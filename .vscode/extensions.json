@@ -1,0 +1,27 @@
+{
+  "recommendations": [
+    // ESLint
+    "dbaeumer.vscode-eslint",
+
+    // Prettier
+    "esbenp.prettier-vscode",
+
+    // スペルミス検知
+    "streetsidesoftware.code-spell-checker",
+
+    // Firebase
+    "toba.vsfire",
+    "ChFlick.firecode",
+
+    // Next JS
+    "PulkitGangwar.nextjs-snippets",
+    "unifiedjs.vscode-mdx",
+    "styled-components.vscode-styled-components",
+
+    // カラーピッカー
+    "anseki.vscode-color",
+
+    // Emmet
+    "FallenMax.mithril-emmet"
+  ]
+}

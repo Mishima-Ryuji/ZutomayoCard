@@ -1,0 +1,7 @@
+export { Timestamp, collection, db, doc } from '~/firebase/alias'
+export type { ColRef, DocRef, FirestoreDataConverter } from '~/firebase/alias'
+export * from './converter'
+export * from './document'
+export * from './io'
+export * from './scheme'
+export * from './utils'

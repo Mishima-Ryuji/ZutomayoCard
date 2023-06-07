@@ -1,0 +1,42 @@
+{
+  // タブのサイズをスペース2つ分に調整
+  "editor.tabSize": 2,
+
+  // ファイルを自動保存する
+  "files.autoSave": "onFocusChange",
+
+  // デフォルトのフォーマッタを prettier に設定
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // ファイル保存時、prettier による自動フォーマット
+  "editor.formatOnSave": true,
+
+  // ファイル保存時、ESLint による自動フォーマット
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": true
+  },
+
+  "eslint.workingDirectories": [
+    { "pattern": "./functions/" },
+    { "pattern": "./web/*/" }
+  ],
+
+  // EmmetをReactでも有効化
+  "emmet.triggerExpansionOnTab": true,
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "typescript": "typescriptreact"
+  },
+
+  // スペルチェックに単語を追加
+  "cSpell.userWords": [
+    "firestore",
+    "subcollection",
+    "subcollections",
+    "subcols",
+    "uids",
+    "vercel"
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

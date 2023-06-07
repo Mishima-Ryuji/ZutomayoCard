@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "workspaces": [
+    "web/",
+    "functions/"
+  ],
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "@typescript-eslint/eslint-plugin": "^5.44.0",
+    "@typescript-eslint/parser": "^5.44.0",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-typescript": "^3.5.2",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
+    "typescript": "^4.9.3"
+  },
+  "scripts": {
+    "lint": "yarn workspace functions run lint && yarn workspace web run lint",
+    "fix": "yarn workspace functions run fix && yarn workspace web run fix",
+    "firebase:deploy:dev": "firebase use dev && firebase deploy",
+    "firebase:deploy:prod": "firebase use prod && firebase deploy",
+    "functions:deploy:prod": "yarn workspace functions run deploy:prod",
+    "functions:deploy:dev": "yarn workspace functions run deploy:dev",
+    "functions:shell": "yarn workspace functions run shell",
+    "dev": "yarn workspace web run dev"
+  }
+}

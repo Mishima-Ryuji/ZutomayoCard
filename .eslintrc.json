@@ -1,0 +1,42 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "import"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/strict",
+    "plugin:prettier/recommended"
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
+  "rules": {
+    "semi": ["error", "never", { "beforeStatementContinuationChars": "never" }],
+    "semi-spacing": ["error", { "after": true, "before": false }],
+    "semi-style": ["error", "first"],
+    "no-extra-semi": "error",
+    "no-unexpected-multiline": "error",
+    "no-unreachable": "error",
+    "object-curly-spacing": ["error", "always"],
+    "no-constant-condition": "off",
+    "guard-for-in": "off",
+    "eqeqeq": ["error", "always"],
+    "prettier/prettier": "error",
+
+    "@typescript-eslint/prefer-ts-expect-error": "error",
+    "@typescript-eslint/no-non-null-assertion": "error",
+    "@typescript-eslint/consistent-type-assertions": "warn",
+    "@typescript-eslint/prefer-optional-chain": "error",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/ban-types": "error",
+    "@typescript-eslint/no-extra-semi": "error",
+    "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/no-floating-promises": ["warn", { "ignoreIIFE": true }]
+  }
+}
