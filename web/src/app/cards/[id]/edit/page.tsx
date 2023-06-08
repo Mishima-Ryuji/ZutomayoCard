@@ -200,10 +200,7 @@ const Page = () => {
             </FormControl>
             <FormControl>
               <FormLabel htmlFor="effect">効果</FormLabel>
-              <Textarea
-                isInvalid={!!errors.effect}
-                {...register('effect', { required: true })}
-              />
+              <Textarea isInvalid={!!errors.effect} {...register('effect')} />
             </FormControl>
             {cardData.type === 'character' && (
               <>
