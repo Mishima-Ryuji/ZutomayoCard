@@ -198,25 +198,6 @@ const Page = () => {
             </FormControl>
             {cardData.type === 'character' && (
               <>
-                <FormControl isInvalid={!!errors.day_offensive_strength}>
-                  <FormLabel htmlFor="day_offensive_strength">
-                    攻撃力 (Day)
-                  </FormLabel>
-                  <Controller
-                    rules={{ required: true }}
-                    name="day_offensive_strength"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <NumberInput
-                        name="day_offensive_strength"
-                        onChange={onChange}
-                        value={value}
-                      >
-                        <NumberInputField />
-                      </NumberInput>
-                    )}
-                  />
-                </FormControl>
                 <FormControl isInvalid={!!errors.night_offensive_strength}>
                   <FormLabel htmlFor="night_offensive_strength">
                     攻撃力 (Night)
@@ -228,6 +209,25 @@ const Page = () => {
                     render={({ field: { onChange, value } }) => (
                       <NumberInput
                         name="night_offensive_strength"
+                        onChange={onChange}
+                        value={value}
+                      >
+                        <NumberInputField />
+                      </NumberInput>
+                    )}
+                  />
+                </FormControl>
+                <FormControl isInvalid={!!errors.day_offensive_strength}>
+                  <FormLabel htmlFor="day_offensive_strength">
+                    攻撃力 (Day)
+                  </FormLabel>
+                  <Controller
+                    rules={{ required: true }}
+                    name="day_offensive_strength"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <NumberInput
+                        name="day_offensive_strength"
                         onChange={onChange}
                         value={value}
                       >
