@@ -83,18 +83,16 @@ const Page = () => {
 
   useEffect(() => {
     if (!card) return
-    reset({
-      ...remove<Card, keyof Card>(card, [
+    reset(
+      remove<Card, keyof Card>(card, [
         'ref',
         'id',
         'created_at',
         'updated_at',
         'parent_id',
         'subcollections',
-      ]),
-      element: 'flame',
-      type: card.type ?? 'character',
-    })
+      ])
+    )
   }, [card])
 
   return (
@@ -150,6 +148,7 @@ const Page = () => {
               <FormLabel htmlFor="element">属性</FormLabel>
               <Controller
                 name="element"
+                rules={{ required: true }}
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <RadioGroup name="element" onChange={onChange} value={value}>
@@ -166,6 +165,7 @@ const Page = () => {
             <FormControl>
               <FormLabel htmlFor="type">種別</FormLabel>
               <Controller
+                rules={{ required: true }}
                 name="type"
                 control={control}
                 render={({ field: { onChange, value } }) => (
