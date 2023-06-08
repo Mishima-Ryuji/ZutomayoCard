@@ -8,8 +8,9 @@ import {
   Spacer,
   chakra,
 } from '@chakra-ui/react'
-import { GoogleAuthProvider, signInWithRedirect } from 'firebase/auth'
+import { GoogleAuthProvider, signInWithRedirect, signOut } from 'firebase/auth'
 import Link from 'next/link'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import { fb } from '~/firebase'
 
 type Props = {
@@ -23,6 +24,7 @@ export const DefaultLayout = ({
   maxWidth = 1200,
   eyecatchImage = false,
 }: Props) => {
+  const [user, loading] = useAuthState(fb.auth)
   return (
     <ChakraProvider>
       <chakra.header py={3} bgColor={'purple.500'}>
@@ -33,15 +35,21 @@ export const DefaultLayout = ({
             </Box>
           </Link>
           <Spacer />
-          <Button
-            size={'sm'}
-            onClick={async () => {
-              const provider = new GoogleAuthProvider()
-              await signInWithRedirect(fb.auth, provider)
-            }}
-          >
-            ログイン
-          </Button>
+          {!loading && (
+            <Button
+              size={'sm'}
+              onClick={async () => {
+                if (user) {
+                  signOut(fb.auth)
+                } else {
+                  const provider = new GoogleAuthProvider()
+                  await signInWithRedirect(fb.auth, provider)
+                }
+              }}
+            >
+              {user ? 'ログアウト' : 'ログイン'}
+            </Button>
+          )}
         </Flex>
       </chakra.header>
       {eyecatchImage && (
