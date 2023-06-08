@@ -70,7 +70,7 @@ const Page = () => {
     control,
     watch,
     formState: { errors, isValid, isDirty },
-  } = useForm<Omit<Card, 'image' | DocumentBaseKey>>({ mode: 'onBlur' })
+  } = useForm<Omit<Card, 'image' | DocumentBaseKey>>({ mode: 'onChange' })
 
   const onSubmit = handleSubmit(async (data) => {
     if (!card) return
@@ -81,20 +81,23 @@ const Page = () => {
 
   const cardData = watch()
 
-  console.log(cardData)
+  console.log(errors)
+  console.log(isValid)
 
   useEffect(() => {
     if (!card) return
-    reset(
-      remove<Card, keyof Card>(card, [
+    reset({
+      ...remove<Card, keyof Card>(card, [
         'ref',
         'id',
         'created_at',
         'updated_at',
         'parent_id',
         'subcollections',
-      ])
-    )
+      ]),
+      element: 'flame',
+      type: card.type ?? 'character',
+    })
   }, [card])
 
   return (
