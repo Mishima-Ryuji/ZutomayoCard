@@ -8,7 +8,7 @@ import { CardList } from '~/components/card/List'
 import { Card } from '~/firebase'
 import { sortedCategoryCardsRef } from '~/models/card'
 
-export const Page = () => {
+const Page = () => {
   const [category, setCategory] = useState<Card['category']>('1st')
   const [cards, loading, error] = useCollectionData(
     sortedCategoryCardsRef(category)

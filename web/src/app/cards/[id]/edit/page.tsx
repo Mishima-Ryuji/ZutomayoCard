@@ -52,7 +52,7 @@ const FileUpload = ({ onChange: handleChange }: FileUploadProps) => {
   )
 }
 
-export const Page = () => {
+const Page = () => {
   const router = useRouter()
   const params = useParams()
   const cardId = params.id
@@ -74,7 +74,7 @@ export const Page = () => {
     if (!card) return
     setIsSubmitting(true)
     await updateDoc(card.ref, data)
-    await router.push('/')
+    router.push('/')
   })
 
   useEffect(() => {
