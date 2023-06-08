@@ -1,61 +1,61 @@
 service cloud.firestore {
   match /databases/{database}/documents {
+    // function documentPath(paths) {
+    //   return path([['databases', database, 'documents'].join('/'), paths.join('/')].join('/'));
+    // }
+
+    // function isAuthenticated() {
+    //   return request.auth != null;
+    // }
+
+    // function isUserAuthenticated(userId) {
+    //   return isAuthenticated() && userId == request.auth.uid;
+    // }
+
+    // function hasRole(role) {
+    //   return isAuthenticated() && exists(documentPath(["accounts", request.auth.uid, "roles", role]));
+    // }
+
+    // function existingData() {
+    //   return resource.data
+    // }
+
+    // function requestData() {
+    //   return request.resource.data
+    // }
+    
+
+    // function getAfterData(path) {
+    //   return getAfter(path).data
+    // }
+    
+    // function getData(path) {
+    //   return get(path).data
+    // }
+
+    // function isOnlyChange(keys) {
+    //   return requestData().diff(existingData()).affectedKeys().hasOnly(keys);
+    // }
+
+    // function isNotChange(keys) {
+    //   return !requestData().diff(existingData()).affectedKeys().hasAny(keys);
+    // }
+
+    // function isValidUpdateTimestamp() {
+    //   return true; // FIXME: 現在時刻を判定するようにする、要フロント対応
+    // }
+
+    // function isValidCreateTimestamp() {
+    //   return isValidUpdateTimestamp()
+    //     && requestData().created_at.toMillis() == requestData().updated_at.toMillis();
+    // }
+
+    // match /{document=**} {
+    //   allow read, write: if hasRole('admin');
+    // }
+    
     match /{document=**} {
-      // function documentPath(paths) {
-      //   return path([['databases', database, 'documents'].join('/'), paths.join('/')].join('/'));
-      // }
-
-      // function isAuthenticated() {
-      //   return request.auth != null;
-      // }
-
-      // function isUserAuthenticated(userId) {
-      //   return isAuthenticated() && userId == request.auth.uid;
-      // }
-
-      // function hasRole(role) {
-      //   return isAuthenticated() && exists(documentPath(["accounts", request.auth.uid, "roles", role]));
-      // }
-
-      // function existingData() {
-      //   return resource.data
-      // }
-
-      // function requestData() {
-      //   return request.resource.data
-      // }
-      
-
-      // function getAfterData(path) {
-      //   return getAfter(path).data
-      // }
-      
-      // function getData(path) {
-      //   return get(path).data
-      // }
-
-      // function isOnlyChange(keys) {
-      //   return requestData().diff(existingData()).affectedKeys().hasOnly(keys);
-      // }
-
-      // function isNotChange(keys) {
-      //   return !requestData().diff(existingData()).affectedKeys().hasAny(keys);
-      // }
-
-      // function isValidUpdateTimestamp() {
-      //   return true; // FIXME: 現在時刻を判定するようにする、要フロント対応
-      // }
-
-      // function isValidCreateTimestamp() {
-      //   return isValidUpdateTimestamp()
-      //     && requestData().created_at.toMillis() == requestData().updated_at.toMillis();
-      // }
-
-      // match /{document=**} {
-      //   allow read, write: if hasRole('admin');
-      // }
-
-      allow read, write: if request.time < timestamp.date(2023, 7, 8);
+      allow read, write;
     }
   }
 }

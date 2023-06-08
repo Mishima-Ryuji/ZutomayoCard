@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import {
   ColRef,
   ConvertersMap,
@@ -8,8 +9,7 @@ import {
   collection,
   db,
   directDoc,
-} from '@pkg/shared/firebase'
-import { z } from 'zod'
+} from '~/shared/firebase'
 
 export type Serialized<T> = {
   [key in keyof T]: T[key] extends Timestamp

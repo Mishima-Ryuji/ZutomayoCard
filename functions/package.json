@@ -17,7 +17,7 @@
     "fix:prettier": "npm run lint:prettier -- --write",
     "deploy": "firebase deploy --only functions",
     "exec:dev": "GCLOUD_PROJECT=[dev] GOOGLE_APPLICATION_CREDENTIALS=./secrets/[dev_filename].json yarn ts-node -r tsconfig-paths/register -r ./src/local/env_config",
-    "exec:prod": "GCLOUD_PROJECT=[prod] GOOGLE_APPLICATION_CREDENTIALS=./secrets/[prod_filename].json yarn ts-node -r tsconfig-paths/register -r ./src/local/env_config"
+    "exec:prod": "GCLOUD_PROJECT=zutomayo-33d04 GOOGLE_APPLICATION_CREDENTIALS=./secrets/zutomayo-33d04-firebase-adminsdk-s625q-0c7e264586.json yarn ts-node -r tsconfig-paths/register -r ./src/local/env_config"
   },
   "engines": {
     "node": "16"

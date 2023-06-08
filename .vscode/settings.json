@@ -36,7 +36,8 @@
     "subcollections",
     "subcols",
     "uids",
-    "vercel"
+    "vercel",
+    "chakra"
   ],
   "typescript.tsdk": "node_modules/typescript/lib"
 }

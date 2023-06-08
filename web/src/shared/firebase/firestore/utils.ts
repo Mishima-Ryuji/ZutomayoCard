@@ -1,4 +1,4 @@
-import { ColRef, DocRef, FirestoreDataConverter } from '@pkg/firebase/alias'
+import { ColRef, DocRef, FirestoreDataConverter } from '~/firebase/alias'
 import { ValidDocument } from './document'
 
 type Ref<T extends ValidDocument> = ColRef<T> | DocRef<T>

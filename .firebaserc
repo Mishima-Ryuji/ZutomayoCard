@@ -1,7 +1,7 @@
 {
   "projects": {
-    "default": "[prod]",
+    "default": "zutomayo-33d04",
     "dev": "[dev]",
-    "prod": "[dev]"
+    "prod": "zutomayo-33d04"
   }
 }
