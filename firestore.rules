@@ -12,9 +12,9 @@ service cloud.firestore {
     //   return isAuthenticated() && userId == request.auth.uid;
     // }
 
-    // function hasRole(role) {
-    //   return isAuthenticated() && exists(documentPath(["accounts", request.auth.uid, "roles", role]));
-    // }
+    function isAdmin() {
+      return isAuthenticated() && exists(documentPath(["admin", request.auth.uid]));
+    }
 
     // function existingData() {
     //   return resource.data
@@ -50,12 +50,12 @@ service cloud.firestore {
     //     && requestData().created_at.toMillis() == requestData().updated_at.toMillis();
     // }
 
-    // match /{document=**} {
-    //   allow read, write: if hasRole('admin');
-    // }
-    
     match /{document=**} {
-      allow read, write;
+      allow read, write: if isAdmin();
+    }
+    
+    match /cards/{id} {
+      allow read;
     }
   }
 }

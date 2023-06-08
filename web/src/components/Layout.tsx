@@ -1,7 +1,16 @@
 'use client'
 
-import { Box, ChakraProvider, Flex, chakra } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  ChakraProvider,
+  Flex,
+  Spacer,
+  chakra,
+} from '@chakra-ui/react'
+import { GoogleAuthProvider, signInWithRedirect } from 'firebase/auth'
 import Link from 'next/link'
+import { fb } from '~/firebase'
 
 type Props = {
   eyecatchImage?: boolean
@@ -16,13 +25,23 @@ export const DefaultLayout = ({
 }: Props) => {
   return (
     <ChakraProvider>
-      <chakra.header py={4} bgColor={'purple.500'}>
-        <Flex maxWidth={maxWidth} margin={'auto'} px={3}>
+      <chakra.header py={3} bgColor={'purple.500'}>
+        <Flex maxWidth={maxWidth} margin={'auto'} px={3} align={'center'}>
           <Link href="/">
-            <Box color={'white'} fontWeight={'bold'}>
+            <Box color={'white'} fontWeight={'bold'} fontSize={'2xl'}>
               Zutomayo Card Wiki
             </Box>
           </Link>
+          <Spacer />
+          <Button
+            size={'sm'}
+            onClick={async () => {
+              const provider = new GoogleAuthProvider()
+              await signInWithRedirect(fb.auth, provider)
+            }}
+          >
+            ログイン
+          </Button>
         </Flex>
       </chakra.header>
       {eyecatchImage && (
