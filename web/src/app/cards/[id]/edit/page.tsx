@@ -103,7 +103,7 @@ const Page = () => {
             <FormControl>
               <FormLabel htmlFor="file">画像</FormLabel>
               <FormHelperText mb={3}>
-                公式の画像は使用が禁止されているため、自分で写真を撮ってアプロードしてください。
+                公式の画像は使用が禁止されているため、自分で写真を撮ってアプロードしてください。画像は選択をすれば反映されるので、更新ボタンを押す必要はありません。
               </FormHelperText>
               <FileUpload
                 onChange={async (e) => {
