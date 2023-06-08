@@ -70,7 +70,7 @@ const Page = () => {
     control,
     watch,
     formState: { errors, isValid, isDirty },
-  } = useForm<Omit<Card, 'image' | DocumentBaseKey>>({ mode: 'onChange' })
+  } = useForm<Omit<Card, 'image' | DocumentBaseKey>>({ mode: 'onBlur' })
 
   const onSubmit = handleSubmit(async (data) => {
     if (!card) return
@@ -182,32 +182,26 @@ const Page = () => {
                 )}
               />
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={!!errors.name}>
               <FormLabel htmlFor="name">カード名</FormLabel>
-              <Input
-                isInvalid={!!errors.name}
-                {...register('name', { required: true })}
-              />
+              <Input {...register('name', { required: true })} />
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={!!errors.name_furigana}>
               <FormLabel htmlFor="name_furigana">
                 カード名（ふりがな）
               </FormLabel>
-              <Input
-                isInvalid={!!errors.name_furigana}
-                {...register('name_furigana', { required: true })}
-              />
+              <Input {...register('name_furigana', { required: true })} />
               <FormHelperText>
                 英語はそのまま入力してください。例: DNA鍋 → DNAなべ
               </FormHelperText>
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={!!errors.effect}>
               <FormLabel htmlFor="effect">効果</FormLabel>
-              <Textarea isInvalid={!!errors.effect} {...register('effect')} />
+              <Textarea {...register('effect')} />
             </FormControl>
             {cardData.type === 'character' && (
               <>
-                <FormControl>
+                <FormControl isInvalid={!!errors.day_offensive_strength}>
                   <FormLabel htmlFor="day_offensive_strength">
                     攻撃力 (Day)
                   </FormLabel>
@@ -217,7 +211,6 @@ const Page = () => {
                     control={control}
                     render={({ field: { onChange, value } }) => (
                       <NumberInput
-                        isInvalid={!!errors.day_offensive_strength}
                         name="day_offensive_strength"
                         onChange={onChange}
                         value={value}
@@ -227,7 +220,7 @@ const Page = () => {
                     )}
                   />
                 </FormControl>
-                <FormControl>
+                <FormControl isInvalid={!!errors.night_offensive_strength}>
                   <FormLabel htmlFor="night_offensive_strength">
                     攻撃力 (Night)
                   </FormLabel>
@@ -237,7 +230,6 @@ const Page = () => {
                     control={control}
                     render={({ field: { onChange, value } }) => (
                       <NumberInput
-                        isInvalid={!!errors.night_offensive_strength}
                         name="night_offensive_strength"
                         onChange={onChange}
                         value={value}
@@ -249,25 +241,20 @@ const Page = () => {
                 </FormControl>
               </>
             )}
-            <FormControl>
+            <FormControl isInvalid={!!errors.clock}>
               <FormLabel htmlFor="clock">時計</FormLabel>
               <Controller
                 name="clock"
                 control={control}
                 rules={{ required: true }}
                 render={({ field: { onChange, value } }) => (
-                  <NumberInput
-                    isInvalid={!!errors.clock}
-                    name="clock"
-                    onChange={onChange}
-                    value={value}
-                  >
+                  <NumberInput name="clock" onChange={onChange} value={value}>
                     <NumberInputField />
                   </NumberInput>
                 )}
               />
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={!!errors.power_cost}>
               <FormLabel htmlFor="power_cost">POWER COST</FormLabel>
               <Controller
                 name="power_cost"
@@ -275,7 +262,6 @@ const Page = () => {
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <NumberInput
-                    isInvalid={!!errors.power_cost}
                     name="power_cost"
                     onChange={onChange}
                     value={value}
@@ -288,19 +274,14 @@ const Page = () => {
                 存在しない場合は0を入れてください。
               </FormHelperText>
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={!!errors.power}>
               <FormLabel htmlFor="power">SEND TO POWER</FormLabel>
               <Controller
                 name="power"
                 rules={{ required: true }}
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <NumberInput
-                    isInvalid={!!errors.power}
-                    name="power"
-                    onChange={onChange}
-                    value={value}
-                  >
+                  <NumberInput name="power" onChange={onChange} value={value}>
                     <NumberInputField />
                   </NumberInput>
                 )}
