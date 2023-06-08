@@ -70,7 +70,7 @@ const Page = () => {
     control,
     watch,
     formState: { errors, isValid, isDirty },
-  } = useForm<Omit<Card, 'image' | DocumentBaseKey>>({ mode: 'onBlur' })
+  } = useForm<Omit<Card, 'image' | DocumentBaseKey>>({ mode: 'onChange' })
 
   const onSubmit = handleSubmit(async (data) => {
     if (!card) return
@@ -80,9 +80,6 @@ const Page = () => {
   })
 
   const cardData = watch()
-
-  console.log(errors)
-  console.log(isValid)
 
   useEffect(() => {
     if (!card) return
