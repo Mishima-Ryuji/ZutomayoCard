@@ -91,7 +91,8 @@ export const DefaultLayout = ({
                   }
                 }}
                 colorScheme="purple"
-                my={8}
+                mt={8}
+                mb={3}
               >
                 {user ? '管理者をログアウト' : '管理者としてログイン'}
               </Button>
