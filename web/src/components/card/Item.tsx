@@ -1,17 +1,17 @@
-import { AspectRatio, Box } from '@chakra-ui/react'
+import { AspectRatio, Box, ResponsiveValue } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Card, getCategoryDetail } from '~/firebase'
 
 type Props = {
   card: Card
-  width?: number
+  width?: ResponsiveValue<number | string>
 }
 
 export const CardItem = ({ card, width }: Props) => {
   const categoryDetail = getCategoryDetail(card)
   return (
-    <Link href={`/cards/${card.id}/edit`}>
+    <Link href={`/cards/${card.id}`}>
       <AspectRatio maxW="400px" width={width} ratio={63 / 88}>
         {card.image ? (
           <Image
@@ -25,7 +25,7 @@ export const CardItem = ({ card, width }: Props) => {
           <Box width={'100%'} height="100%" border={'solid'} p={2}>
             {categoryDetail.name}
             <br />
-            {card.no} / {card.special_denominator ?? categoryDetail.denominator}
+            {card.no} / {categoryDetail.denominator}
           </Box>
         )}
       </AspectRatio>

@@ -17,16 +17,29 @@ const Page = () => {
     <DefaultLayout eyecatchImage>
       <Flex py={3}>
         <Tabs variant="soft-rounded" colorScheme="purple">
-          <TabList>
-            <Tab onClick={() => setCategory('1st')}>第一弾</Tab>
-            <Tab onClick={() => setCategory('2nd')}>第二段</Tab>
-            <Tab onClick={() => setCategory('local/techno_poor')}>ご当地</Tab>
-            <Tab onClick={() => setCategory('bonus/jinkougaku')}>特典</Tab>
-            <Tab onClick={() => setCategory('collab/OIOI')}>コラボ</Tab>
+          <TabList overflowY={'auto'}>
+            <Tab flexShrink={0} onClick={() => setCategory('1st')}>
+              第一弾
+            </Tab>
+            <Tab flexShrink={0} onClick={() => setCategory('2nd')}>
+              第二弾
+            </Tab>
+            <Tab
+              flexShrink={0}
+              onClick={() => setCategory('local/techno_poor')}
+            >
+              ご当地
+            </Tab>
+            <Tab flexShrink={0} onClick={() => setCategory('bonus/jinkougaku')}>
+              特典
+            </Tab>
+            <Tab flexShrink={0} onClick={() => setCategory('collab/OIOI')}>
+              コラボ
+            </Tab>
           </TabList>
         </Tabs>
       </Flex>
-      {cards && <CardList cards={cards} />}
+      {cards && <CardList cards={cards} width={'200px'} />}
     </DefaultLayout>
   )
 }

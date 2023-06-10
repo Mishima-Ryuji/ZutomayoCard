@@ -17,6 +17,7 @@ export interface Card extends Document {
   order: number
   no: string
   special_denominator?: string
+  special_procurement_method?: string
   rarity?: 'N' | 'N+' | 'R' | 'R+' | 'SR' | 'SR+' | 'UR' | 'SE'
   element?: 'flame' | 'wind' | 'electricity' | 'darkness'
   name?: string
@@ -28,6 +29,11 @@ export interface Card extends Document {
   power_cost?: number
   power?: number
   type?: 'character' | 'enchant' | 'area_enchant'
+
+  rank?: 'A' | 'B' | 'C' | 'D'
+  rank_description?: string
+
+  youtube_id?: string
 }
 
 export const cardConverter = getConverter<Card>(CardSubcols)
@@ -41,6 +47,20 @@ type CategoryDetail = {
   name: string
   detail?: string
   denominator: string // Card番号の**/**の分母を表す
+  procurement_method: string
+}
+
+export const getDisplayType = (card: Card) => {
+  switch (card.type) {
+    case 'area_enchant':
+      return 'Area Enchant'
+    case 'character':
+      return 'Character'
+    case 'enchant':
+      return 'Enchant'
+    default:
+      return '未設定'
+  }
 }
 
 export const getCategoryDetail = (card: Card): CategoryDetail => {
@@ -50,32 +70,43 @@ export const getCategoryDetail = (card: Card): CategoryDetail => {
         id: card.category,
         name: '第一弾',
         detail: 'THE WORLD IS CHANGING',
-        denominator: '104',
+        denominator: card.special_denominator ?? '104',
+        procurement_method:
+          card.special_procurement_method ?? 'ずとまよカード第一弾を開封する。',
       }
     case '2nd':
       return {
         id: card.category,
         name: '第二弾',
         detail: 'ALL ALONG THE WATCHTOWER',
-        denominator: '104',
+        denominator: card.special_denominator ?? '104',
+        procurement_method:
+          card.special_procurement_method ?? 'ずとまよカード第二弾を開封する。',
       }
     case 'local/techno_poor':
       return {
         id: card.category,
         name: 'テクノプアのご当地カード',
-        denominator: '20',
+        denominator: card.special_denominator ?? '20',
+        procurement_method:
+          card.special_procurement_method ??
+          'テクノプアのライブ会場でご当地カードセットステッカーを購入する。現在はトレード以外の入手は不可。',
       }
     case 'bonus/jinkougaku':
       return {
         id: card.category,
         name: '沈香学の特典',
-        denominator: '7',
+        denominator: card.special_denominator ?? '7',
+        procurement_method:
+          card.special_procurement_method ??
+          '沈香学の特典で付属している。特典には限りがあり、無くなり次第終了。',
       }
     case 'collab/OIOI':
       return {
         id: card.category,
         name: 'OIOIコラボ',
-        denominator: '♦︎♦︎',
+        denominator: card.special_denominator ?? '♦︎♦︎',
+        procurement_method: card.special_procurement_method ?? '',
       }
   }
 }

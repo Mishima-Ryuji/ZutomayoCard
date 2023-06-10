@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  Box,
   Button,
   FormControl,
   FormHelperText,
@@ -76,7 +77,7 @@ const Page = () => {
     if (!card) return
     setIsSubmitting(true)
     await updateDoc(card.ref, data)
-    router.push('/')
+    router.push(`/cards/${card.id}`)
   })
 
   const cardData = watch()
@@ -209,7 +210,9 @@ const Page = () => {
                     render={({ field: { onChange, value } }) => (
                       <NumberInput
                         name="night_offensive_strength"
-                        onChange={onChange}
+                        onChange={(v) =>
+                          onChange(isNaN(parseInt(v)) ? undefined : parseInt(v))
+                        }
                         value={value}
                       >
                         <NumberInputField />
@@ -228,7 +231,9 @@ const Page = () => {
                     render={({ field: { onChange, value } }) => (
                       <NumberInput
                         name="day_offensive_strength"
-                        onChange={onChange}
+                        onChange={(v) =>
+                          onChange(isNaN(parseInt(v)) ? undefined : parseInt(v))
+                        }
                         value={value}
                       >
                         <NumberInputField />
@@ -245,7 +250,13 @@ const Page = () => {
                 control={control}
                 rules={{ required: true }}
                 render={({ field: { onChange, value } }) => (
-                  <NumberInput name="clock" onChange={onChange} value={value}>
+                  <NumberInput
+                    name="clock"
+                    onChange={(v) =>
+                      onChange(isNaN(parseInt(v)) ? undefined : parseInt(v))
+                    }
+                    value={value}
+                  >
                     <NumberInputField />
                   </NumberInput>
                 )}
@@ -260,7 +271,9 @@ const Page = () => {
                 render={({ field: { onChange, value } }) => (
                   <NumberInput
                     name="power_cost"
-                    onChange={onChange}
+                    onChange={(v) =>
+                      onChange(isNaN(parseInt(v)) ? undefined : parseInt(v))
+                    }
                     value={value}
                   >
                     <NumberInputField />
@@ -278,7 +291,13 @@ const Page = () => {
                 rules={{ required: true }}
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <NumberInput name="power" onChange={onChange} value={value}>
+                  <NumberInput
+                    name="power"
+                    value={value}
+                    onChange={(v) =>
+                      onChange(isNaN(parseInt(v)) ? undefined : parseInt(v))
+                    }
+                  >
                     <NumberInputField />
                   </NumberInput>
                 )}
@@ -299,7 +318,9 @@ const Page = () => {
           </VStack>
         </form>
       ) : (
-        <Spinner m="auto" />
+        <Box textAlign={'center'} p="5">
+          <Spinner m="auto" />
+        </Box>
       )}
     </DefaultLayout>
   )
