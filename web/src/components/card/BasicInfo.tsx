@@ -94,7 +94,7 @@ export const CardBasicInfo = ({ card }: Props) => {
               )}
             {card.power != undefined && (
               <Box>
-                <Heading size="md">POWER</Heading>
+                <Heading size="md">SEND TO POWER</Heading>
                 <Text pt="2" fontSize="sm">
                   {card.power > 0 && card.power < 10 ? (
                     <>{[...Array(card.power)].map(() => '♦︎')}</>
@@ -106,7 +106,7 @@ export const CardBasicInfo = ({ card }: Props) => {
             )}
             {card.power_cost != undefined && (
               <Box>
-                <Heading size="md">SEND TO POWER</Heading>
+                <Heading size="md">POWER COST</Heading>
                 <Text pt="2" fontSize="sm">
                   {card.power_cost > 0 && card.power_cost < 10 ? (
                     <>{[...Array(card.power_cost)].map(() => '♦︎')}</>
