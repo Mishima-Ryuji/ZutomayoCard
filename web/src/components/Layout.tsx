@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   ChakraProvider,
+  Container,
   Flex,
   ListItem,
   Spacer,
@@ -45,6 +46,39 @@ export const DefaultLayout = ({
               </Box>
             </Link>
             <Spacer />
+          </Flex>
+        </chakra.header>
+        <Box width={'100%'} height={'60px'} />
+        {eyecatchImage && (
+          <Box width={'100%'} height={500} backgroundColor={'blackAlpha.500'}>
+            画像入れる
+          </Box>
+        )}
+        <Container maxWidth={maxWidth} width={'100%'} px={3}>
+          {children}
+        </Container>
+        <chakra.footer p={3} bgColor={'gray.100'}>
+          <Container maxWidth={maxWidth} px={3}>
+            <UnorderedList>
+              <ListItem fontSize={'x-small'}>
+                本サービスは非公式のサービスであり、「ずっと真夜中でいいのに。」の公認のサービスではありません。
+              </ListItem>
+              <ListItem fontSize={'x-small'}>
+                本サービスの運営は、完全に非営利でファンコミュニティとして運営しています。
+              </ListItem>
+              <ListItem fontSize={'x-small'}>
+                本サービスに掲載されているカードの画像は、カードの実物を直接撮影したものを掲載しています。カードを直接撮影した上での掲載は、公式に問い合わせて問題ないことを確認しております。
+              </ListItem>
+              <ListItem fontSize={'x-small'}>
+                本サービスに掲載されているカードの画像以外のイラストや画像は運営で制作した二次創作です。
+              </ListItem>
+              <ListItem fontSize={'x-small'}>
+                本サービスは公式から警告や中止の要請があった場合は速やかにその要求に応じます。
+              </ListItem>
+              <ListItem fontSize={'x-small'}>
+                本サービスの掲載内容は、不明点を公式のスタッフに尋ねることでなるべく正しい情報を掲載するように心掛けていますが、完全に正しさが保証されたものではありません。
+              </ListItem>
+            </UnorderedList>
             {!loading && (
               <Button
                 size={'sm'}
@@ -56,42 +90,13 @@ export const DefaultLayout = ({
                     await signInWithRedirect(fb.auth, provider)
                   }
                 }}
+                colorScheme="purple"
+                my={8}
               >
-                {user ? 'ログアウト' : 'ログイン'}
+                {user ? '管理者をログアウト' : '管理者としてログイン'}
               </Button>
             )}
-          </Flex>
-        </chakra.header>
-        <Box width={'100%'} height={'60px'} />
-        {eyecatchImage && (
-          <Box width={'100%'} height={500} backgroundColor={'blackAlpha.500'}>
-            画像入れる
-          </Box>
-        )}
-        <Box maxWidth={maxWidth} width={'100%'} px={3} margin={'auto'}>
-          {children}
-        </Box>
-        <chakra.footer p={3} bgColor={'gray.100'}>
-          <UnorderedList maxWidth={maxWidth} margin={'auto'} px={3}>
-            <ListItem fontSize={'x-small'}>
-              本サービスは非公式のサービスであり、「ずっと真夜中でいいのに。」の公認のサービスではありません。
-            </ListItem>
-            <ListItem fontSize={'x-small'}>
-              本サービスの運営は、完全に非営利でファンコミュニティとして運営しています。
-            </ListItem>
-            <ListItem fontSize={'x-small'}>
-              本サービスに掲載されているカードの画像は、カードの実物を直接撮影したものを掲載しています。カードを直接撮影した上での掲載は、公式に問い合わせて問題ないことを確認しております。
-            </ListItem>
-            <ListItem fontSize={'x-small'}>
-              本サービスに掲載されているカードの画像以外のイラストや画像は運営で制作した二次創作です。
-            </ListItem>
-            <ListItem fontSize={'x-small'}>
-              本サービスは公式から警告や中止の要請があった場合は速やかにその要求に応じます。
-            </ListItem>
-            <ListItem fontSize={'x-small'}>
-              本サービスの掲載内容は、不明点を公式のスタッフに尋ねることでなるべく正しい情報を掲載するように心掛けていますが、完全に正しさが保証されたものではありません。
-            </ListItem>
-          </UnorderedList>
+          </Container>
         </chakra.footer>
       </Stack>
     </ChakraProvider>
