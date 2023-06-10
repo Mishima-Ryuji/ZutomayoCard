@@ -28,6 +28,7 @@ import { FiFile } from 'react-icons/fi'
 import { DefaultLayout } from '~/components/Layout'
 import { CardItem } from '~/components/card/Item'
 import { Card, DocumentBaseKey, cardRef, fb, updateDoc } from '~/firebase'
+import { useAuthState } from '~/hooks/useAuthState'
 import { remove } from '~/shared/utils'
 
 type FileUploadProps = {
@@ -64,6 +65,15 @@ const Page = () => {
   const [card, loading, error] = useDocumentData(
     typeof cardId === 'string' ? cardRef(cardId) : null
   )
+
+  const { isAdmin, adminLoading } = useAuthState()
+
+  useEffect(() => {
+    if (adminLoading) return
+    if (isAdmin) return
+    router.push(cardId ? `cards/${cardId}` : '/')
+  }, [adminLoading])
+
   const {
     handleSubmit,
     register,
@@ -98,7 +108,7 @@ const Page = () => {
 
   return (
     <DefaultLayout>
-      {card ? (
+      {card && isAdmin ? (
         <form onSubmit={onSubmit}>
           <VStack width={'100%'} my={5} alignItems={'baseline'} gap={5}>
             <FormControl>

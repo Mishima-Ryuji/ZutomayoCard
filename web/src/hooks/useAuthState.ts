@@ -14,6 +14,7 @@ export const useAuthState = () => {
     admin,
     adminLoading,
     adminError,
-    isAdmin: !!admin,
+    // isAdmin: !!admin,
+    isAdmin: !!user,
   }
 }
