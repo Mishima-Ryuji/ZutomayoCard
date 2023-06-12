@@ -12,7 +12,7 @@ import {
   UnorderedList,
   chakra,
 } from '@chakra-ui/react'
-import { GoogleAuthProvider, signInWithRedirect, signOut } from 'firebase/auth'
+import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
 import Link from 'next/link'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { fb } from '~/firebase'
@@ -87,7 +87,7 @@ export const DefaultLayout = ({
                     signOut(fb.auth)
                   } else {
                     const provider = new GoogleAuthProvider()
-                    await signInWithRedirect(fb.auth, provider)
+                    await signInWithPopup(fb.auth, provider)
                   }
                 }}
                 colorScheme="purple"
