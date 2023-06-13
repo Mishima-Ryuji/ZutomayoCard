@@ -131,6 +131,7 @@ const ComboItem = ({ combo, baseCardId }: ItemProps) => {
   const [cards, loading, error] = useCollectionData(
     designatedIdsCardsRef(cardIds)
   )
+  const { isAdmin } = useAuthState()
   return (
     <Box>
       <Stack gap={3}>
@@ -138,17 +139,19 @@ const ComboItem = ({ combo, baseCardId }: ItemProps) => {
         <Box>{combo.description}</Box>
         <Flex mt={2} gap={3}>
           <ComboWriter baseCardId={baseCardId} combo={combo} />
-          <Button
-            colorScheme="red"
-            size="xs"
-            gap={1}
-            onClick={() => {
-              deleteDoc(combo.ref)
-            }}
-          >
-            <FaTrash />
-            コンボを削除
-          </Button>
+          {isAdmin && (
+            <Button
+              colorScheme="red"
+              size="xs"
+              gap={1}
+              onClick={() => {
+                deleteDoc(combo.ref)
+              }}
+            >
+              <FaTrash />
+              コンボを削除
+            </Button>
+          )}
         </Flex>
       </Stack>
     </Box>

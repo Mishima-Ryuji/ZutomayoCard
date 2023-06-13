@@ -124,6 +124,7 @@ type ItemProps = {
 }
 
 const QuestionItem = ({ question, baseCardId }: ItemProps) => {
+  const { isAdmin } = useAuthState()
   return (
     <Box>
       <Heading size="sm" mb={2}>
@@ -132,17 +133,19 @@ const QuestionItem = ({ question, baseCardId }: ItemProps) => {
       <Box>{question.answer}</Box>
       <Flex mt={2} gap={3}>
         <QuestionWriter question={question} baseCardId={baseCardId} />
-        <Button
-          colorScheme="red"
-          size="xs"
-          gap={1}
-          onClick={() => {
-            deleteDoc(question.ref)
-          }}
-        >
-          <FaTrash />
-          疑問を削除
-        </Button>
+        {isAdmin && (
+          <Button
+            colorScheme="red"
+            size="xs"
+            gap={1}
+            onClick={() => {
+              deleteDoc(question.ref)
+            }}
+          >
+            <FaTrash />
+            疑問を削除
+          </Button>
+        )}
       </Flex>
     </Box>
   )
