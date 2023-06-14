@@ -105,6 +105,8 @@ const QuestionWriter = ({ question, baseCardId, mt }: QuestionWriterProps) => {
                     card_id: baseCardId,
                   })
                 }
+                setAnswer('')
+                setTitle('')
                 onClose()
               }}
               isDisabled={!title || !answer}

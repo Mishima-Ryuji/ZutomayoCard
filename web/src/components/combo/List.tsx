@@ -108,6 +108,8 @@ const ComboWriter = ({ combo, baseCardId, mt }: ComboWriterProps) => {
                     description,
                   })
                 }
+                setCardIds([])
+                setDescription('')
                 onClose()
               }}
               isDisabled={cardIds.length === 0 || !description}
