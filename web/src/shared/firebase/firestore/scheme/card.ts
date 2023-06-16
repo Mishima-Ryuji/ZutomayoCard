@@ -8,6 +8,7 @@ export interface Card extends Document {
   readonly parent_id: 'cards'
   readonly subcollections: typeof CardSubcols
   image?: { url: string; filename: string; full_path: string }
+  resized_image?: { url: string; filename: string; full_path: string }
   category:
     | '1st'
     | '2nd'

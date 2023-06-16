@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  AspectRatio,
   Box,
   Button,
   ChakraProvider,
@@ -13,6 +14,7 @@ import {
   chakra,
 } from '@chakra-ui/react'
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { fb } from '~/firebase'
@@ -25,7 +27,7 @@ type Props = {
 
 export const DefaultLayout = ({
   children,
-  maxWidth = 1200,
+  maxWidth = 1500,
   eyecatchImage = false,
 }: Props) => {
   const [user, loading] = useAuthState(fb.auth)
@@ -37,7 +39,7 @@ export const DefaultLayout = ({
           position="fixed"
           width={'100%'}
           zIndex={1000}
-          shadow={'sm'}
+          shadow={'md'}
         >
           <Flex maxWidth={maxWidth} margin={'auto'} p={3} align={'center'}>
             <Link href="/">
@@ -48,10 +50,16 @@ export const DefaultLayout = ({
             <Spacer />
           </Flex>
         </chakra.header>
-        <Box width={'100%'} height={'60px'} />
+        <Box height={'60px'} />
         {eyecatchImage && (
-          <Box width={'100%'} height={500} backgroundColor={'blackAlpha.500'}>
-            画像入れる
+          <Box m="auto" width={'100%'} backgroundColor={'#442c6c'}>
+            <AspectRatio maxWidth={maxWidth} m="auto" ratio={1280 / 460}>
+              <Image
+                src="/first_view.png"
+                alt="ずとまよカードWikiのトップ画像"
+                fill
+              />
+            </AspectRatio>
           </Box>
         )}
         <Container maxWidth={maxWidth} width={'100%'} px={3}>

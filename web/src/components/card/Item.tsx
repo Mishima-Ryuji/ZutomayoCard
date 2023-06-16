@@ -10,12 +10,13 @@ type Props = {
 
 export const CardItem = ({ card, width }: Props) => {
   const categoryDetail = getCategoryDetail(card)
+  const url = card.resized_image?.url ?? card.image?.url
   return (
     <Link href={`/cards/${card.id}`}>
-      <AspectRatio maxW="400px" width={width} ratio={63 / 88}>
-        {card.image ? (
+      <AspectRatio maxW="400px" width={width} m="auto" ratio={63 / 88}>
+        {url ? (
           <Image
-            src={card.image.url}
+            src={url}
             alt={`${
               card.name ? `ずとまよカード「${card.name}」` : 'ずとまよカード'
             }の写真`}
