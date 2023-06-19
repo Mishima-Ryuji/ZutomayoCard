@@ -70,7 +70,10 @@ const ComboWriter = ({ combo, baseCardId, mt }: ComboWriterProps) => {
                   defaultValue={cardIds.join(',')}
                   onChange={(e) =>
                     setCardIds(
-                      e.currentTarget.value.split(',').map((id) => id.trim())
+                      e.currentTarget.value
+                        .split(',')
+                        .map((id) => id.trim())
+                        .filter((id) => id !== '')
                     )
                   }
                 />
@@ -131,7 +134,7 @@ type ItemProps = {
 const ComboItem = ({ combo, baseCardId }: ItemProps) => {
   const cardIds = combo.card_ids.filter((id) => id !== baseCardId)
   const [cards, loading, error] = useCollectionData(
-    designatedIdsCardsRef(cardIds)
+    cardIds.length > 0 ? designatedIdsCardsRef(cardIds) : null
   )
   const { isAdmin } = useAuthState()
   return (
