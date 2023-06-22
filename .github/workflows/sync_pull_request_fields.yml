@@ -1,0 +1,45 @@
+name: Apply assignees, labels and milestone from linked issues to PRs
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  label_and_milestone:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply assignees, labels and milestone from issue to PR
+        uses: actions/github-script@v5
+        with:
+          script: |
+            // Extract issue number from PR body
+            const body = context.payload.pull_request.body;
+            const issueNumberMatch = body.match(/close #(\d+)/);
+            if (!issueNumberMatch) {
+              console.log('No issue number found in PR body');
+              return;
+            }
+
+            const issueNumber = issueNumberMatch[1];
+
+            // Fetch issue details
+            const issue = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            });
+
+            // Apply the issue's assignees, labels and milestone to the PR
+            let milestoneNumber = null;
+            if (issue.data.milestone) {
+              milestoneNumber = issue.data.milestone.number;
+            }
+
+            github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: issue.data.labels.map(label => label.name),
+              milestone: milestoneNumber,
+              assignees: issue.data.assignees.map(assignee => assignee.login)
+            });
