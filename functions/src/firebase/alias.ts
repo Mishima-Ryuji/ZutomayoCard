@@ -54,7 +54,7 @@ export const directDoc = <T extends ValidDocument>(
 export const doc = <T extends ValidDocument>(
   colRef: ColRef<T>,
   id?: T['id']
-): DocRef<T> => (id ? colRef.doc(id) : colRef.doc())
+): DocRef<T> => (id !== undefined ? colRef.doc(id) : colRef.doc())
 
 export const isDocRef = <T extends ValidDocument>(
   ref: DocRef<T> | ColRef<T>

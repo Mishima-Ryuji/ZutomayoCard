@@ -19,7 +19,7 @@
 
   "eslint.workingDirectories": [
     { "pattern": "./functions/" },
-    { "pattern": "./web/*/" }
+    { "pattern": "./web/" }
   ],
 
   // EmmetをReactでも有効化

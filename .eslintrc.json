@@ -1,15 +1,11 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "import"],
+  "plugins": ["@typescript-eslint"],
   "extends": [
     "eslint:recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:import/typescript",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/strict",
-    "plugin:prettier/recommended"
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
   "settings": {
     "import/resolver": {
@@ -17,26 +13,74 @@
     }
   },
   "rules": {
+    // 末尾にセミコロンを書かないルール
     "semi": ["error", "never", { "beforeStatementContinuationChars": "never" }],
-    "semi-spacing": ["error", { "after": true, "before": false }],
-    "semi-style": ["error", "first"],
-    "no-extra-semi": "error",
-    "no-unexpected-multiline": "error",
-    "no-unreachable": "error",
-    "object-curly-spacing": ["error", "always"],
-    "no-constant-condition": "off",
-    "guard-for-in": "off",
-    "eqeqeq": ["error", "always"],
-    "prettier/prettier": "error",
 
+    // セミコロン前後の空白を一貫させるルールです。
+    "semi-spacing": ["error", { "after": true, "before": false }],
+
+    // セミコロンを行末に書くか、次の文 (Statement) の行頭に書くかを一貫させるルール
+    // セミコロンはつけないルールなので無意味だが念の為
+    "semi-style": ["error", "first"],
+
+    // 余分なセミコロンを禁止するルール
+    // セミコロンはつけないルールなので無意味だが念の為
+    "no-extra-semi": "error",
+
+    // 意図に反して2つの文が接続された箇所を警告するルール
+    "no-unexpected-multiline": "error",
+
+    // オブジェクトの{}に関するルール
+    "object-curly-spacing": ["error", "always"],
+
+    // 定数が条件の時に指定された場合に警告
+    "no-constant-condition": "warn",
+
+    // for in の中でkeyを直接使えるようにするルール
+    "guard-for-in": "off",
+
+    // イコール2つ(==)は事故の元なのでイコール3つ(===)を使うように
+    "eqeqeq": ["error", "smart"],
+
+    // 条件部分でboolean型を強制する
+    "@typescript-eslint/strict-boolean-expressions": "error",
+
+    // @ts-ignoreの使用を禁止し、@ts-expect-errorを強制する
+    // @ts-ignoreはエラーが解決された場合にエラーにならないので消し忘れる可能性がある
     "@typescript-eslint/prefer-ts-expect-error": "error",
+
+    // 変数名がnullじゃないことを宣言することを禁止するルール
+    // 例外を投げるようにした方がバグの特定がしやすいため
     "@typescript-eslint/no-non-null-assertion": "error",
+
+    // 不当な型アサーションを警告
     "@typescript-eslint/consistent-type-assertions": "warn",
+
+    // オプショナルチェーンの利用を強制
+    // nullやundefinedの判定でandするとコードが複雑になるため
     "@typescript-eslint/prefer-optional-chain": "error",
+
+    // 未使用変数の警告
     "@typescript-eslint/no-unused-vars": "warn",
+
+    // String オブジェクトや Boolean オブジェクトなどの、JavaScript で定義されているプリミティブ値のラッパーオブジェクトを型定義に利用することを許可しない
     "@typescript-eslint/ban-types": "error",
+
+    // 余分なセミコロンを禁止するルール
+    // セミコロンはつけないルールなので無意味だが念の為
     "@typescript-eslint/no-extra-semi": "error",
+
+    // interfaceである必要がない宣言はtypeに変換するルールをOFFにする
     "@typescript-eslint/consistent-type-definitions": "off",
-    "@typescript-eslint/no-floating-promises": ["warn", { "ignoreIIFE": true }]
+
+    // awaitしていないPromiseに警告を表示
+    // 気づき忘れるとデバックに時間ががかるため
+    "@typescript-eslint/no-floating-promises": [
+      "error",
+      { "ignoreIIFE": true }
+    ],
+
+    // 到達できない文を警告するルール
+    "@typescript-eslint/switch-exhaustiveness-check": "error"
   }
 }

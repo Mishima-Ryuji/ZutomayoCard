@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Box,
   Button,
@@ -20,7 +18,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { ChangeEventHandler, useEffect, useRef, useState } from 'react'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
 import { Controller, useForm } from 'react-hook-form'
@@ -57,8 +55,7 @@ const FileUpload = ({ onChange: handleChange }: FileUploadProps) => {
 
 const Page = () => {
   const router = useRouter()
-  const params = useParams()
-  const cardId = params.id
+  const cardId = router.query.id
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -71,7 +68,7 @@ const Page = () => {
   useEffect(() => {
     if (adminLoading) return
     if (isAdmin) return
-    router.push(cardId ? `cards/${cardId}` : '/')
+    void router.push(typeof cardId === 'string' ? `cards/${cardId}` : '/')
   }, [adminLoading])
 
   const {
@@ -87,7 +84,7 @@ const Page = () => {
     if (!card) return
     setIsSubmitting(true)
     await updateDoc(card.ref, data)
-    router.push(`/cards/${card.id}`)
+    await router.push(`/cards/${card.id}`)
   })
 
   const cardData = watch()
@@ -118,10 +115,9 @@ const Page = () => {
               </FormHelperText>
               <FileUpload
                 onChange={async (e) => {
-                  if (!card) return
                   const file = e.currentTarget.files?.[0]
                   const ext = file?.name.split('.').pop()
-                  if (!file || !ext) return
+                  if (!file || ext === undefined) return
                   const filename = `${card.id}.${ext}`
                   const fullPath = `cards/${filename}`
                   const uploadRef = ref(fb.storage, fullPath)

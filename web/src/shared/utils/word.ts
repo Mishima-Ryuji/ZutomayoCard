@@ -1,3 +1,5 @@
+// TODO: このファイルは外部から持ってきたもので、ESlintを通すために一部のルールを無視している
+
 interface Rules {
   pluralRules: Record<string, string>
   singularRules: Record<string, string>
@@ -147,6 +149,7 @@ const rules: Rules = {
 }
 
 export const pluralize = (word: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-for-in-array
   for (const i in rules.uninflected) {
     if (word.toLowerCase() === rules.uninflected[i]) {
       return word
@@ -158,8 +161,11 @@ export const pluralize = (word: string) => {
     }
   }
   for (const i in rules.pluralRules) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const rObj = eval('new RegExp(' + i + ');')
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     if (word.match(rObj)) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       word = word.replace(rObj, eval(rules.pluralRules[i]))
       return word
     }
@@ -168,6 +174,7 @@ export const pluralize = (word: string) => {
 }
 
 export const singularize = (word: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-for-in-array
   for (const i in rules.uninflected) {
     if (word.toLowerCase() === rules.uninflected[i]) {
       return word
@@ -179,8 +186,11 @@ export const singularize = (word: string) => {
     }
   }
   for (const i in rules.singularRules) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const rObj = eval('new RegExp(' + i + ');')
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     if (word.match(rObj)) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       word = word.replace(rObj, eval(rules.singularRules[i]))
       return word
     }

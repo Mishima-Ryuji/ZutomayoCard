@@ -39,7 +39,7 @@ class Firebase {
   }
 
   static getInstance() {
-    if (!Firebase.instance) {
+    if (Firebase.instance === undefined) {
       Firebase.instance = new Firebase()
     }
     return Firebase.instance
@@ -54,6 +54,8 @@ class Firebase {
       params: Functions[typeof funcName]['input']
     ): Promise<{ data: Functions[typeof funcName]['returns'] }> => {
       // JSONで表現出来ない型がfirebase-js-sdkでは適切にフォーマットしてくれないので一回stringifyを通して整形する
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const data: any = JSON.parse(JSON.stringify(params))
 
       console.debug(data)

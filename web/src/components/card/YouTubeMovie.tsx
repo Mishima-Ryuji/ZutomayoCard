@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Box,
   Button,
@@ -34,17 +32,19 @@ export const YouTubeMovie = ({ card }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [youtubeURL, setYouTubeURL] = useState<string>(
-    card.youtube_id ? `https://www.youtube.com/watch?v=${card.youtube_id}` : ''
+    card.youtube_id !== undefined
+      ? `https://www.youtube.com/watch?v=${card.youtube_id}`
+      : ''
   )
 
-  if (!isAdmin && !card.youtube_id) return <></>
+  if (!isAdmin && card.youtube_id !== undefined) return <></>
 
   return (
     <Box>
       <Heading size="md" mb={4}>
         動画解説
       </Heading>
-      {card.youtube_id ? (
+      {card.youtube_id !== undefined ? (
         <>
           <Youtube videoId={card.youtube_id} />
         </>
@@ -64,16 +64,16 @@ export const YouTubeMovie = ({ card }: Props) => {
               <FaPencilAlt />
               YouTubeの動画の登録
             </Button>
-            {card.youtube_id && (
+            {card.youtube_id !== undefined && (
               <Button
                 colorScheme="red"
                 size="xs"
                 mt={7}
-                onClick={() => {
+                onClick={async () => {
                   const confirmed =
                     window.confirm('本当に動画解説を削除しますか？')
                   if (!confirmed) return
-                  updateDoc(card.ref, {
+                  await updateDoc(card.ref, {
                     youtube_id: deleteField(),
                   })
                 }}

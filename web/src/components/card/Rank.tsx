@@ -81,10 +81,10 @@ export const CardRank = ({ card }: Props) => {
                 colorScheme="red"
                 size="xs"
                 mt={7}
-                onClick={() => {
+                onClick={async () => {
                   const confirmed = window.confirm('本当に評価を削除しますか？')
                   if (!confirmed) return
-                  updateDoc(card.ref, {
+                  await updateDoc(card.ref, {
                     rank: deleteField(),
                     rank_description: deleteField(),
                   })
@@ -134,7 +134,11 @@ export const CardRank = ({ card }: Props) => {
                 <Button
                   colorScheme="purple"
                   onClick={async () => {
-                    if (!rank || !rankDescription)
+                    if (
+                      !rank ||
+                      rankDescription === undefined ||
+                      rankDescription === ''
+                    )
                       throw new Error('Unexpected error has ocurred.')
                     await updateDoc(card.ref, {
                       rank,
@@ -142,7 +146,11 @@ export const CardRank = ({ card }: Props) => {
                     })
                     onClose()
                   }}
-                  isDisabled={!rank || !rankDescription}
+                  isDisabled={
+                    !rank ||
+                    rankDescription === undefined ||
+                    rankDescription === ''
+                  }
                 >
                   更新
                 </Button>

@@ -97,9 +97,8 @@ const ComboWriter = ({ combo, baseCardId, mt }: ComboWriterProps) => {
               onClick={async () => {
                 if (cardIds.length === 0 || !description)
                   throw new Error('Unexpected error has ocurred.')
-                const actualCardIds = baseCardId
-                  ? [baseCardId, ...cardIds]
-                  : cardIds
+                const actualCardIds =
+                  baseCardId !== undefined ? [baseCardId, ...cardIds] : cardIds
                 if (combo) {
                   await updateDoc(combo.ref, {
                     card_ids: actualCardIds,
@@ -149,8 +148,8 @@ const ComboItem = ({ combo, baseCardId }: ItemProps) => {
               colorScheme="red"
               size="xs"
               gap={1}
-              onClick={() => {
-                deleteDoc(combo.ref)
+              onClick={async () => {
+                await deleteDoc(combo.ref)
               }}
             >
               <FaTrash />
@@ -176,7 +175,7 @@ export const ComboList = ({ combos, baseCardId }: Props) => {
       </Heading>
       <Stack gap={8}>
         {combos.map((combo) => (
-          <ComboItem combo={combo} baseCardId={baseCardId} />
+          <ComboItem key={combo.id} combo={combo} baseCardId={baseCardId} />
         ))}
         {combos.length === 0 && (
           <Box>コンボで使うと強いカードはありません。</Box>

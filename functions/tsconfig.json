@@ -6,13 +6,18 @@
     "outDir": "lib",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017",
+    "target": "es2020",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "lib": ["ES2021", "ES2022.Intl"],
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": "./",
     "paths": {
       "~/*": ["./src/*"]
     }
   },
   "compileOnSave": true,
-  "include": ["**/*.ts"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

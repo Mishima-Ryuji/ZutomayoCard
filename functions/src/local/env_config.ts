@@ -1,5 +1,6 @@
 import { config } from 'dotenv'
 
-config({
-  path: `.env.${process.env.GCLOUD_PROJECT}`,
-})
+if (process.env.GCLOUD_PROJECT !== undefined)
+  config({
+    path: `.env.${process.env.GCLOUD_PROJECT}`,
+  })

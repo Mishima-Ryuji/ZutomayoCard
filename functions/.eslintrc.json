@@ -1,16 +1,21 @@
 {
-  "root": true,
   "env": {
     "es6": true,
     "node": true
   },
-  "extends": ["google", "../.eslintrc.json"],
+  "plugins": ["import"],
+  "extends": [
+    "../.eslintrc.json",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
   "parserOptions": {
     "project": "tsconfig.json",
     "sourceType": "module"
   },
   "rules": {
-    "require-jsdoc": "off"
+    "require-jsdoc": "off",
+    "valid-jsdoc": "off"
   },
   "ignorePatterns": [
     "/lib/**/*" // Ignore built files.

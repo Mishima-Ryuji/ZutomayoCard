@@ -36,4 +36,6 @@ const resizeCards = async () => {
   }
 }
 
-resizeCards().then(() => console.log('finish'))
+resizeCards()
+  .then(() => console.log('finish'))
+  .catch((e) => console.error(e))

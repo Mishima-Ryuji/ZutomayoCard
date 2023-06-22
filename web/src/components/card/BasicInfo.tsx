@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Badge,
   Box,
@@ -34,9 +32,7 @@ export const CardBasicInfo = ({ card }: Props) => {
       <ChakraCard flexGrow={1}>
         <CardHeader>
           <Stack direction="row" mb={2}>
-            {categoryDetail && (
-              <Badge colorScheme="purple">{categoryDetail.name}</Badge>
-            )}
+            <Badge colorScheme="purple">{categoryDetail.name}</Badge>
             <Badge colorScheme="purple">
               {`${card.no} / ${categoryDetail.denominator}`}
             </Badge>
@@ -65,7 +61,7 @@ export const CardBasicInfo = ({ card }: Props) => {
                 </Text>
               </Box>
             )}
-            {card.effect && (
+            {card.effect !== undefined && (
               <Box>
                 <Heading size="md">効果</Heading>
                 <Text pt="2" fontSize="sm">
@@ -73,7 +69,7 @@ export const CardBasicInfo = ({ card }: Props) => {
                 </Text>
               </Box>
             )}
-            {card.clock != undefined && (
+            {card.clock !== undefined && (
               <Box>
                 <Heading size="md">時計</Heading>
                 <Text pt="2" fontSize="sm" fontWeight={'bold'}>
@@ -81,8 +77,8 @@ export const CardBasicInfo = ({ card }: Props) => {
                 </Text>
               </Box>
             )}
-            {card.day_offensive_strength != undefined &&
-              card.night_offensive_strength != undefined && (
+            {card.day_offensive_strength !== undefined &&
+              card.night_offensive_strength !== undefined && (
                 <Box>
                   <Heading size="md">攻撃力</Heading>
                   <Stack direction="row" mt={2}>
@@ -92,24 +88,24 @@ export const CardBasicInfo = ({ card }: Props) => {
                   <Text pt="2" fontSize="sm" fontWeight={'bold'}></Text>
                 </Box>
               )}
-            {card.power != undefined && (
+            {card.power !== undefined && (
               <Box>
                 <Heading size="md">SEND TO POWER</Heading>
                 <Text pt="2" fontSize="sm">
                   {card.power > 0 && card.power < 10 ? (
-                    <>{[...Array(card.power)].map(() => '♦︎')}</>
+                    <>{[...Array<unknown>(card.power)].map(() => '♦︎')}</>
                   ) : (
                     `♦︎ × ${card.power}`
                   )}
                 </Text>
               </Box>
             )}
-            {card.power_cost != undefined && (
+            {card.power_cost !== undefined && (
               <Box>
                 <Heading size="md">POWER COST</Heading>
                 <Text pt="2" fontSize="sm">
                   {card.power_cost > 0 && card.power_cost < 10 ? (
-                    <>{[...Array(card.power_cost)].map(() => '♦︎')}</>
+                    <>{[...Array<unknown>(card.power_cost)].map(() => '♦︎')}</>
                   ) : (
                     `♦︎ × ${card.power_cost}`
                   )}

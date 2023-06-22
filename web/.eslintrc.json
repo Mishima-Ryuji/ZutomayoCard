@@ -1,3 +1,25 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["../.eslintrc.json", "next/core-web-vitals"],
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "@typescript-eslint/no-misused-promises": "off",
+
+    "@typescript-eslint/no-namespace": "off",
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "react-i18next",
+            "importNames": ["useTranslation"],
+            "message": "Please use `next-i18next` instead."
+          }
+        ]
+      }
+    ]
+  },
+  "parserOptions": {
+    "project": "tsconfig.json",
+    "sourceType": "module"
+  }
 }

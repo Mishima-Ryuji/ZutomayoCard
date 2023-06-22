@@ -92,7 +92,7 @@ export const DefaultLayout = ({
                 size={'sm'}
                 onClick={async () => {
                   if (user) {
-                    signOut(fb.auth)
+                    await signOut(fb.auth)
                   } else {
                     const provider = new GoogleAuthProvider()
                     await signInWithPopup(fb.auth, provider)

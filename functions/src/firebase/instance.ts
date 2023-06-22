@@ -1,7 +1,7 @@
 import { App, getApps, initializeApp } from 'firebase-admin/app'
 import { Auth, getAuth } from 'firebase-admin/auth'
 import { Firestore, getFirestore } from 'firebase-admin/firestore'
-import { getStorage, Storage } from 'firebase-admin/storage'
+import { Storage, getStorage } from 'firebase-admin/storage'
 
 export class Firebase {
   public static instance: Firebase
@@ -21,7 +21,7 @@ export class Firebase {
   }
 
   static getInstance() {
-    if (!Firebase.instance) {
+    if (Firebase.instance === undefined) {
       Firebase.instance = new Firebase()
     }
     return Firebase.instance

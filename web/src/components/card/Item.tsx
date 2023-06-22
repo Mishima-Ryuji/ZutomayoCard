@@ -14,11 +14,13 @@ export const CardItem = ({ card, width }: Props) => {
   return (
     <Link href={`/cards/${card.id}`}>
       <AspectRatio maxW="400px" width={width} m="auto" ratio={63 / 88}>
-        {url ? (
+        {url !== undefined ? (
           <Image
             src={url}
             alt={`${
-              card.name ? `ずとまよカード「${card.name}」` : 'ずとまよカード'
+              card.name !== undefined
+                ? `ずとまよカード「${card.name}」`
+                : 'ずとまよカード'
             }の写真`}
             fill
           />

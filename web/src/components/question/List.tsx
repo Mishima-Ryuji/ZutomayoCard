@@ -140,8 +140,8 @@ const QuestionItem = ({ question, baseCardId }: ItemProps) => {
             colorScheme="red"
             size="xs"
             gap={1}
-            onClick={() => {
-              deleteDoc(question.ref)
+            onClick={async () => {
+              await deleteDoc(question.ref)
             }}
           >
             <FaTrash />
@@ -168,7 +168,11 @@ export const QuestionList = ({ questions, baseCardId }: Props) => {
       </Heading>
       <Stack gap={8}>
         {questions.map((question) => (
-          <QuestionItem question={question} baseCardId={baseCardId} />
+          <QuestionItem
+            key={question.id}
+            question={question}
+            baseCardId={baseCardId}
+          />
         ))}
         {questions.length === 0 && <Box>疑問点は登録されていません。</Box>}
       </Stack>

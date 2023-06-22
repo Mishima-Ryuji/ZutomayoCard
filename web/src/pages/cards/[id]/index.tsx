@@ -1,7 +1,5 @@
-'use client'
-
 import { Box, Spinner, Stack } from '@chakra-ui/react'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import {
   useCollectionData,
   useDocumentData,
@@ -19,8 +17,7 @@ import { designatedCardIdQuestionsRef } from '~/models/question'
 
 const Page = () => {
   const router = useRouter()
-  const params = useParams()
-  const cardId = params.id
+  const cardId = router.query.id
 
   const { isAdmin } = useAuthState()
 

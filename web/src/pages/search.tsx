@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Box,
   Checkbox,
@@ -19,6 +17,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { DefaultLayout } from '~/components/Layout'
 import { CardList } from '~/components/card/List'
 import { Card, cardsRef } from '~/firebase'
+import { isBlank } from '~/shared/utils'
 
 type SearchElementProps = {
   cards: Card[]
@@ -29,7 +28,8 @@ const SearchByName = ({ cards }: SearchElementProps) => {
   const result = useMemo(() => {
     return cards.filter(
       (card) =>
-        card.name?.includes(keyword) || card.name_furigana?.includes(keyword)
+        (!isBlank(card.name) && card.name.includes(keyword)) ||
+        (!isBlank(card.name_furigana) && card.name_furigana.includes(keyword))
     )
   }, [keyword])
   return (
@@ -80,7 +80,7 @@ const SearchByAttribute = ({ cards }: SearchElementProps) => {
   ])
   console.log(elements.includes('darkness'))
   const result = useMemo(() => {
-    return cards.filter((card) => true)
+    return cards.filter(() => true)
   }, [elements])
   return (
     <>
@@ -155,9 +155,9 @@ const Page = () => {
       <Flex py={3}>
         <Tabs variant="soft-rounded" colorScheme="purple" width={'100%'}>
           <TabList>
-            <Tab onClick={() => {}}>カード名で検索</Tab>
-            <Tab onClick={() => {}}>効果で検索</Tab>
-            <Tab onClick={() => {}}>絞り込み検索</Tab>
+            <Tab>カード名で検索</Tab>
+            <Tab>効果で検索</Tab>
+            <Tab>絞り込み検索</Tab>
           </TabList>
           {cards ? (
             <TabPanels>

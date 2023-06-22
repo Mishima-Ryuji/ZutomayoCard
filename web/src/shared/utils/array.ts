@@ -9,7 +9,7 @@ export const unique = <T>(array: T[]): T[] => {
 
 export const chunkArray = <T>(arr: T[], chunkSize: number): T[][] => {
   const subArrayCount = Math.ceil(arr.length / chunkSize)
-  const result = new Array(subArrayCount)
+  const result = new Array<T[]>(subArrayCount)
   for (let i = 0; i < subArrayCount; i++) {
     const start = i * chunkSize
     const end = start + chunkSize
@@ -23,8 +23,8 @@ export const range: {
   (end: number): number[]
 } = (first: number, second?: number) => {
   const array = []
-  const start = second ? first : 0
-  const end = second ? second : first
+  const start = second !== undefined ? first : 0
+  const end = second !== undefined ? second : first
   for (let i = start; i < end; i++) {
     array.push(i)
   }

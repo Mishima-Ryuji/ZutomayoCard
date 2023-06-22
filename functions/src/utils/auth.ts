@@ -3,7 +3,7 @@ import { https } from 'firebase-functions'
 
 export const getAuthenticatedUid = (context: https.CallableContext) => {
   const uid = context.auth?.uid
-  if (uid) return uid
+  if (uid !== undefined) return uid
   else
     throw new https.HttpsError('unauthenticated', 'Authentication is required.')
 }
