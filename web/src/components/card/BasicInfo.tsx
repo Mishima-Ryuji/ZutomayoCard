@@ -27,7 +27,7 @@ export const CardBasicInfo = ({ card }: Props) => {
   return (
     <Flex gap={5} width={'100%'} direction={['column', 'row']}>
       <Box display={['none', 'block']}>
-        <CardItem card={card} width={['100%', 250]} />
+        <CardItem card={card} width={['100%', 250]} highResolution />
       </Box>
       <ChakraCard flexGrow={1}>
         <CardHeader>
@@ -48,7 +48,7 @@ export const CardBasicInfo = ({ card }: Props) => {
             </Link>
           )}
           <Box display={['block', 'none']} mt={5}>
-            <CardItem card={card} width={['100%', 250]} />
+            <CardItem card={card} width={['100%', 250]} highResolution />
           </Box>
         </CardHeader>
         <CardBody>
@@ -56,12 +56,12 @@ export const CardBasicInfo = ({ card }: Props) => {
             {card.type && (
               <Box>
                 <Heading size="md">種類</Heading>
-                <Text pt="2" fontSize="sm" fontWeight={'bold'}>
+                <Text pt="2" fontSize="md" fontWeight={'bold'}>
                   {getDisplayType(card)}
                 </Text>
               </Box>
             )}
-            {card.effect !== undefined && (
+            {card.effect !== undefined && card.effect !== '' && (
               <Box>
                 <Heading size="md">効果</Heading>
                 <Text pt="2" fontSize="sm">
@@ -72,7 +72,7 @@ export const CardBasicInfo = ({ card }: Props) => {
             {card.clock !== undefined && (
               <Box>
                 <Heading size="md">時計</Heading>
-                <Text pt="2" fontSize="sm" fontWeight={'bold'}>
+                <Text pt="2" fontSize="md" fontWeight={'bold'}>
                   {card.clock}
                 </Text>
               </Box>
@@ -82,8 +82,14 @@ export const CardBasicInfo = ({ card }: Props) => {
                 <Box>
                   <Heading size="md">攻撃力</Heading>
                   <Stack direction="row" mt={2}>
-                    <Badge colorScheme="purple">{`Night ${card.night_offensive_strength}`}</Badge>
-                    <Badge colorScheme="purple">{`Day ${card.day_offensive_strength}`}</Badge>
+                    <Badge
+                      colorScheme="purple"
+                      fontSize={'md'}
+                    >{`Night ${card.night_offensive_strength}`}</Badge>
+                    <Badge
+                      colorScheme="purple"
+                      fontSize={'md'}
+                    >{`Day ${card.day_offensive_strength}`}</Badge>
                   </Stack>
                   <Text pt="2" fontSize="sm" fontWeight={'bold'}></Text>
                 </Box>

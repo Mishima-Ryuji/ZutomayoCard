@@ -5,13 +5,21 @@ import { CardItem } from './Item'
 type Props = {
   cards: Card[]
   width: ResponsiveValue<number | string>
+  marginAuto?: boolean
 }
 
-export const CardList = ({ cards, width }: Props) => {
+export const CardList = ({ cards, width, marginAuto }: Props) => {
   return (
     <SimpleGrid minChildWidth={width} gap={6}>
       {cards.map((card) => {
-        return <CardItem key={card.id} card={card} width={width} />
+        return (
+          <CardItem
+            key={card.id}
+            card={card}
+            width={width}
+            marginAuto={marginAuto}
+          />
+        )
       })}
       <Box width={width} />
       <Box width={width} />

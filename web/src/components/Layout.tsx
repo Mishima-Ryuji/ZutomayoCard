@@ -17,6 +17,7 @@ import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { FaSearch, FaUser } from 'react-icons/fa'
 import { fb } from '~/firebase'
 
 type Props = {
@@ -25,9 +26,11 @@ type Props = {
   children?: React.ReactNode
 }
 
+const BRAND_RADIO = 0.2
+
 export const DefaultLayout = ({
   children,
-  maxWidth = 1500,
+  maxWidth = 1200,
   eyecatchImage = false,
 }: Props) => {
   const [user, loading] = useAuthState(fb.auth)
@@ -41,16 +44,33 @@ export const DefaultLayout = ({
           zIndex={1000}
           shadow={'md'}
         >
-          <Flex maxWidth={maxWidth} margin={'auto'} p={3} align={'center'}>
+          <Flex
+            maxWidth={maxWidth}
+            margin={'auto'}
+            p={2}
+            px={3}
+            gap={[5, 5, 7]}
+            fontSize={['xl', 'xl', '2xl']}
+            align={'center'}
+          >
             <Link href="/">
-              <Box color={'white'} fontWeight={'bold'} fontSize={'2xl'}>
-                Zutomayo Card Wiki
+              <Box
+                position={'relative'}
+                width={[935 * 0.2, 935 * 0.2, 935 * 0.25]}
+                height={[179 * 0.2, 179 * 0.2, 179 * 0.25]}
+              >
+                <Image src="/logo.png" fill alt="Zutomayo Card Wiki" />
               </Box>
             </Link>
             <Spacer />
+            <Link href="/search">
+              <FaSearch color="white" />
+            </Link>
+            <FaUser color="white" />
           </Flex>
         </chakra.header>
-        <Box height={'60px'} />
+        {/* TODO: ヘッダーの高さ分をとる、要ハードコーディング改善 */}
+        <Box height={['51.8px', '51.8px', '60.75px']} />
         {eyecatchImage && (
           <Box m="auto" width={'100%'} backgroundColor={'#442c6c'}>
             <AspectRatio maxWidth={maxWidth} m="auto" ratio={1280 / 460}>
@@ -79,6 +99,9 @@ export const DefaultLayout = ({
               </ListItem>
               <ListItem fontSize={'x-small'}>
                 本サービスに掲載されているカードの画像以外のイラストや画像は運営で制作した二次創作です。
+              </ListItem>
+              <ListItem fontSize={'x-small'}>
+                本サービス上の画像や情報を無断で利用することは禁止です。
               </ListItem>
               <ListItem fontSize={'x-small'}>
                 本サービスは公式から警告や中止の要請があった場合は速やかにその要求に応じます。

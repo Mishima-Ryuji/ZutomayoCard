@@ -6,14 +6,28 @@ import { Card, getCategoryDetail } from '~/firebase'
 type Props = {
   card: Card
   width?: ResponsiveValue<number | string>
+  marginAuto?: boolean
+  highResolution?: boolean
 }
 
-export const CardItem = ({ card, width }: Props) => {
+export const CardItem = ({
+  card,
+  width,
+  marginAuto = false,
+  highResolution = false,
+}: Props) => {
   const categoryDetail = getCategoryDetail(card)
-  const url = card.resized_image?.url ?? card.image?.url
+  const url = !highResolution
+    ? card.resized_image?.url ?? card.image?.url
+    : card.image?.url
   return (
     <Link href={`/cards/${card.id}`}>
-      <AspectRatio maxW="400px" width={width} m="auto" ratio={63 / 88}>
+      <AspectRatio
+        maxW="400px"
+        width={width}
+        m={marginAuto ? 'auto' : '0'}
+        ratio={63 / 88}
+      >
         {url !== undefined ? (
           <Image
             src={url}
