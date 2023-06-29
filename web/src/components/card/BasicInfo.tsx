@@ -16,6 +16,7 @@ import { FaPencilAlt } from 'react-icons/fa'
 import { CardItem } from '~/components/card/Item'
 import { Card, getCategoryDetail, getDisplayType } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
+import { CardElementImage } from './ElementImage'
 
 type Props = {
   card: Card
@@ -38,7 +39,12 @@ export const CardBasicInfo = ({ card }: Props) => {
             </Badge>
             {card.rarity && <Badge colorScheme="purple">{card.rarity}</Badge>}
           </Stack>
-          <Heading size="lg">{card.name}</Heading>
+          <Flex alignItems={'center'}>
+            {card.element && (
+              <CardElementImage element={card.element} size={40} />
+            )}
+            <Heading size={['md', 'lg']}>{card.name}</Heading>
+          </Flex>
           {isAdmin && (
             <Link href={`/cards/${card.id}/edit`}>
               <Button colorScheme="purple" size="xs" mt={2} gap={1}>
