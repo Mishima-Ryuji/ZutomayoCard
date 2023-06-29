@@ -1,7 +1,7 @@
 import sharp = require('sharp')
 import { cardsRef, fb, getDocs, updateDoc } from '~/firebase'
 
-const magnification = 5
+const magnification = 3
 
 const resizeCards = async () => {
   const s = fb.storage
