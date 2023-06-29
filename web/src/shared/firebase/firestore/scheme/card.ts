@@ -3,27 +3,37 @@ import { getConverter } from '../converter'
 import { Document } from '../document'
 import { CardSubcols } from './subcollections'
 
+export type CardElement = 'flame' | 'wind' | 'electricity' | 'darkness'
+
+export type CardCategory =
+  | '1st'
+  | '2nd'
+  | 'local/techno_poor'
+  | 'collab/OIOI'
+  | 'bonus/jinkougaku'
+
+export type CardRarity = 'N' | 'N+' | 'R' | 'R+' | 'SR' | 'SR+' | 'UR' | 'SE'
+
+export type CardType = 'character' | 'enchant' | 'area_enchant'
+
 export interface Card extends Document {
   readonly ref: DocRef<Card>
   readonly parent_id: 'cards'
   readonly subcollections: typeof CardSubcols
   image?: { url: string; filename: string; full_path: string }
   resized_image?: { url: string; filename: string; full_path: string }
-  category:
-    | '1st'
-    | '2nd'
-    | 'local/techno_poor'
-    | 'collab/OIOI'
-    | 'bonus/jinkougaku'
+  category: CardCategory
   order: number
   no: string
   special_denominator?: string
   special_procurement_method?: string
-  rarity?: 'N' | 'N+' | 'R' | 'R+' | 'SR' | 'SR+' | 'UR' | 'SE'
-  element?: 'flame' | 'wind' | 'electricity' | 'darkness'
+  rarity?: CardRarity
+  element?: CardElement
   name?: string
+  zh_name: string
   name_furigana?: string
   effect?: string
+  zh_effect: string
   day_offensive_strength?: number
   night_offensive_strength?: number
   clock?: number

@@ -6,3 +6,20 @@ export const sortedCategoryCardsRef = (category: Card['category']) =>
 
 export const designatedIdsCardsRef = (ids: string[]) =>
   query(cardsRef, where(documentId(), 'in', ids))
+
+export const cardsSorter = (a: Card, b: Card): number => {
+  const categories = [
+    '1st',
+    '2nd',
+    'local/techno_poor',
+    'collab/OIOI',
+    'bonus/jinkougaku',
+  ]
+  const aCategoryIndex = categories.findIndex((c) => a.category === c)
+  const bCategoryIndex = categories.findIndex((c) => b.category === c)
+  if (aCategoryIndex - bCategoryIndex !== 0) {
+    return aCategoryIndex - bCategoryIndex
+  } else {
+    return a.order - b.order
+  }
+}
