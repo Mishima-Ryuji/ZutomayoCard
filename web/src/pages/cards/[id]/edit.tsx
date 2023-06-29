@@ -132,7 +132,7 @@ const Page = () => {
                   })
                 }}
               />
-              <CardItem card={card} width={200} />
+              <CardItem card={card} width={200} highResolution />
             </FormControl>
             <FormControl>
               <FormLabel htmlFor="rarity">レアリティ</FormLabel>
