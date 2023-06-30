@@ -141,7 +141,7 @@ const SearchByAttribute = ({ cards }: SearchElementProps) => {
           rarities.includes(card.rarity)
       )
       .sort(cardsSorter)
-  }, [elements, types])
+  }, [elements, types, rarities])
   return (
     <>
       <Stack gap={5} mb={6}>
