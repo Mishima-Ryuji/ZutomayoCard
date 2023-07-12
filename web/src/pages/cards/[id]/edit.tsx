@@ -18,6 +18,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import DefaultErrorPage from 'next/error'
 import { useRouter } from 'next/router'
 import { ChangeEventHandler, useEffect, useRef, useState } from 'react'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
@@ -102,7 +103,8 @@ const Page = () => {
       ])
     )
   }, [card])
-
+  if (!card && !loading && cardId !== undefined)
+    return <DefaultErrorPage statusCode={404} />
   return (
     <DefaultLayout>
       {card && isAdmin ? (

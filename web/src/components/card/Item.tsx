@@ -1,51 +1,87 @@
-import { AspectRatio, Box, ResponsiveValue } from '@chakra-ui/react'
+import { AspectRatio, Box, ResponsiveValue, Tag } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { Card, getCategoryDetail } from '~/firebase'
+import { PromiseVoid } from '~/types'
 
 type Props = {
   card: Card
   width?: ResponsiveValue<number | string>
-  marginAuto?: boolean
+  onSelect?: (card: Card) => PromiseVoid
   highResolution?: boolean
+  selectCount?: number
+  selected?: boolean
 }
 
 export const CardItem = ({
   card,
   width,
-  marginAuto = false,
   highResolution = false,
+  selectCount,
+  selected,
+  onSelect: handleSelect,
 }: Props) => {
   const categoryDetail = getCategoryDetail(card)
   const url = !highResolution
     ? card.resized_image?.url ?? card.image?.url
     : card.image?.url
+  const router = useRouter()
+
+  const Img = (
+    <Box
+      position={'relative'}
+      width={'100%'}
+      height="100%"
+      border={selected === true && selectCount === undefined ? 'solid' : 'none'}
+      borderColor={'red.400'}
+      borderWidth={'5px'}
+      cursor={'pointer'}
+    >
+      {url !== undefined ? (
+        <Image
+          src={url}
+          alt={`${
+            card.name !== undefined
+              ? `ずとまよカード「${card.name}」`
+              : 'ずとまよカード'
+          }の写真`}
+          fill
+        />
+      ) : (
+        <Box width={'100%'} height="100%" border={'solid'} p={2}>
+          {categoryDetail.name}
+          <br />
+          {card.no} / {categoryDetail.denominator}
+        </Box>
+      )}
+      {selectCount !== undefined && selectCount > 0 && (
+        <Tag
+          size={'lg'}
+          position={'absolute'}
+          right={1}
+          top={1}
+          variant={'solid'}
+          colorScheme="red"
+        >
+          {selectCount}
+        </Tag>
+      )}
+    </Box>
+  )
   return (
-    <Link href={`/cards/${card.id}`}>
-      <AspectRatio
-        maxW="400px"
-        width={width}
-        m={marginAuto ? 'auto' : '0'}
-        ratio={63 / 88}
-      >
-        {url !== undefined ? (
-          <Image
-            src={url}
-            alt={`${
-              card.name !== undefined
-                ? `ずとまよカード「${card.name}」`
-                : 'ずとまよカード'
-            }の写真`}
-            fill
-          />
-        ) : (
-          <Box width={'100%'} height="100%" border={'solid'} p={2}>
-            {categoryDetail.name}
-            <br />
-            {card.no} / {categoryDetail.denominator}
-          </Box>
-        )}
-      </AspectRatio>
-    </Link>
+    <AspectRatio
+      width={width ?? '100%'}
+      ratio={63 / 88}
+      onClick={async () => {
+        if (handleSelect) await handleSelect(card)
+      }}
+    >
+      {handleSelect === undefined ? (
+        <Link href={`/cards/${card.id}`}>{Img}</Link>
+      ) : (
+        Img
+      )}
+    </AspectRatio>
   )
 }

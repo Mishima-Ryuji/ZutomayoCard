@@ -46,9 +46,7 @@ export const YouTubeMovie = ({ card }: Props) => {
         動画解説
       </Heading>
       {card.youtube_id !== undefined ? (
-        <>
-          <Youtube videoId={card.youtube_id} />
-        </>
+        <Youtube videoId={card.youtube_id} />
       ) : (
         <Box>{`現在準備中です。`}</Box>
       )}

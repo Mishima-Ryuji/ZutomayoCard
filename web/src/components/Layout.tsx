@@ -4,7 +4,6 @@ import {
   AspectRatio,
   Box,
   Button,
-  ChakraProvider,
   Container,
   Flex,
   ListItem,
@@ -17,60 +16,75 @@ import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { FaSearch, FaUser } from 'react-icons/fa'
+import { FaUser } from 'react-icons/fa'
 import { fb } from '~/firebase'
 
 type Props = {
   eyecatchImage?: boolean
   maxWidth?: number
   children?: React.ReactNode
+  bottomSpace?: number | number[]
+  footerNone?: boolean
 }
-
-const BRAND_RADIO = 0.2
 
 export const DefaultLayout = ({
   children,
   maxWidth = 1200,
   eyecatchImage = false,
+  bottomSpace = 0,
+  footerNone = false,
 }: Props) => {
   const [user, loading] = useAuthState(fb.auth)
   return (
-    <ChakraProvider>
-      <Stack gap={0}>
-        <chakra.header
-          bgColor={'purple.500'}
-          position="fixed"
-          width={'100%'}
-          zIndex={1000}
-          shadow={'md'}
+    <Stack gap={0}>
+      <chakra.header
+        bgColor={'purple.500'}
+        position="fixed"
+        width={'100%'}
+        zIndex={1000}
+        shadow={'md'}
+      >
+        <Flex
+          maxWidth={maxWidth}
+          margin={'auto'}
+          p={2}
+          px={3}
+          gap={[3, 3, 5]}
+          fontSize={['xl', 'xl', '2xl']}
+          align={'center'}
         >
-          <Flex
-            maxWidth={maxWidth}
-            margin={'auto'}
-            p={2}
-            px={3}
-            gap={[5, 5, 7]}
-            fontSize={['xl', 'xl', '2xl']}
-            align={'center'}
-          >
-            <Link href="/">
-              <Box
-                position={'relative'}
-                width={[935 * 0.2, 935 * 0.2, 935 * 0.25]}
-                height={[179 * 0.2, 179 * 0.2, 179 * 0.25]}
-              >
-                <Image src="/logo.png" fill alt="Zutomayo Card Wiki" />
-              </Box>
-            </Link>
-            <Spacer />
-            <Link href="/search">
-              <FaSearch color="white" />
-            </Link>
-            <FaUser color="white" />
-          </Flex>
-        </chakra.header>
-        {/* TODO: ヘッダーの高さ分をとる、要ハードコーディング改善 */}
-        <Box height={['51.8px', '51.8px', '60.75px']} />
+          <Link href="/">
+            <Box
+              position={'relative'}
+              width={[935 * 0.2, 935 * 0.2, 935 * 0.25]}
+              height={[179 * 0.2, 179 * 0.2, 179 * 0.25]}
+            >
+              <Image src="/logo.png" fill alt="Zutomayo Card Wiki" />
+            </Box>
+          </Link>
+          <Spacer />
+          <Link href="/decks">
+            <Image
+              src="/icons/deck_builder.png"
+              alt="デッキビルダーアイコン"
+              width={30}
+              height={30}
+            />
+          </Link>
+          <Link href="/search">
+            <Image
+              src="/icons/search.png"
+              alt="検索アイコン"
+              width={(30 / 680) * 830}
+              height={30}
+            />
+          </Link>
+          <FaUser color="#e5dad7" />
+        </Flex>
+      </chakra.header>
+      {/* TODO: ヘッダーの高さ分をとる、要ハードコーディング改善 */}
+      <Box height={['51.8px', '51.8px', '60.75px']} />
+      <Box>
         {eyecatchImage && (
           <Box m="auto" width={'100%'} backgroundColor={'#442c6c'}>
             <AspectRatio maxWidth={maxWidth} m="auto" ratio={1280 / 460}>
@@ -82,9 +96,12 @@ export const DefaultLayout = ({
             </AspectRatio>
           </Box>
         )}
-        <Container maxWidth={maxWidth} width={'100%'} px={3}>
-          {children}
-        </Container>
+      </Box>
+      <Container maxWidth={maxWidth} width={'100%'} px={3}>
+        {children}
+      </Container>
+      <Box height={bottomSpace} width={'100%'} />
+      {!footerNone && (
         <chakra.footer p={3} bgColor={'gray.100'}>
           <Container maxWidth={maxWidth} px={3}>
             <UnorderedList>
@@ -130,7 +147,7 @@ export const DefaultLayout = ({
             )}
           </Container>
         </chakra.footer>
-      </Stack>
-    </ChakraProvider>
+      )}
+    </Stack>
   )
 }

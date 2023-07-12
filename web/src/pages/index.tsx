@@ -4,7 +4,7 @@ import { Flex, Tab, TabList, Tabs } from '@chakra-ui/react'
 import { getDocs } from 'firebase/firestore'
 import { GetStaticProps } from 'next'
 import { useMemo, useState } from 'react'
-import { useCollectionData } from 'react-firebase-hooks/firestore'
+import { useCollectionDataOnce } from 'react-firebase-hooks/firestore'
 import { DefaultLayout } from '~/components/Layout'
 import { CardList } from '~/components/card/List'
 import { Card, cardConverter, cardsRef } from '~/firebase'
@@ -28,7 +28,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
 const Page = ({ cards: staticCards }: Props) => {
   const [category, setCategory] = useState<Card['category']>('1st')
-  const [cards, loading, error] = useCollectionData(cardsRef, {
+  const [cards] = useCollectionDataOnce(cardsRef, {
     initialValue: deserializeArray(staticCards, { ref: cardConverter }),
   })
   const formattedCards = useMemo(() => {
@@ -62,9 +62,7 @@ const Page = ({ cards: staticCards }: Props) => {
           </TabList>
         </Tabs>
       </Flex>
-      {formattedCards && (
-        <CardList cards={formattedCards} width={'150px'} marginAuto />
-      )}
+      {formattedCards && <CardList cards={formattedCards} width={'150px'} />}
     </DefaultLayout>
   )
 }

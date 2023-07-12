@@ -1,9 +1,12 @@
-import { Box, Heading, Spinner } from '@chakra-ui/react'
+import { Box, Spinner } from '@chakra-ui/react'
 import { GetStaticProps } from 'next'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore'
 import { DefaultLayout } from '~/components/Layout'
-import { CardSearcher } from '~/components/card/Searcher'
+import { DECK_FORM_BOTTOM_SPACE, DeckForm } from '~/components/deck/Form'
 import { Card, cardConverter, cardsRef, getDocs } from '~/firebase'
+import { useAuthState } from '~/hooks/useAuthState'
 import { Serialized, deserializeArray, serializeArray } from '~/shared/utils'
 
 type Props = {
@@ -26,21 +29,27 @@ const Page = ({ cards: staticCards }: Props) => {
   const [cards] = useCollectionDataOnce(cardsRef, {
     initialValue: deserializeArray(staticCards, { ref: cardConverter }),
   })
+
+  const router = useRouter()
+  const { user, loading } = useAuthState()
+  useEffect(() => {
+    if (loading) return
+    if (user) return
+    void router.push('/decks')
+  }, [loading])
+
   return (
-    <DefaultLayout>
-      <Heading mt={3} fontSize={'2xl'}>
-        検索
-      </Heading>
-      <Box py={3}>
-        {cards ? (
-          <CardSearcher cards={cards} />
+    <>
+      <DefaultLayout bottomSpace={DECK_FORM_BOTTOM_SPACE} footerNone>
+        {cards && user ? (
+          <DeckForm cards={cards} />
         ) : (
           <Box textAlign={'center'} p="5">
             <Spinner m="auto" />
           </Box>
         )}
-      </Box>
-    </DefaultLayout>
+      </DefaultLayout>
+    </>
   )
 }
 
