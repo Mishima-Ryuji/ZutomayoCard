@@ -141,7 +141,7 @@ const Page = ({ cards: staticCards, deck: staticDeck }: Props) => {
             />
             {deck.description !== undefined && (
               <>
-                <Heading fontSize={'xl'} mt={7} mb={2}>
+                <Heading fontSize={'xl'} mt={3} mb={2}>
                   デッキの解説と立ち回り方
                 </Heading>
                 <p>{deck.description}</p>
