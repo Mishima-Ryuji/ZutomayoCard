@@ -1,4 +1,12 @@
-import { Box, Button, Flex, Heading, Link, Spinner } from '@chakra-ui/react'
+import {
+  AspectRatio,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Link,
+  Spinner,
+} from '@chakra-ui/react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import DefaultErrorPage from 'next/error'
 import { useRouter } from 'next/router'
@@ -144,7 +152,12 @@ const Page = ({ cards: staticCards, deck: staticDeck }: Props) => {
                 <Heading fontSize={'xl'} mt={7} mb={2}>
                   動画解説
                 </Heading>
-                <Youtube videoId={deck.youtube_id} />
+                <AspectRatio width={'100%'} maxW={640} ratio={640 / 360}>
+                  <Youtube
+                    videoId={deck.youtube_id}
+                    opts={{ width: '100%', height: '100%' }}
+                  />
+                </AspectRatio>
               </>
             )}
           </>

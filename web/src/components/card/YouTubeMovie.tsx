@@ -1,4 +1,5 @@
 import {
+  AspectRatio,
   Box,
   Button,
   Flex,
@@ -46,7 +47,12 @@ export const YouTubeMovie = ({ card }: Props) => {
         動画解説
       </Heading>
       {card.youtube_id !== undefined ? (
-        <Youtube videoId={card.youtube_id} />
+        <AspectRatio width={'100%'} maxW={640} ratio={640 / 360}>
+          <Youtube
+            videoId={card.youtube_id}
+            opts={{ width: '100%', height: '100%' }}
+          />
+        </AspectRatio>
       ) : (
         <Box>{`現在準備中です。`}</Box>
       )}
