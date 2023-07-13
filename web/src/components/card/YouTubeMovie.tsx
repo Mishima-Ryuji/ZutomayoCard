@@ -37,7 +37,7 @@ export const YouTubeMovie = ({ card }: Props) => {
       : ''
   )
 
-  if (!isAdmin && (card.youtube_id !== undefined || card.youtube_id !== ''))
+  if (!isAdmin && (card.youtube_id === undefined || card.youtube_id === ''))
     return <></>
 
   return (
