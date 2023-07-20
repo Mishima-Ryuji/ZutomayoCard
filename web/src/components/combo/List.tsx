@@ -139,7 +139,7 @@ const ComboItem = ({ combo, baseCardId }: ItemProps) => {
   return (
     <Box>
       <Stack gap={3}>
-        {cards && <CardList width={'100px'} cards={cards} />}
+        {cards && <CardList cards={cards} />}
         <Box>{combo.description}</Box>
         <Flex mt={2} gap={3}>
           <ComboWriter baseCardId={baseCardId} combo={combo} />
