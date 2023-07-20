@@ -162,13 +162,15 @@ const Page = ({ cards: staticCards }: Props) => {
               </Text>
             </Box>
             <Flex gap={3} align={'center'}>
-              <Button
-                colorScheme="purple"
-                size={'sm'}
-                onClick={() => setShowLoginPopup(true)}
-              >
-                ログイン
-              </Button>
+              {user === null && (
+                <Button
+                  colorScheme="purple"
+                  size={'sm'}
+                  onClick={() => setShowLoginPopup(true)}
+                >
+                  ログイン
+                </Button>
+              )}
               <Link href="https://twitter.com/zutoca_wiki">
                 <Button
                   colorScheme="twitter"
