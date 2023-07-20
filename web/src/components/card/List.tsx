@@ -1,27 +1,27 @@
-import { Box, ResponsiveValue, SimpleGrid } from '@chakra-ui/react'
+import { ResponsiveValue, SimpleGrid } from '@chakra-ui/react'
 import { Card } from '~/firebase'
 import { PromiseVoid } from '~/types'
 import { CardItem } from './Item'
 
 type Props = {
   cards: Card[]
-  width: ResponsiveValue<number | string>
+  columns?: ResponsiveValue<number>
   counter?: boolean
   selectedCardIds?: string[]
   onSelect?: (card: Card) => PromiseVoid
-  gap?: number
+  gap?: ResponsiveValue<number>
 }
 
 export const CardList = ({
   cards,
-  width,
   counter = false,
   selectedCardIds,
   onSelect: handleSelect,
-  gap = 7,
+  columns = [2, 3, 4, 6],
+  gap = [3, 4, 5, 7],
 }: Props) => {
   return (
-    <SimpleGrid minChildWidth={width} gap={gap}>
+    <SimpleGrid gap={gap} columns={columns}>
       {cards.map((card) => {
         return (
           <CardItem
@@ -37,11 +37,6 @@ export const CardList = ({
           />
         )
       })}
-      <Box />
-      <Box />
-      <Box />
-      <Box />
-      <Box />
     </SimpleGrid>
   )
 }

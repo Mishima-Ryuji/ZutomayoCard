@@ -25,7 +25,7 @@ export const DeckItem = ({ deck, cards }: Props) => {
       <Heading fontSize={'2xl'} mb={2} color="purple.500">
         <Link href={`/decks/${deck.id}`}>{deck.name}</Link>
       </Heading>
-      <CardList width={'50px'} gap={2} cards={deckCards} />
+      <CardList columns={[5, 6, 7]} gap={2} cards={deckCards} />
     </Box>
   )
 }

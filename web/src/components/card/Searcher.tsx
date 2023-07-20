@@ -44,7 +44,7 @@ const SearchByName = ({ cards, ...otherProps }: Props) => {
         onChange={(e) => setKeyword(e.currentTarget.value)}
       />
       {keyword ? (
-        <CardList cards={result} width={'150px'} {...otherProps} />
+        <CardList cards={result} {...otherProps} />
       ) : (
         <Box>キーワードを入力してください。</Box>
       )}
@@ -68,7 +68,7 @@ const SearchByEffect = ({ cards, ...otherProps }: Props) => {
         onChange={(e) => setKeyword(e.currentTarget.value)}
       />
       {keyword ? (
-        <CardList cards={result} width={'150px'} {...otherProps} />
+        <CardList cards={result} {...otherProps} />
       ) : (
         <Box>キーワードを入力してください。</Box>
       )}
@@ -336,7 +336,7 @@ const SearchByAttribute = ({ cards, ...otherProps }: Props) => {
           </Stack>
         </CheckboxGroup>
       </Stack>
-      <CardList cards={result} width={'150px'} {...otherProps} />
+      <CardList cards={result} {...otherProps} />
     </>
   )
 }

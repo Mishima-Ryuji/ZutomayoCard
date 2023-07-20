@@ -1,7 +1,6 @@
 import { AspectRatio, Box, ResponsiveValue, Tag } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { Card, getCategoryDetail } from '~/firebase'
 import { PromiseVoid } from '~/types'
 
@@ -26,7 +25,6 @@ export const CardItem = ({
   const url = !highResolution
     ? card.resized_image?.url ?? card.image?.url
     : card.image?.url
-  const router = useRouter()
 
   const Img = (
     <Box

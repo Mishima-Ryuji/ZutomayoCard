@@ -10,9 +10,12 @@ export interface Deck extends Document {
   created_by: string
   card_ids: string[]
   name: string
-  description?: string
   youtube_id?: string
   is_public: boolean
+  concept?: string
+  movement?: string
+  cards_adoption?: string
+  detail?: string
 }
 
 export const deckConverter = getConverter<Deck>(DeckSubcols)

@@ -25,6 +25,8 @@ type Props = {
   counter?: boolean
   onClickNext: () => PromiseVoid
   nextButtonDisabled?: boolean
+  maxNum?: number
+  maxNumOfEachCard?: number
 }
 
 export const CardsSelector = ({
@@ -35,6 +37,8 @@ export const CardsSelector = ({
   counter = false,
   onClickNext: handleClickNext,
   nextButtonDisabled = false,
+  maxNum,
+  maxNumOfEachCard = 1,
 }: Props) => {
   const [showSelected, setShowSelected] = useState(false)
 
@@ -49,7 +53,9 @@ export const CardsSelector = ({
   }, [cards, selectedCardIds])
 
   const handleSelect = (card: Card) => {
-    if (selectedCardIds.filter((id) => card.id === id).length >= 2) {
+    if (
+      selectedCardIds.filter((id) => card.id === id).length >= maxNumOfEachCard
+    ) {
       setSelectedCardIds(selectedCardIds.filter((id) => card.id !== id))
     } else {
       setSelectedCardIds([...selectedCardIds, card.id])
@@ -90,7 +96,8 @@ export const CardsSelector = ({
             >
               選択中
               <Tag size={'sm'} ml={2} variant="solid" colorScheme="blackAlpha">
-                {selectedCardIds.length} / 20
+                {selectedCardIds.length}
+                {maxNum !== undefined ? `/ ${maxNum}` : ''}
               </Tag>
             </Button>
             <Button
@@ -125,11 +132,10 @@ export const CardsSelector = ({
           <ModalBody mb={3}>
             {selectedCards.length > 0 ? (
               <CardList
-                width={'100px'}
                 gap={5}
                 cards={selectedCards}
                 selectedCardIds={selectedCardIds}
-                counter
+                counter={counter}
                 onSelect={handleSelect}
               />
             ) : (

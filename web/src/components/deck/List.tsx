@@ -1,4 +1,4 @@
-import { Stack } from '@chakra-ui/react'
+import { Box, Stack } from '@chakra-ui/react'
 import { Card, Deck } from '~/firebase'
 import { DeckItem } from './Item'
 
@@ -13,6 +13,9 @@ export const DeckList = ({ cards, decks }: Props) => {
       {decks.map((deck) => (
         <DeckItem key={deck.id} deck={deck} cards={cards} />
       ))}
+      {decks.length === 0 && (
+        <Box>デッキがありません。新規作成しましょう。</Box>
+      )}
     </Stack>
   )
 }

@@ -42,7 +42,10 @@ export const DeckForm = ({ cards, deck }: Props) => {
   }, [cards, selectedCardIds])
   const [showCardSelector, setShowCardSelector] = useState(deck ? false : true)
   const [name, setName] = useState(deck?.name ?? 'My deck')
-  const [description, setDescription] = useState(deck?.description ?? '')
+  const [detail, setDetail] = useState(deck?.detail ?? '')
+  const [concept, setConcept] = useState(deck?.concept ?? '')
+  const [movement, setMovement] = useState(deck?.movement ?? '')
+  const [adoption, setAdoption] = useState(deck?.cards_adoption ?? '')
   const [youtubeURL, setYoutubeURL] = useState(
     deck?.youtube_id !== undefined
       ? `https://www.youtube.com/watch?v=${deck.youtube_id}`
@@ -76,13 +79,14 @@ export const DeckForm = ({ cards, deck }: Props) => {
               onClickNext={() => setShowCardSelector(false)}
               nextButtonDisabled={selectedCardIds.length !== 20}
               counter
+              maxNum={20}
+              maxNumOfEachCard={2}
             />
           </>
         ) : (
           <>
             <CardList
-              width={'100px'}
-              gap={5}
+              columns={[4, 5, 6]}
               cards={selectedCards}
               selectedCardIds={selectedCardIds}
               counter
@@ -107,36 +111,54 @@ export const DeckForm = ({ cards, deck }: Props) => {
                 />
                 {isAdmin && (
                   <FormHelperText>
-                    作戦やコンセプトが伝わる簡潔な名前を設定しましょう。
+                    作戦やコンセプト、おすすめの対象者などが伝わる簡潔な名前を設定しましょう。
                   </FormHelperText>
                 )}
               </FormControl>
               <FormControl>
+                <FormLabel>コンセプト{isAdmin === false && '(任意)'}</FormLabel>
+                <Textarea
+                  value={concept}
+                  onChange={(e) => setConcept(e.currentTarget.value)}
+                />
+                <FormHelperText>
+                  どのデッキのコンセプトを説明しましょう。
+                </FormHelperText>
+              </FormControl>
+              <FormControl>
+                <FormLabel>立ち回り方{isAdmin === false && '(任意)'}</FormLabel>
+                <Textarea
+                  value={movement}
+                  onChange={(e) => setMovement(e.currentTarget.value)}
+                />
+                <FormHelperText>
+                  このデッキを使うときの試合開始から終了までの立ち回りを書きましょう。
+                </FormHelperText>
+              </FormControl>
+              <FormControl>
                 <FormLabel>
-                  デッキの解説や立ち回り方{isAdmin === false && '(任意)'}
+                  カードの採用理由と代替カード{isAdmin === false && '(任意)'}
                 </FormLabel>
                 <Textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.currentTarget.value)}
+                  value={adoption}
+                  onChange={(e) => setAdoption(e.currentTarget.value)}
                 />
-                {isAdmin && (
-                  <FormHelperText>
-                    どのカードをどのタイミングで使うかなどの解説を書きましょう。
-                  </FormHelperText>
-                )}
+                <FormHelperText>
+                  採用したカードの採用理由や代替できるカードの説明などをしましょう。
+                </FormHelperText>
               </FormControl>
-              {isAdmin && (
-                <FormControl
-                  isInvalid={youtubeURL !== '' && !/v=(.+)$/.test(youtubeURL)}
-                >
-                  <FormLabel>YouTubeのURL</FormLabel>
-                  <Input
-                    placeholder="URLを入力してください"
-                    value={youtubeURL}
-                    onChange={(e) => setYoutubeURL(e.currentTarget.value)}
-                  />
-                </FormControl>
-              )}
+              <FormControl>
+                <FormLabel>
+                  詳細やその他の情報{isAdmin === false && '(任意)'}
+                </FormLabel>
+                <Textarea
+                  value={detail}
+                  onChange={(e) => setDetail(e.currentTarget.value)}
+                />
+                <FormHelperText>
+                  どのカードをどのタイミングで使うかなどの解説を書きましょう。
+                </FormHelperText>
+              </FormControl>
               {isAdmin && (
                 <FormControl
                   isInvalid={youtubeURL !== '' && !/v=(.+)$/.test(youtubeURL)}
@@ -155,7 +177,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                     isChecked={isPublic}
                     onChange={(e) => setIsPublic(e.currentTarget.checked)}
                   >
-                    公開する
+                    公開する（おすすめのデッキに表示されます）
                   </Checkbox>
                 </FormControl>
               )}
@@ -178,8 +200,11 @@ export const DeckForm = ({ cards, deck }: Props) => {
                       await updateDoc(deck.ref, {
                         card_ids: selectedCardIds,
                         name,
-                        description:
-                          description !== '' ? description : deleteField(),
+                        concept: concept !== '' ? concept : deleteField(),
+                        movement: movement !== '' ? movement : deleteField(),
+                        cards_adoption:
+                          adoption !== '' ? adoption : deleteField(),
+                        detail: detail !== '' ? detail : deleteField(),
                         youtube_id:
                           youtubeURL !== '' && youtubeIdCap !== null
                             ? youtubeIdCap[1]
@@ -191,8 +216,10 @@ export const DeckForm = ({ cards, deck }: Props) => {
                         created_by: user.uid,
                         card_ids: selectedCardIds,
                         name,
-                        description:
-                          description !== '' ? description : undefined,
+                        concept: concept !== '' ? concept : undefined,
+                        movement: movement !== '' ? movement : undefined,
+                        cards_adoption: adoption !== '' ? adoption : undefined,
+                        detail: detail !== '' ? detail : undefined,
                         youtube_id:
                           youtubeURL !== '' && youtubeIdCap !== null
                             ? youtubeIdCap[1]

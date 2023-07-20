@@ -106,10 +106,9 @@ const Page = ({ cards: staticCards, deck: staticDeck }: Props) => {
       <Box py={3}>
         {deckCards && deck ? (
           <>
-            <Heading fontSize={'2xl'} mb={1}>
+            <Heading fontSize={'2xl'} mb={3}>
               {deck.name}
             </Heading>
-
             {user && user?.uid === deck.created_by && (
               <Flex gap={2} mb={4}>
                 <Link href={`/decks/${deck.id}/edit`}>
@@ -134,17 +133,41 @@ const Page = ({ cards: staticCards, deck: staticDeck }: Props) => {
               </Flex>
             )}
             <CardList
-              width={'150px'}
+              columns={[5, 6, 7]}
               cards={deckCards}
               selectedCardIds={deck.card_ids}
               counter
             />
-            {deck.description !== undefined && (
+            {deck.concept !== undefined && (
               <>
                 <Heading fontSize={'xl'} mt={3} mb={2}>
-                  デッキの解説と立ち回り方
+                  コンセプト
                 </Heading>
-                <p>{deck.description}</p>
+                <p>{deck.concept}</p>
+              </>
+            )}
+            {deck.movement !== undefined && (
+              <>
+                <Heading fontSize={'xl'} mt={3} mb={2}>
+                  立ち回り方
+                </Heading>
+                <p>{deck.movement}</p>
+              </>
+            )}
+            {deck.cards_adoption !== undefined && (
+              <>
+                <Heading fontSize={'xl'} mt={3} mb={2}>
+                  カードの採用理由と代替カード
+                </Heading>
+                <p>{deck.cards_adoption}</p>
+              </>
+            )}
+            {deck.detail !== undefined && (
+              <>
+                <Heading fontSize={'xl'} mt={3} mb={2}>
+                  詳細やその他の情報
+                </Heading>
+                <p>{deck.detail}</p>
               </>
             )}
             {deck.youtube_id !== undefined && (
