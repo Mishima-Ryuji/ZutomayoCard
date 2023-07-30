@@ -32,7 +32,7 @@ export const Head = ({
   index = true,
 }: HeadProps) => {
   const router = useRouter()
-  const host = 'https://zutomayo-card.com/'
+  const host = 'https://zutomayo-card.com'
 
   const strPath = path ?? router.asPath
   const url = host + strPath
