@@ -59,7 +59,7 @@ const Page = ({ cards: staticCards }: Props) => {
     return <DefaultErrorPage statusCode={404} />
   return (
     <>
-      <DefaultLayout bottomSpace={DECK_FORM_BOTTOM_SPACE} footerNone>
+      <DefaultLayout bottomSpace={DECK_FORM_BOTTOM_SPACE} footerNone noBanner>
         {cards && deck && user && user.uid === deck.created_by ? (
           <DeckForm cards={cards} deck={deck} />
         ) : (

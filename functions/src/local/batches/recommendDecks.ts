@@ -6,7 +6,7 @@ const createCards = async () => {
   const decks = decksSnapshot.docs.map((d) => d.data())
   for (const deck of decks) {
     batch.update(deck.ref, {
-      is_recommended: true,
+      is_recommended: deck.is_public,
     })
   }
   await batch.commit()

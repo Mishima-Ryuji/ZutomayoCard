@@ -27,23 +27,25 @@ import {
   getDocs,
 } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
-import { publicDecksRef, userDecksRef } from '~/models/deck'
+import { recommendedDecksRef, userDecksRef } from '~/models/deck'
 import { Serialized, deserializeArray, serializeArray } from '~/shared/utils'
 
 type Props = {
   cards: Serialized<Card>[]
-  publicDecks: Serialized<Deck>[]
+  recommendedDecks: Serialized<Deck>[]
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
   const cardsSnapshot = await getDocs(cardsRef)
   const cards = cardsSnapshot.docs.map((doc) => doc.data())
-  const publicDecksSnapshot = await getDocs(publicDecksRef)
-  const publicDecks = publicDecksSnapshot.docs.map((doc) => doc.data())
+  const recommendedDecksSnapshot = await getDocs(recommendedDecksRef)
+  const recommendedDecks = recommendedDecksSnapshot.docs.map((doc) =>
+    doc.data()
+  )
   const result = {
     props: {
       cards: serializeArray(cards),
-      publicDecks: serializeArray(publicDecks),
+      recommendedDecks: serializeArray(recommendedDecks),
     },
     revalidate: 10000,
   }
@@ -52,15 +54,17 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
 const Page = ({
   cards: staticCards,
-  publicDecks: staticPublicDecks,
+  recommendedDecks: staticRecommendedDecks,
 }: Props) => {
   const { user } = useAuthState()
 
   const [cards] = useCollectionDataOnce(cardsRef, {
     initialValue: deserializeArray(staticCards, { ref: cardConverter }),
   })
-  const [publicDecks] = useCollectionDataOnce(publicDecksRef, {
-    initialValue: deserializeArray(staticPublicDecks, { ref: deckConverter }),
+  const [recommendedDecks] = useCollectionDataOnce(recommendedDecksRef, {
+    initialValue: deserializeArray(staticRecommendedDecks, {
+      ref: deckConverter,
+    }),
   })
   const [currentUserDecks] = useCollectionDataOnce(
     user ? userDecksRef(user.uid) : null
@@ -99,8 +103,8 @@ const Page = ({
         <TabPanels>
           <TabPanel px={0}>
             <Box>
-              {cards && publicDecks ? (
-                <DeckList decks={publicDecks} cards={cards} />
+              {cards && recommendedDecks ? (
+                <DeckList decks={recommendedDecks} cards={cards} />
               ) : (
                 <Box textAlign={'center'} p="5">
                   <Spinner m="auto" />

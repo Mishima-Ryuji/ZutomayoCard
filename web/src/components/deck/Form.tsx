@@ -174,7 +174,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
               )}
               <FormControl>
                 <Checkbox
-                  isChecked={isRecommended}
+                  isChecked={isPublic}
                   onChange={(e) => {
                     if (e.currentTarget.checked) {
                       setIsPublic(true)

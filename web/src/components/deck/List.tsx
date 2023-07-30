@@ -13,9 +13,7 @@ export const DeckList = ({ cards, decks }: Props) => {
       {decks.map((deck) => (
         <DeckItem key={deck.id} deck={deck} cards={cards} />
       ))}
-      {decks.length === 0 && (
-        <Box>デッキがありません。新規作成しましょう。</Box>
-      )}
+      {decks.length === 0 && <Box>デッキがありません。</Box>}
     </Stack>
   )
 }
