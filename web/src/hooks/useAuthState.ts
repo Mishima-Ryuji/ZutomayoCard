@@ -1,20 +1,27 @@
 import { useAuthState as useFirebaseAuthState } from 'react-firebase-hooks/auth'
-import { useDocumentDataOnce } from 'react-firebase-hooks/firestore'
-import { adminRef, fb } from '~/firebase'
+import {
+  useDocumentData,
+  useDocumentDataOnce,
+} from 'react-firebase-hooks/firestore'
+import { adminRef, fb, profileRef } from '~/firebase'
 
 export const useAuthState = () => {
   const [user, loading, error] = useFirebaseAuthState(fb.auth)
   const [admin, adminLoading, adminError] = useDocumentDataOnce(
     user ? adminRef(user.uid) : null
   )
+  const [profile, profileLoading] = useDocumentData(
+    user ? profileRef(user.uid) : null
+  )
   return {
-    user,
+    user: loading ? undefined : user,
     loading,
     error,
     admin,
-    adminLoading,
+    adminLoading: loading || adminLoading,
     adminError,
-    // isAdmin: !!admin,
-    isAdmin: !!user,
+    profile,
+    isAdmin: !!admin,
+    profileLoading: loading || profileLoading,
   }
 }

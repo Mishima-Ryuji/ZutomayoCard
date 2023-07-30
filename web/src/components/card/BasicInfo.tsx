@@ -11,11 +11,14 @@ import {
   StackDivider,
   Text,
 } from '@chakra-ui/react'
+import { arrayRemove, arrayUnion } from 'firebase/firestore'
 import Link from 'next/link'
+import { useState } from 'react'
 import { FaPencilAlt } from 'react-icons/fa'
 import { CardItem } from '~/components/card/Item'
-import { Card, getCategoryDetail, getDisplayType } from '~/firebase'
+import { Card, getCategoryDetail, getDisplayType, updateDoc } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
+import { LoginPopup } from '../auth/LoginPopup'
 import { CardElementImage } from './ElementImage'
 
 type Props = {
@@ -24,7 +27,8 @@ type Props = {
 
 export const CardBasicInfo = ({ card }: Props) => {
   const categoryDetail = getCategoryDetail(card)
-  const { isAdmin } = useAuthState()
+  const { isAdmin, user, profile } = useAuthState()
+  const [showLoginPopup, setShowLoginPopup] = useState(false)
   return (
     <Flex gap={5} width={'100%'} direction={['column', 'row']}>
       <Box display={['none', 'block']}>
@@ -129,6 +133,52 @@ export const CardBasicInfo = ({ card }: Props) => {
               <Text pt="2" fontSize="sm">
                 {categoryDetail.procurement_method}
               </Text>
+              <Flex mt={3} gap={2}>
+                <LoginPopup
+                  show={showLoginPopup}
+                  onHide={() => setShowLoginPopup(false)}
+                />
+                {user ? (
+                  <Link href={`/cards/${card.id}/trade`}>
+                    <Button colorScheme="purple" size={'sm'}>
+                      交換相手を探す
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button
+                    colorScheme="purple"
+                    size={'sm'}
+                    onClick={() => setShowLoginPopup(true)}
+                  >
+                    交換相手を探す
+                  </Button>
+                )}
+                {profile && (
+                  <Button
+                    colorScheme={
+                      profile.received_card_ids.includes(card.id)
+                        ? 'red'
+                        : 'purple'
+                    }
+                    size={'sm'}
+                    onClick={async () => {
+                      if (profile.received_card_ids.includes(card.id)) {
+                        await updateDoc(profile.ref, {
+                          received_card_ids: arrayRemove(card.id),
+                        })
+                      } else {
+                        await updateDoc(profile.ref, {
+                          received_card_ids: arrayUnion(card.id),
+                        })
+                      }
+                    }}
+                  >
+                    {profile.received_card_ids.includes(card.id)
+                      ? '欲しい登録を解除'
+                      : '欲しい登録'}
+                  </Button>
+                )}
+              </Flex>
             </Box>
           </Stack>
         </CardBody>

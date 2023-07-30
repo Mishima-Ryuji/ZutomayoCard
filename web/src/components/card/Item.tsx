@@ -7,6 +7,7 @@ import { PromiseVoid } from '~/types'
 type Props = {
   card: Card
   width?: ResponsiveValue<number | string>
+  maxWidth?: ResponsiveValue<number | string>
   onSelect?: (card: Card) => PromiseVoid
   highResolution?: boolean
   selectCount?: number
@@ -16,6 +17,7 @@ type Props = {
 export const CardItem = ({
   card,
   width,
+  maxWidth,
   highResolution = false,
   selectCount,
   selected,
@@ -70,6 +72,7 @@ export const CardItem = ({
   return (
     <AspectRatio
       width={width ?? '100%'}
+      maxWidth={maxWidth}
       ratio={63 / 88}
       onClick={async () => {
         if (handleSelect) await handleSelect(card)

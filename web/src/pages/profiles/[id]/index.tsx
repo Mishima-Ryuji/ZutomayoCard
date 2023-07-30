@@ -1,15 +1,27 @@
-import { Box, Spinner } from '@chakra-ui/react'
+import {
+  Alert,
+  AlertIcon,
+  Box,
+  Heading,
+  Spinner,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
+} from '@chakra-ui/react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import DefaultErrorPage from 'next/error'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import {
   useCollectionDataOnce,
   useDocumentDataOnce,
 } from 'react-firebase-hooks/firestore'
 import { DefaultLayout } from '~/components/Layout'
-import { ProfileForm } from '~/components/profile/Form'
+import { CardList } from '~/components/card/List'
 import {
   Card,
   Profile,
@@ -94,12 +106,70 @@ const Page = ({ cards: staticCards, profile: staticProfile }: Props) => {
     )
       void router.push(`/profiles/edit`)
   })
+  const receivedCards = useMemo(() => {
+    if (profile?.offered_card_ids === undefined || cards === undefined)
+      return []
+    return cards
+      ?.filter((card) => profile?.received_card_ids.includes(card.id))
+      .sort(
+        (a, b) =>
+          profile?.received_card_ids.findIndex((id) => a.id === id) -
+          profile?.received_card_ids.findIndex((id) => b.id === id)
+      )
+  }, [cards, profile])
+
+  const offeredCards = useMemo(() => {
+    if (profile?.offered_card_ids === undefined || cards === undefined)
+      return []
+    return cards
+      .filter((card) => profile.offered_card_ids.includes(card.id))
+      .sort(
+        (a, b) =>
+          profile.offered_card_ids.findIndex((id) => a.id === id) -
+          profile.offered_card_ids.findIndex((id) => b.id === id)
+      )
+  }, [cards, profile])
+
   if (uid !== user?.uid && uid !== undefined && !loadingProfile && !profile)
     return <DefaultErrorPage statusCode={404} />
   return (
     <DefaultLayout noBanner footerNone>
       {profile && cards ? (
-        <ProfileForm profile={profile} cards={cards} />
+        <>
+          <Heading mt={5} fontSize={'2xl'}>
+            {profile.name}
+          </Heading>
+          <Heading mt={5} fontSize={'xl'}>
+            連絡先
+          </Heading>
+          <Text>{profile.contact}</Text>
+          <Heading mt={5} fontSize={'xl'}>
+            トレード
+          </Heading>
+          <Alert mt={2} status="warning">
+            <AlertIcon />
+            {profile.requirement}
+          </Alert>
+          <Tabs
+            variant="soft-rounded"
+            colorScheme="purple"
+            width={'100%'}
+            mt={4}
+          >
+            <TabList>
+              <Tab>譲れるカード</Tab>
+              <Tab>欲しいカード</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel px={0}>
+                <CardList cards={offeredCards} columns={[3, 4, 5, 7]} />
+              </TabPanel>
+              <TabPanel px={0}>
+                <CardList cards={receivedCards} columns={[3, 4, 5, 7]} />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </>
       ) : (
         <Box textAlign={'center'} p="5">
           <Spinner m="auto" />
