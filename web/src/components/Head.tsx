@@ -63,7 +63,7 @@ export const Head = ({
       <link rel="canonical" href={url} />
 
       <link rel="shortcut icon" href={host + '/favicon.ico'} />
-      <link rel="apple-touch-icon" href={host + '/logo.png'} />
+      <link rel="apple-touch-icon" href={host + '/logo.jpg'} />
 
       {/* OGP */}
       <meta property="og:title" content={ogpTitle} />
