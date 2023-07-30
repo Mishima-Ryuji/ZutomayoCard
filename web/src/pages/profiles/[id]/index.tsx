@@ -37,6 +37,7 @@ import {
   profilesRef,
 } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
+import { cardsSorter } from '~/models/card'
 import { publicUserDecksRef } from '~/models/deck'
 import {
   Serialized,
@@ -134,11 +135,7 @@ const Page = ({
       return []
     return cards
       ?.filter((card) => profile?.received_card_ids.includes(card.id))
-      .sort(
-        (a, b) =>
-          profile?.received_card_ids.findIndex((id) => a.id === id) -
-          profile?.received_card_ids.findIndex((id) => b.id === id)
-      )
+      .sort(cardsSorter)
   }, [cards, profile])
 
   const offeredCards = useMemo(() => {
@@ -146,11 +143,7 @@ const Page = ({
       return []
     return cards
       .filter((card) => profile.offered_card_ids.includes(card.id))
-      .sort(
-        (a, b) =>
-          profile.offered_card_ids.findIndex((id) => a.id === id) -
-          profile.offered_card_ids.findIndex((id) => b.id === id)
-      )
+      .sort(cardsSorter)
   }, [cards, profile])
 
   if (uid !== user?.uid && uid !== undefined && !loadingProfile && !profile)
