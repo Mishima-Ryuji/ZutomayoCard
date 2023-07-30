@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import DefaultErrorPage from 'next/error'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import { useEffect } from 'react'
@@ -166,7 +167,10 @@ const Page = ({
             {!profileLoading && currentUserProfile === undefined && (
               <Alert status={'warning'}>
                 <AlertIcon />
-                プロフィールを登録すると交換相手を探しやすくなります。
+                <Link href={`/profiles/edit`}>
+                  プロフィールでトレードの設定
+                </Link>
+                をすると交換相手を探しやすくなります。
               </Alert>
             )}
             <Box mt={3}>

@@ -7,8 +7,10 @@ import {
   Heading,
   Input,
   Stack,
+  Text,
   Textarea,
 } from '@chakra-ui/react'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { CardList } from '~/components/card/List'
@@ -57,6 +59,28 @@ export const ProfileForm = ({ cards, profile }: Props) => {
   const [contact, setContact] = useState(profile?.contact ?? '')
   const router = useRouter()
 
+  const handleSubmit = async () => {
+    if (name === '' || contact === '' || requirement === '' || !user) return
+    if (profile) {
+      await updateDoc(profileRef(user.uid), {
+        name,
+        contact,
+        requirement,
+        received_card_ids: receivedCardIds,
+        offered_card_ids: offeredCardIds,
+      })
+    } else {
+      await createDoc(profileRef(user.uid), {
+        name,
+        contact,
+        requirement,
+        received_card_ids: receivedCardIds,
+        offered_card_ids: offeredCardIds,
+      })
+    }
+    await router.push(`/profiles/${user.uid}`)
+  }
+
   return (
     <>
       <Heading my={3} fontSize={'2xl'}>
@@ -98,56 +122,14 @@ export const ProfileForm = ({ cards, profile }: Props) => {
           <>
             <Stack gap={7} mb={5}>
               <FormControl>
-                <FormLabel>あなたの名前（ハンドルネーム可）</FormLabel>
+                <FormLabel>あなたの名前（ハンドルネーム可・必須）</FormLabel>
                 <Input
                   value={name}
                   onChange={(e) => setName(e.currentTarget.value)}
                 />
               </FormControl>
-              <Box>
-                <FormLabel>あなたが欲しいカード</FormLabel>
-                <CardList
-                  columns={[4, 5, 6]}
-                  cards={receivedCards}
-                  selectedCardIds={receivedCardIds}
-                />
-                <Button
-                  size={'sm'}
-                  mt={1}
-                  onClick={() => setShowReceivedCardSelector(true)}
-                  colorScheme={'purple'}
-                >
-                  カードを選択
-                </Button>
-              </Box>
-              <Box>
-                <FormLabel>あなたが渡せるカード</FormLabel>
-                <CardList
-                  columns={[4, 5, 6]}
-                  cards={offeredCards}
-                  selectedCardIds={offeredCardIds}
-                />
-                <Button
-                  size={'sm'}
-                  mt={1}
-                  onClick={() => setShowOfferedCardSelector(true)}
-                  colorScheme={'purple'}
-                >
-                  カードを選択
-                </Button>
-              </Box>
               <FormControl>
-                <FormLabel>交換の条件</FormLabel>
-                <Textarea
-                  value={requirement}
-                  onChange={(e) => setRequirement(e.currentTarget.value)}
-                />
-                <FormHelperText>
-                  カードを交換する際の条件を入力してください。「郵送NG」、「同リアリティの交換のみ」、「東京都のみ」、「〇〇会場手渡しのみ」など。
-                </FormHelperText>
-              </FormControl>
-              <FormControl>
-                <FormLabel>連絡先</FormLabel>
+                <FormLabel>連絡先（必須）</FormLabel>
                 <Textarea
                   value={contact}
                   onChange={(e) => setContact(e.currentTarget.value)}
@@ -156,39 +138,71 @@ export const ProfileForm = ({ cards, profile }: Props) => {
                   カードを交換したい相手がこの連絡先を使ってあなたに連絡します。公開しても問題ない連絡先を書いてください。
                 </FormHelperText>
               </FormControl>
+
+              <Box>
+                <Heading fontSize={'xl'} mb={3}>
+                  トレードの設定（任意）
+                </Heading>
+                <Stack gap={7}>
+                  <Box>
+                    <FormLabel>あなたが欲しいカード</FormLabel>
+                    <CardList
+                      columns={[4, 5, 6]}
+                      cards={receivedCards}
+                      selectedCardIds={receivedCardIds}
+                    />
+                    <Button
+                      size={'sm'}
+                      mt={1}
+                      onClick={() => setShowReceivedCardSelector(true)}
+                      colorScheme={'purple'}
+                    >
+                      カードを選択
+                    </Button>
+                  </Box>
+                  <Box>
+                    <FormLabel>あなたが渡せるカード</FormLabel>
+                    <CardList
+                      columns={[4, 5, 6]}
+                      cards={offeredCards}
+                      selectedCardIds={offeredCardIds}
+                    />
+                    <Button
+                      size={'sm'}
+                      mt={1}
+                      onClick={() => setShowOfferedCardSelector(true)}
+                      colorScheme={'purple'}
+                    >
+                      カードを選択
+                    </Button>
+                  </Box>
+                  <FormControl>
+                    <FormLabel>交換の条件</FormLabel>
+                    <Textarea
+                      value={requirement}
+                      onChange={(e) => setRequirement(e.currentTarget.value)}
+                    />
+                    <FormHelperText>
+                      カードを交換する際の条件を入力してください。「郵送NG」、「同リアリティの交換のみ」、「東京都のみ」、「〇〇会場手渡しのみ」など。
+                    </FormHelperText>
+                  </FormControl>
+                </Stack>
+              </Box>
+              <Box>
+                <Heading fontSize={'xl'} mb={3}>
+                  デッキの作成と公開（任意）
+                </Heading>
+                <Text>
+                  プロフィールを登録後に
+                  <Link href={'/decks/new'}>デッキの作成ページ</Link>
+                  からデッキを作成することで、あなたのプロフィールにデッキが表示されます。
+                </Text>
+              </Box>
               <Box>
                 <Button
                   colorScheme="purple"
-                  isDisabled={
-                    name === '' || contact === '' || requirement === ''
-                  }
-                  onClick={async () => {
-                    if (
-                      name === '' ||
-                      contact === '' ||
-                      requirement === '' ||
-                      !user
-                    )
-                      return
-                    if (profile) {
-                      await updateDoc(profileRef(user.uid), {
-                        name,
-                        contact,
-                        requirement,
-                        received_card_ids: receivedCardIds,
-                        offered_card_ids: offeredCardIds,
-                      })
-                    } else {
-                      await createDoc(profileRef(user.uid), {
-                        name,
-                        contact,
-                        requirement,
-                        received_card_ids: receivedCardIds,
-                        offered_card_ids: offeredCardIds,
-                      })
-                    }
-                    await router.push(`/profiles/${user.uid}`)
-                  }}
+                  isDisabled={name === '' || contact === ''}
+                  onClick={handleSubmit}
                 >
                   登録
                 </Button>
