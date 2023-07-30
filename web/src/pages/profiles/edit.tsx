@@ -2,13 +2,10 @@ import { Box, Spinner } from '@chakra-ui/react'
 import { GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import {
-  useCollectionDataOnce,
-  useDocumentDataOnce,
-} from 'react-firebase-hooks/firestore'
+import { useCollectionDataOnce } from 'react-firebase-hooks/firestore'
 import { DefaultLayout } from '~/components/Layout'
 import { ProfileForm } from '~/components/profile/Form'
-import { Card, cardConverter, cardsRef, getDocs, profileRef } from '~/firebase'
+import { Card, cardConverter, cardsRef, getDocs } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
 import { Serialized, deserializeArray, serializeArray } from '~/shared/utils'
 
@@ -31,11 +28,10 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
 const Page = ({ cards: staticCards }: Props) => {
   const router = useRouter()
-  const { user, loading } = useAuthState()
+  const { user, loading, profile, profileLoading } = useAuthState()
   const [cards] = useCollectionDataOnce(cardsRef, {
     initialValue: deserializeArray(staticCards, { ref: cardConverter }),
   })
-  const [profile] = useDocumentDataOnce(user ? profileRef(user.uid) : null)
 
   useEffect(() => {
     if (loading) return
@@ -44,7 +40,7 @@ const Page = ({ cards: staticCards }: Props) => {
 
   return (
     <DefaultLayout head={{ title: 'プロフィールの編集' }} noBanner footerNone>
-      {cards ? (
+      {cards && !profileLoading ? (
         <ProfileForm profile={profile} cards={cards} />
       ) : (
         <Box textAlign={'center'} p="5">
