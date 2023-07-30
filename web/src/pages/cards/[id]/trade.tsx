@@ -5,11 +5,11 @@ import {
   Box,
   CardBody,
   Card as ChakraCard,
+  Link as ChakraLink,
   Flex,
   Heading,
   Spinner,
   Stack,
-  Text,
 } from '@chakra-ui/react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import DefaultErrorPage from 'next/error'
@@ -178,7 +178,9 @@ const Page = ({
               <Alert status={'warning'} mt={3}>
                 <AlertIcon />
                 <Link href={`/profiles/edit`}>
-                  <Text color={'purple.500'}>プロフィールでトレードの設定</Text>
+                  <ChakraLink color="purple.500">
+                    プロフィールでトレードの設定
+                  </ChakraLink>
                 </Link>
                 をすると交換相手を探しやすくなります。
               </Alert>

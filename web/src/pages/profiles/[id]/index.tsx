@@ -2,6 +2,7 @@ import {
   Alert,
   AlertIcon,
   Box,
+  Button,
   Heading,
   Spinner,
   Tab,
@@ -13,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import DefaultErrorPage from 'next/error'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import { useEffect, useMemo } from 'react'
@@ -20,6 +22,7 @@ import {
   useCollectionDataOnce,
   useDocumentDataOnce,
 } from 'react-firebase-hooks/firestore'
+import { FaPencilAlt } from 'react-icons/fa'
 import { DefaultLayout } from '~/components/Layout'
 import { CardList } from '~/components/card/List'
 import { DeckList } from '~/components/deck/List'
@@ -164,10 +167,18 @@ const Page = ({
           <Heading mt={5} fontSize={'2xl'}>
             {profile.name}
           </Heading>
+          {profile.id === user?.uid && (
+            <Link href={`/profiles/edit`}>
+              <Button colorScheme="purple" size="xs" mt={2} gap={1}>
+                <FaPencilAlt />
+                プロフィールを編集
+              </Button>
+            </Link>
+          )}
           <Heading mt={5} fontSize={'xl'}>
             連絡先
           </Heading>
-          <Text>{profile.contact}</Text>
+          <Text mt={2}>{profile.contact}</Text>
           <Tabs mt={3} colorScheme={'purple'}>
             <TabList>
               <Tab>トレード</Tab>

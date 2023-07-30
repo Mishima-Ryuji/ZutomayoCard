@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Link as ChakraLink,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -194,7 +195,11 @@ export const ProfileForm = ({ cards, profile }: Props) => {
                 </Heading>
                 <Text>
                   プロフィールを登録後に
-                  <Link href={'/decks/new'}>デッキの作成ページ</Link>
+                  <Link href={'/decks/new'}>
+                    <ChakraLink color="purple.500">
+                      デッキの作成ページ
+                    </ChakraLink>
+                  </Link>
                   からデッキを作成することで、あなたのプロフィールにデッキが表示されます。
                 </Text>
               </Box>
