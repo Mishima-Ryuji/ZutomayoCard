@@ -70,7 +70,7 @@ export const LoginPopup = ({ onHide: handleHide, show }: Props) => {
         <ModalCloseButton />
         <ModalBody pb={6}>
           <Text mb={4}>
-            ログインをすると、デッキ構築機能やトレー相手検索機能などのZutomayo
+            ログインをすると、デッキ構築機能やトレード相手の検索機能などのZutomayo
             Card Wikiの全ての機能が利用できるようになります。
           </Text>
           <HStack>
