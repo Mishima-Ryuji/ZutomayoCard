@@ -2,7 +2,7 @@ import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 
 const TWITTER_USER_NAME = '@zutoca_wiki'
-const DISPLAY_APP_NAME = 'ズトカWiki'
+const DISPLAY_APP_NAME = 'Zutomayo Card Wiki'
 
 export type HeadProps = {
   type?: 'website' | 'article'
