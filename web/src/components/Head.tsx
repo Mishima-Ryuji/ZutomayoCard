@@ -18,7 +18,7 @@ export type HeadProps = {
 export const Head = ({
   type = 'website',
   title = 'ずとまよカードをもっと楽しく',
-  description = '',
+  description = '本サイトでは、「ずとまよカードをもっと楽しく」をコンセプトに、カードの検索やデッキの構築、トレード相手の検索をする機能を提供しております。各カードのページでは、対戦ガチ勢からの評価や動画解説を用意しており、初心者でも簡単に対戦を始めるための知識を身につけることができます。',
   keyword,
   image,
   keywords = [
