@@ -16,6 +16,7 @@ import {
   Stack,
   UnorderedList,
   chakra,
+  useToast,
 } from '@chakra-ui/react'
 import { signOut } from 'firebase/auth'
 import Image from 'next/image'
@@ -46,6 +47,7 @@ export const DefaultLayout = ({
 }: Props) => {
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const { user } = useAuthState()
+  const toast = useToast()
   return (
     <>
       <LoginPopup
@@ -106,7 +108,18 @@ export const DefaultLayout = ({
                       <Link href={`/profiles/${user.uid}`}>
                         <MenuItem>プロフィール</MenuItem>
                       </Link>
-                      <MenuItem onClick={() => signOut(fb.auth)}>
+                      <MenuItem
+                        onClick={async () => {
+                          await signOut(fb.auth)
+                          toast({
+                            title: 'Zutomayo Card Wiki',
+                            description: 'ログアウトしました。',
+                            status: 'success',
+                            duration: 3000,
+                            isClosable: true,
+                          })
+                        }}
+                      >
                         ログアウト
                       </MenuItem>
                     </>

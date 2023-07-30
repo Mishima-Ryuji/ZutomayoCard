@@ -8,6 +8,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useToast,
 } from '@chakra-ui/react'
 import {
   AuthProvider,
@@ -30,8 +31,27 @@ type Props = {
 
 export const LoginPopup = ({ onHide: handleHide, show }: Props) => {
   const { user, loading } = useAuthState()
+  const toast = useToast()
   const handleClick = async (provider: AuthProvider) => {
-    await signInWithPopup(fb.auth, provider)
+    try {
+      await signInWithPopup(fb.auth, provider)
+      toast({
+        title: 'Zutomayo Card Wiki',
+        description: 'ログインに成功しました。',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
+    } catch (error) {
+      handleHide()
+      toast({
+        title: 'Zutomayo Card Wiki',
+        description: 'ログインに失敗しました。',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      })
+    }
   }
 
   useEffect(() => {

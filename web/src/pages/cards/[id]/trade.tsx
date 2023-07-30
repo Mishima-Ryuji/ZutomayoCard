@@ -9,6 +9,7 @@ import {
   Heading,
   Spinner,
   Stack,
+  Text,
 } from '@chakra-ui/react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import DefaultErrorPage from 'next/error'
@@ -168,7 +169,7 @@ const Page = ({
               <Alert status={'warning'}>
                 <AlertIcon />
                 <Link href={`/profiles/edit`}>
-                  プロフィールでトレードの設定
+                  <Text color={'purple.500'}>プロフィールでトレードの設定</Text>
                 </Link>
                 をすると交換相手を探しやすくなります。
               </Alert>
