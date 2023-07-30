@@ -30,10 +30,8 @@ export interface Card extends Document {
   rarity?: CardRarity
   element?: CardElement
   name?: string
-  zh_name: string
   name_furigana?: string
   effect?: string
-  zh_effect: string
   day_offensive_strength?: number
   night_offensive_strength?: number
   clock?: number
