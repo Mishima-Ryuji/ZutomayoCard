@@ -153,12 +153,17 @@ const Page = ({ cards: staticCards }: Props) => {
                   width={25}
                   height={25}
                 />
-                <Heading size="xs" textTransform="uppercase">
-                  対戦で便利な機能
+                <Heading
+                  size="xs"
+                  textTransform="uppercase"
+                  color={'purple.600'}
+                  cursor={'pointer'}
+                >
+                  <Link href={'/about'}>運営の情報</Link>
                 </Heading>
               </Flex>
               <Text pt="2" fontSize="sm">
-                今後実装予定
+                当サイトの運営の情報を掲載しています。当サイトに協力してくださる方も募集しております。
               </Text>
             </Box>
             <Flex gap={3} align={'center'}>

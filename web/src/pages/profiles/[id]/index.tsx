@@ -97,7 +97,7 @@ const Page = ({ cards: staticCards, profile: staticProfile }: Props) => {
   if (uid !== user?.uid && uid !== undefined && !loadingProfile && !profile)
     return <DefaultErrorPage statusCode={404} />
   return (
-    <DefaultLayout>
+    <DefaultLayout noBanner footerNone>
       {profile && cards ? (
         <ProfileForm profile={profile} cards={cards} />
       ) : (

@@ -33,6 +33,7 @@ type Props = {
   children?: React.ReactNode
   bottomSpace?: number | number[]
   footerNone?: boolean
+  noBanner?: boolean
 }
 
 export const DefaultLayout = ({
@@ -41,6 +42,7 @@ export const DefaultLayout = ({
   eyecatchImage = false,
   bottomSpace = 0,
   footerNone = false,
+  noBanner = false,
 }: Props) => {
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const { user } = useAuthState()
@@ -116,8 +118,12 @@ export const DefaultLayout = ({
                     </>
                   )}
                   <MenuDivider />
-                  <MenuItem>運営について</MenuItem>
-                  <MenuItem>利用上の注意点</MenuItem>
+                  <Link href={`/about`}>
+                    <MenuItem>運営について</MenuItem>
+                  </Link>
+                  <Link href={`/caution`}>
+                    <MenuItem>利用上の注意点</MenuItem>
+                  </Link>
                 </MenuList>
               </Portal>
             </Menu>
@@ -140,9 +146,11 @@ export const DefaultLayout = ({
         </Box>
         <Container maxWidth={maxWidth} width={'100%'} px={3}>
           {children}
-          <Box width={'100%'} my={7}>
-            <InvitationBanners />
-          </Box>
+          {noBanner === false && (
+            <Box width={'100%'} my={7}>
+              <InvitationBanners />
+            </Box>
+          )}
         </Container>
         <Box height={bottomSpace} width={'100%'} />
         {!footerNone && (

@@ -43,7 +43,7 @@ const Page = ({ cards: staticCards }: Props) => {
   }, [user, loading])
 
   return (
-    <DefaultLayout>
+    <DefaultLayout noBanner footerNone>
       {cards ? (
         <ProfileForm profile={profile} cards={cards} />
       ) : (
