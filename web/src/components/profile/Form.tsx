@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CardList } from '~/components/card/List'
 import { CardsSelector } from '~/components/card/Selector'
 import { Card, Profile, createDoc, profileRef, updateDoc } from '~/firebase'
@@ -43,6 +43,11 @@ export const ProfileForm = ({ cards, profile }: Props) => {
   const [offeredCardIds, setOfferedCardIds] = useState<string[]>(
     profile?.offered_card_ids ?? []
   )
+  useEffect(() => {
+    if (!profile) return
+    setOfferedCardIds(profile.offered_card_ids)
+    setReceivedCardIds(profile.received_card_ids)
+  }, [profile])
   const offeredCards = useMemo(() => {
     return cards
       ?.filter((card) => offeredCardIds.includes(card.id))
