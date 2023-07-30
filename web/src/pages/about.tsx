@@ -29,7 +29,7 @@ const MEMBERS: Member[] = [
   {
     name: 'Ryuji',
     img_path: '/admins/ryuji.jpg',
-    roles: ['管理人', 'エンジニア'],
+    roles: ['管理人', '開発'],
     profile: `Zutomayo Card Wikiの管理人。ずとまよPremium会員。ずとまよカード完全フルコンプ勢（ご当地カードや限定カードも含む）。好きな曲は、ミラーチューン、お勉強しといてよ、残機、あいつら全員同窓会、花一匁。本職はエンジニア。`,
     twitter: 'zutomayo_ryuji',
   },
@@ -57,6 +57,54 @@ const MEMBERS: Member[] = [
     profile:
       'ずとまよPREMIUM🎖/DiscordサーバーZUTOMAYO CARD CLUB管理人/ズトカ第一弾コンプ',
     twitter: 'nora_nekosanpo',
+  },
+  {
+    name: 'ごみばこ',
+    roles: ['デザインの作成'],
+    img_path: '/admins/mayoi_ztmy.jpg',
+    twitter: 'mayoi_ztmy',
+  },
+  {
+    name: 'ピュロ',
+    roles: ['カードの登録'],
+    img_path: '/admins/ztmy_tkhr.jpg',
+    twitter: 'ztmy_tkhr',
+  },
+  {
+    name: '𣜿',
+    roles: ['カードの登録'],
+    img_path: '/admins/yuzuriha_ztmy.jpg',
+    twitter: 'yuzuriha_ztmy',
+  },
+  {
+    name: 'とみやのあーぼちゃ',
+    roles: ['カードの登録'],
+    img_path: '/admins/tomiymf1.jpg',
+    twitter: 'tomiymf1',
+  },
+  {
+    name: 'ぬぬき',
+    roles: ['カードの登録'],
+    img_path: '/admins/NuNuKi__.jpg',
+    twitter: 'NuNuKi__',
+  },
+  {
+    name: 'ふえると',
+    roles: ['カードの登録'],
+    img_path: '/admins/mvm_v2.jpg',
+    twitter: 'mvm_v2',
+  },
+  {
+    name: 'すぴ',
+    roles: ['カードの登録'],
+    img_path: '/admins/sspsss_ztmy.jpg',
+    twitter: 'sspsss_ztmy',
+  },
+  {
+    name: 'ゆうたろす',
+    roles: ['カードの登録'],
+    img_path: '/admins/yutaros123.jpg',
+    twitter: 'yutaros123',
   },
 ]
 
