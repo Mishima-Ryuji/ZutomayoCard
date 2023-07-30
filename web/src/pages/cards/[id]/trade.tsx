@@ -175,7 +175,7 @@ const Page = ({
           <Box>
             <Heading fontSize={'2xl'}>交換相手の一覧</Heading>
             {!profileLoading && currentUserProfile === undefined && (
-              <Alert status={'warning'}>
+              <Alert status={'warning'} mt={3}>
                 <AlertIcon />
                 <Link href={`/profiles/edit`}>
                   <Text color={'purple.500'}>プロフィールでトレードの設定</Text>
