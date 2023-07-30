@@ -40,7 +40,12 @@ const Page = ({ cards: staticCards }: Props) => {
 
   return (
     <>
-      <DefaultLayout bottomSpace={DECK_FORM_BOTTOM_SPACE} footerNone noBanner>
+      <DefaultLayout
+        head={{ title: 'デッキの作成' }}
+        bottomSpace={DECK_FORM_BOTTOM_SPACE}
+        footerNone
+        noBanner
+      >
         {cards && user ? (
           <DeckForm cards={cards} />
         ) : (

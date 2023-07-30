@@ -33,6 +33,7 @@ import {
   getCategoryDetail,
   getDoc,
   getDocs,
+  makeCardTitle,
   profileConverter,
 } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
@@ -140,7 +141,15 @@ const Page = ({
   if (!card && !loadingCard && cardId !== undefined)
     return <DefaultErrorPage statusCode={404} />
   return (
-    <DefaultLayout>
+    <DefaultLayout
+      head={{
+        title: makeCardTitle(card, 'の交換相手一覧'),
+        description:
+          card?.name !== undefined
+            ? `ずとまよカードの「${card.name}」を譲ってくれる相手を探して連絡することができます。`
+            : undefined,
+      }}
+    >
       {card && categoryDetail && cards && profiles ? (
         <Stack my={4} gap={10}>
           <ChakraCard>

@@ -110,7 +110,14 @@ const MEMBERS: Member[] = [
 
 const Page = () => {
   return (
-    <DefaultLayout noBanner>
+    <DefaultLayout
+      head={{
+        title: '運営について',
+        description:
+          'Zutomayo Card Wikiはズトカをより多くの人に楽しんでもらうことを目的として運営しております。今後もズトカを楽しむ上で便利になる機能を追加していく予定です。デザインや開発、動画制作、カードの登録をできる協力者を募集中です。',
+      }}
+      noBanner
+    >
       <Flex gap={4} mt={3}>
         <Stack flexGrow={1}>
           <Heading fontSize={'2xl'}>Zutomayo Card Wikiの運営について</Heading>

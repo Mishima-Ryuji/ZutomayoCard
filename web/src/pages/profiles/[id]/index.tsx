@@ -149,7 +149,16 @@ const Page = ({
   if (uid !== user?.uid && uid !== undefined && !loadingProfile && !profile)
     return <DefaultErrorPage statusCode={404} />
   return (
-    <DefaultLayout noBanner footerNone>
+    <DefaultLayout
+      head={{
+        title: profile ? `${profile.name}のズトカプロフィール` : undefined,
+        description: profile
+          ? `本ページでは、${profile.name}さんが構築したデッキや交換したいカードを閲覧することができます。`
+          : undefined,
+      }}
+      noBanner
+      footerNone
+    >
       {profile && cards ? (
         <>
           <Heading mt={5} fontSize={'2xl'}>

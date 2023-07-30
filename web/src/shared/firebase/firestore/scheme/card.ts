@@ -119,3 +119,11 @@ export const getCategoryDetail = (card: Card): CategoryDetail => {
       }
   }
 }
+
+export const makeCardTitle = (card: Card | undefined, suffix = '') => {
+  if (card === undefined) return undefined
+  const categoryDetail = getCategoryDetail(card)
+  return card.name !== undefined
+    ? `${categoryDetail.name}【${card.no} / ${categoryDetail.denominator}】 ${card.name}${suffix}`
+    : undefined
+}

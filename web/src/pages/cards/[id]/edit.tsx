@@ -26,7 +26,14 @@ import { Controller, useForm } from 'react-hook-form'
 import { FiFile } from 'react-icons/fi'
 import { DefaultLayout } from '~/components/Layout'
 import { CardItem } from '~/components/card/Item'
-import { Card, DocumentBaseKey, cardRef, fb, updateDoc } from '~/firebase'
+import {
+  Card,
+  DocumentBaseKey,
+  cardRef,
+  fb,
+  makeCardTitle,
+  updateDoc,
+} from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
 import { remove } from '~/shared/utils'
 
@@ -106,7 +113,7 @@ const Page = () => {
   if (!card && !loading && cardId !== undefined)
     return <DefaultErrorPage statusCode={404} />
   return (
-    <DefaultLayout>
+    <DefaultLayout head={{ title: makeCardTitle(card, 'の編集') }}>
       {card && isAdmin ? (
         <form onSubmit={onSubmit}>
           <VStack width={'100%'} my={5} alignItems={'baseline'} gap={5}>

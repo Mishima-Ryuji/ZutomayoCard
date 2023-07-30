@@ -25,10 +25,12 @@ import { useState } from 'react'
 import { FaUser } from 'react-icons/fa'
 import { fb } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
+import { Head, HeadProps } from './Head'
 import { InvitationBanners } from './InvitationBanners'
 import { LoginPopup } from './auth/LoginPopup'
 
 type Props = {
+  head: HeadProps
   eyecatchImage?: boolean
   maxWidth?: number
   children?: React.ReactNode
@@ -38,6 +40,7 @@ type Props = {
 }
 
 export const DefaultLayout = ({
+  head,
   children,
   maxWidth = 1200,
   eyecatchImage = false,
@@ -50,6 +53,7 @@ export const DefaultLayout = ({
   const toast = useToast()
   return (
     <>
+      <Head {...head} />
       <LoginPopup
         show={showLoginPopup}
         onHide={() => setShowLoginPopup(false)}

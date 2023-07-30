@@ -71,7 +71,13 @@ const Page = ({
   )
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   return (
-    <DefaultLayout>
+    <DefaultLayout
+      head={{
+        title: 'おすすめデッキ一覧',
+        description:
+          '本ページでは、ずとまよカードのガチ勢がおすすめするデッキの一覧を見ることができます。',
+      }}
+    >
       <LoginPopup
         show={showLoginPopup}
         onHide={() => setShowLoginPopup(false)}

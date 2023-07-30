@@ -43,7 +43,7 @@ const Page = ({ cards: staticCards }: Props) => {
   }, [user, loading])
 
   return (
-    <DefaultLayout noBanner footerNone>
+    <DefaultLayout head={{ title: 'プロフィールの編集' }} noBanner footerNone>
       {cards ? (
         <ProfileForm profile={profile} cards={cards} />
       ) : (

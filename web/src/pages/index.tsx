@@ -56,7 +56,7 @@ const Page = ({ cards: staticCards }: Props) => {
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const { user } = useAuthState()
   return (
-    <DefaultLayout eyecatchImage>
+    <DefaultLayout head={{}} eyecatchImage>
       <LoginPopup
         show={showLoginPopup}
         onHide={() => setShowLoginPopup(false)}

@@ -3,7 +3,13 @@ import { DefaultLayout } from '~/components/Layout'
 
 const Page = () => {
   return (
-    <DefaultLayout noBanner footerNone>
+    <DefaultLayout
+      head={{
+        title: '利用上の注意点',
+      }}
+      noBanner
+      footerNone
+    >
       <Heading mt={3} fontSize={'2xl'}>
         利用上の注意点
       </Heading>

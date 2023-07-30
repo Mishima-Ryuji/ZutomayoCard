@@ -27,7 +27,13 @@ const Page = ({ cards: staticCards }: Props) => {
     initialValue: deserializeArray(staticCards, { ref: cardConverter }),
   })
   return (
-    <DefaultLayout>
+    <DefaultLayout
+      head={{
+        title: '検索',
+        description:
+          'ずとまよカードを属性やレアリティ、効果、カード名で絞り込み検索をすることができます。',
+      }}
+    >
       <Heading mt={3} fontSize={'2xl'}>
         検索
       </Heading>

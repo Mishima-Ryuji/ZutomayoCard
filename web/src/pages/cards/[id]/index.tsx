@@ -24,6 +24,7 @@ import {
   getCategoryDetail,
   getDoc,
   getDocs,
+  makeCardTitle,
   questionConverter,
 } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
@@ -125,7 +126,9 @@ const Page = ({
   if (!card && !loading && cardId !== undefined)
     return <DefaultErrorPage statusCode={404} />
   return (
-    <DefaultLayout>
+    <DefaultLayout
+      head={{ title: makeCardTitle(card), description: card?.effect }}
+    >
       {card && categoryDetail ? (
         <Stack gap={10} my={4}>
           {isAdmin && <Box mb={-4}>Card ID: {card.id}</Box>}

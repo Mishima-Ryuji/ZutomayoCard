@@ -102,7 +102,7 @@ const Page = ({ cards: staticCards, deck: staticDeck }: Props) => {
   if (!deck && !loadingDeck && deckId !== undefined)
     return <DefaultErrorPage statusCode={404} />
   return (
-    <DefaultLayout>
+    <DefaultLayout head={{ title: deck?.name, description: deck?.concept }}>
       <Box py={3}>
         {deckCards && deck ? (
           <>
