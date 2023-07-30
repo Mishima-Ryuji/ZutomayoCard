@@ -115,7 +115,7 @@ export const CardsSelector = ({
               isDisabled={nextButtonDisabled}
               onClick={handleClickNext}
             >
-              次へ
+              決定
             </Button>
           </Flex>
         </Box>
