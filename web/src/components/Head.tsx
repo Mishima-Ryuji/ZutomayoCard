@@ -43,7 +43,7 @@ export const Head = ({
   title += ' | ' + DISPLAY_APP_NAME
 
   if (image === undefined) {
-    image = host + '/logo.png'
+    image = host + '/logo.jpg'
   } else if (image.startsWith('/')) {
     image = host + image
   }
