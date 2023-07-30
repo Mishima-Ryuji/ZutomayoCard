@@ -51,9 +51,10 @@ export const DeckForm = ({ cards, deck }: Props) => {
       ? `https://www.youtube.com/watch?v=${deck.youtube_id}`
       : ''
   )
-  const [isPublic, setIsPublic] = useState(false)
+  const [isPublic, setIsPublic] = useState(true)
+  const [isRecommended, setIsRecommended] = useState(false)
   useEffect(() => {
-    setIsPublic(isAdmin)
+    setIsRecommended(isAdmin)
   }, [isAdmin])
 
   const router = useRouter()
@@ -171,13 +172,35 @@ export const DeckForm = ({ cards, deck }: Props) => {
                   />
                 </FormControl>
               )}
+              <FormControl>
+                <Checkbox
+                  isChecked={isRecommended}
+                  onChange={(e) => {
+                    if (e.currentTarget.checked) {
+                      setIsPublic(true)
+                    } else {
+                      setIsPublic(false)
+                      setIsRecommended(false)
+                    }
+                  }}
+                >
+                  公開する（URLを知っている人がアクセス可能）
+                </Checkbox>
+              </FormControl>
               {isAdmin && (
                 <FormControl>
                   <Checkbox
-                    isChecked={isPublic}
-                    onChange={(e) => setIsPublic(e.currentTarget.checked)}
+                    isChecked={isRecommended}
+                    onChange={(e) => {
+                      if (e.currentTarget.checked) {
+                        setIsPublic(true)
+                        setIsRecommended(e.currentTarget.checked)
+                      } else {
+                        setIsRecommended(false)
+                      }
+                    }}
                   >
-                    公開する（おすすめのデッキに表示されます）
+                    おすすめのデッキに表示する
                   </Checkbox>
                 </FormControl>
               )}
@@ -225,6 +248,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                             ? youtubeIdCap[1]
                             : undefined,
                         is_public: isPublic,
+                        is_recommended: isRecommended,
                       })
                       await router.push(`/decks/${deckRef.id}`)
                     }

@@ -12,6 +12,7 @@ export interface Deck extends Document {
   name: string
   youtube_id?: string
   is_public: boolean
+  is_recommended: boolean
   concept?: string
   movement?: string
   cards_adoption?: string
