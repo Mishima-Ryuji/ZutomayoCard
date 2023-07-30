@@ -57,10 +57,10 @@ export const CardItem = ({
       )}
       {selectCount !== undefined && selectCount > 0 && (
         <Tag
-          size={'lg'}
+          size={'sm'}
           position={'absolute'}
-          right={1}
-          top={1}
+          right={0.5}
+          top={0.5}
           variant={'solid'}
           colorScheme="red"
         >

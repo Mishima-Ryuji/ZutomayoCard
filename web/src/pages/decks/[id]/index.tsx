@@ -6,6 +6,7 @@ import {
   Heading,
   Link,
   Spinner,
+  Text,
 } from '@chakra-ui/react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import DefaultErrorPage from 'next/error'
@@ -23,6 +24,7 @@ import { CardList } from '~/components/card/List'
 import {
   Card,
   Deck,
+  Profile,
   cardConverter,
   cardsRef,
   deckConverter,
@@ -30,6 +32,8 @@ import {
   deleteDoc,
   getDoc,
   getDocs,
+  profileConverter,
+  profileRef,
 } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
 import {
@@ -47,6 +51,7 @@ interface Params extends ParsedUrlQuery {
 type Props = {
   cards: Serialized<Card>[]
   deck: Serialized<Deck> | null
+  deckOwner: Serialized<Profile> | null
 }
 
 export const getStaticPaths: GetStaticPaths = () => {
@@ -63,17 +68,26 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
   const cards = cardsSnapshot.docs.map((doc) => doc.data())
   const decksSnapshot = params ? await getDoc(deckRef(params.id)) : undefined
   const deck = decksSnapshot?.data()
+  const deckOwnerSnapshot = deck
+    ? await getDoc(profileRef(deck.created_by))
+    : undefined
+  const deckOwner = deckOwnerSnapshot?.data()
   const result = {
     props: {
       cards: serializeArray(cards),
       deck: deck ? serialize(deck) : null,
+      deckOwner: deckOwner ? serialize(deckOwner) : null,
     },
     revalidate: 10000,
   }
   return result
 }
 
-const Page = ({ cards: staticCards, deck: staticDeck }: Props) => {
+const Page = ({
+  cards: staticCards,
+  deck: staticDeck,
+  deckOwner: staticDeckOwner,
+}: Props) => {
   const router = useRouter()
   const deckId = router.query.id
   const [cards] = useCollectionDataOnce(cardsRef, {
@@ -84,6 +98,14 @@ const Page = ({ cards: staticCards, deck: staticDeck }: Props) => {
     {
       initialValue: staticDeck
         ? deserialize(staticDeck, { ref: deckConverter })
+        : undefined,
+    }
+  )
+  const [deckOwner, loadingDeckOwner] = useDocumentDataOnce(
+    deck ? profileRef(deck.created_by) : null,
+    {
+      initialValue: staticDeckOwner
+        ? deserialize(staticDeckOwner, { ref: profileConverter })
         : undefined,
     }
   )
@@ -109,6 +131,7 @@ const Page = ({ cards: staticCards, deck: staticDeck }: Props) => {
             <Heading fontSize={'2xl'} mb={3}>
               {deck.name}
             </Heading>
+
             {user && user?.uid === deck.created_by && (
               <Flex gap={2} mb={4}>
                 <Link href={`/decks/${deck.id}/edit`}>
@@ -131,6 +154,18 @@ const Page = ({ cards: staticCards, deck: staticDeck }: Props) => {
                   デッキを削除
                 </Button>
               </Flex>
+            )}
+            {deckOwner && (
+              <>
+                <Heading fontSize={'xl'} mt={3}>
+                  デッキの作成者
+                </Heading>
+                <Text color="purple.500" fontSize={'xl'} mb={3}>
+                  <Link href={`/profiles/${deckOwner.id}`}>
+                    {deckOwner.name}
+                  </Link>
+                </Text>
+              </>
             )}
             <CardList
               columns={[5, 6, 7]}
