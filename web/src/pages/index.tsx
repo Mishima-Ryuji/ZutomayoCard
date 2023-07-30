@@ -68,7 +68,7 @@ const Page = ({ cards: staticCards }: Props) => {
             width={[935 * 0.15, 935 * 0.2]}
             height={[179 * 0.15, 179 * 0.2]}
           >
-            <Image src="/logo.png" fill alt="Zutomayo Card Wiki" />
+            <Image src="/brand.png" fill alt="Zutomayo Card Wiki" />
           </Box>
         </CardHeader>
         <CardBody>
