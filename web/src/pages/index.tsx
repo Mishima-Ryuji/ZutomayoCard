@@ -176,7 +176,7 @@ const Page = ({ cards: staticCards }: Props) => {
                   ログイン
                 </Button>
               )}
-              <Link href="https://twitter.com/zutoca_wiki">
+              <Link href="https://twitter.com/zutomayo_card_wiki">
                 <Button
                   colorScheme="twitter"
                   size={'sm'}

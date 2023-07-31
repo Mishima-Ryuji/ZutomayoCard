@@ -1,7 +1,7 @@
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 
-const TWITTER_USER_NAME = '@zutoca_wiki'
+const TWITTER_USER_NAME = '@zutomayo_card_wiki'
 const DISPLAY_APP_NAME = 'Zutomayo Card Wiki'
 
 export type HeadProps = {
