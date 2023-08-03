@@ -1,16 +1,19 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    // function isAuthenticated() {
-    //   return request.auth != null;
-    // }
-    // function isUserAuthenticated(userId) {
-    //   return isAuthenticated() && userId == request.auth.uid;
-    // }
-    match /{allPaths=**} {
-      allow read, write;
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+		function isAdmin() {
+      return isAuthenticated() && request.auth != null && firestore.exists(/databases/(default)/documents/admin/$(request.auth.uid));
+    }
+    
+    match /cards/{id} {
+      allow read;
+      allow create, update: if isAdmin();
+    }
+    match /resized_cards/{id} {
+      allow read;
     }
   }
 }
-
-    
