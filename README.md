@@ -41,6 +41,8 @@ Pull request はテンプレートに従って記述してください。レビ�
 
 また、本リポジトリは Cloud Functions のコードと Next.js のコードを共通化してモノレポで運用しています。Cloud Functions のコードで使う Firebase の SDK と Next.js で使う Firebase の SDK は種類が違いますが、共通化できるようにそれぞれの SDK 用のエイリアスを作成して共通化しています。そのため、Firebase の関数等を使うときは、firebase/firestore などから export されている関数を使うのではなく、~/firebase からエクスポートされている関数を使用してください。
 
+また、同じ Issue を複数人で取り組まないようにするために、Issue を開始したら自分をアサインしてください。
+
 ## 禁止行為
 
 以下の行為は禁止行為とさせて頂きます。
