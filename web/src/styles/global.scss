@@ -1,3 +1,19 @@
 p {
   white-space: pre-wrap;
 }
+
+.editorjs {
+  .cdx-block {
+    padding: 0;
+  }
+  .ce-block {
+    a {
+      color: blue;
+    }
+  }
+  .codex-editor__redactor {
+    padding: 0 !important;
+  }
+  .ce-popover--opened {
+  }
+}
