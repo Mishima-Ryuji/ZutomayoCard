@@ -5,7 +5,7 @@ import { FC, useCallback, useRef, useState } from "react"
 import { EditorCore, ReactEditorJS, i18n, tools } from "../ReactEditorJS"
 
 
-interface RichEditorProps {
+export interface RichEditorProps {
   defaultValue: EditorConfig['data']
   onInitialize: (editor: EditorCore) => void
   isInitializing: boolean
@@ -13,7 +13,7 @@ interface RichEditorProps {
 const _RichEditor: FC<RichEditorProps> = ({ onInitialize, defaultValue, }) => {
   if (typeof window === "undefined") return <></>
   return (
-    <chakra.div className="editorjs" zIndex={1} position="relative">
+    <chakra.div className="editorjs" zIndex={1} position="relative" >
       <ReactEditorJS
         {...{ tools, i18n }}
         tunes={[]}
