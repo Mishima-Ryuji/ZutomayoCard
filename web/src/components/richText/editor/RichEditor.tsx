@@ -1,7 +1,7 @@
 
 import { chakra } from "@chakra-ui/react"
 import { EditorConfig, OutputData } from "@editorjs/editorjs"
-import { FC, useCallback, useRef, useState } from "react"
+import { FC, useCallback, useEffect, useRef, useState } from "react"
 import { EditorCore, ReactEditorJS, i18n, tools } from "../ReactEditorJS"
 
 
@@ -10,10 +10,16 @@ export interface RichEditorProps {
   defaultValue: EditorConfig['data']
   onInitialize: (editor: EditorCore) => void
   isInitializing: boolean
+  onDestroyed: () => void
   placeholder?: string | false
 }
-const _RichEditor: FC<RichEditorProps> = ({ editorKey, onInitialize, defaultValue, placeholder = false }) => {
+const _RichEditor: FC<RichEditorProps> = ({ editorKey, onInitialize, defaultValue, placeholder = false, onDestroyed, }) => {
   if (typeof window === "undefined") return <></>
+  useEffect(() => {
+    return () => {
+      onDestroyed()
+    }
+  }, [])
   return (
     <chakra.div className="editorjs" zIndex={1} position="relative" padding={2} border="solid 2px" borderColor="blue.300" borderRadius="md">
       <ReactEditorJS
@@ -48,14 +54,21 @@ export function useRichEditor({ editorKey, defaultValue }: UseRichEditorOptions)
     [],
   )
   const getCurrentValue = async () => {
-    return await getCurrentEditorjsInstance()?.save()
+    if (isDestroyed) return null
+    return await getCurrentEditorjsInstance()?.save() ?? null
   }
+
+  const [isDestroyed, setIsDestroyed] = useState(false)
+  const onDestroyed = useCallback(() => {
+    setIsDestroyed(true)
+  }, [])
 
   const props: RichEditorProps = {
     editorKey,
     onInitialize,
     defaultValue,
     isInitializing,
+    onDestroyed,
   }
   return {
     props,

@@ -117,10 +117,10 @@ export const DeckForm = ({ cards, deck }: Props) => {
             : undefined,
         is_public: isPublic,
         is_recommended: isRecommended,
-        markuped_concept: markupedConcept,
-        markuped_movement: markupedMovement,
-        markuped_cards_adoption: markupedAdoption,
-        markuped_detail: markupedDetail,
+        markuped_concept: await markupedConcept.getCurrentValue() ?? null,
+        markuped_movement: await markupedMovement.getCurrentValue() ?? null,
+        markuped_cards_adoption: await markupedAdoption.getCurrentValue() ?? null,
+        markuped_detail: await markupedDetail.getCurrentValue() ?? null,
       })
       await router.push(`/decks/${deckRef.id}`)
     }
