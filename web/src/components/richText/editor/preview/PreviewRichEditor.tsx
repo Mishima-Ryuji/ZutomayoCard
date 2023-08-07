@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Badge, Button, HStack, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Switch, Textarea, chakra } from "@chakra-ui/react"
+import { Alert, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Badge, Button, HStack, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Switch, Textarea, chakra } from "@chakra-ui/react"
 import { FC, useRef, useState } from "react"
 import { RichEditor } from ".."
 import { RichEditorProps } from "../RichEditor"
@@ -119,6 +119,11 @@ const PreviewRichEditor: FC<PreviewRichEditorProps> = ({
             <AlertDialogHeader>
               リッチエディタを無効にしますか？
             </AlertDialogHeader>
+            <AlertDialogBody>
+              <Alert status='warning'>
+                無効にすると一部のデータが失われる可能性があります。
+              </Alert>
+            </AlertDialogBody>
             <AlertDialogFooter>
               <Button onClick={handleCancelHandleConfirm}>
                 キャンセル
