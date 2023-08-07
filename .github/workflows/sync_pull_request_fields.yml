@@ -11,6 +11,7 @@ jobs:
       - name: Apply assignees, labels and milestone from issue to PR
         uses: actions/github-script@v5
         with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             // Extract issue number from PR body
             const body = context.payload.pull_request.body;
