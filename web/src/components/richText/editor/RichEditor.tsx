@@ -9,17 +9,19 @@ export interface RichEditorProps {
   defaultValue: EditorConfig['data']
   onInitialize: (editor: EditorCore) => void
   isInitializing: boolean
+  placeholder?: string | false
 }
-const _RichEditor: FC<RichEditorProps> = ({ onInitialize, defaultValue, }) => {
+const _RichEditor: FC<RichEditorProps> = ({ onInitialize, defaultValue, placeholder = false }) => {
   if (typeof window === "undefined") return <></>
   return (
-    <chakra.div className="editorjs" zIndex={1} position="relative" >
+    <chakra.div className="editorjs" zIndex={1} position="relative" padding={2} border="solid 2px" borderColor="blue.300" borderRadius="md">
       <ReactEditorJS
         {...{ tools, i18n }}
         tunes={[]}
         inlineToolbar={["bold", "italic", "link"]}
         onInitialize={onInitialize}
         defaultValue={defaultValue}
+        placeholder={placeholder}
       />
     </chakra.div>
   )

@@ -1,18 +1,39 @@
-import { Badge, HStack, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Switch, Textarea, chakra } from "@chakra-ui/react"
-import { FC, useState } from "react"
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Badge, Button, HStack, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Switch, Textarea, chakra } from "@chakra-ui/react"
+import { FC, useRef, useState } from "react"
 import { RichEditor } from ".."
 import { RichEditorProps } from "../RichEditor"
 
 interface PreviewRichEditorProps extends RichEditorProps {
   textareaValue: string
   onChangeTextareaValue: (value: string) => void
+  onResetTextareaValue: () => void
+  onResetRichEditor: () => void
 }
 const PreviewRichEditor: FC<PreviewRichEditorProps> = ({
   textareaValue,
   onChangeTextareaValue,
+  onResetTextareaValue,
+  onResetRichEditor,
   ...editorProps
 }) => {
   const [isEnableRich, setIsEnableRich] = useState(false)
+
+  const [confirmDialogType, setConfirmDialogType] = useState<"enable" | "disable" | null>(null)
+  const enableButtonRef = useRef<HTMLButtonElement>(null)
+  const disableButtonRef = useRef<HTMLButtonElement>(null)
+  const handleConfirmEnable = () => { setConfirmDialogType("enable") }
+  const handleEnable = () => {
+    onResetRichEditor()
+    setIsEnableRich(true)
+    setConfirmDialogType(null)
+  }
+  const handleConfirmDisable = () => { setConfirmDialogType("disable") }
+  const handleDisable = () => {
+    onResetTextareaValue()
+    setIsEnableRich(false)
+    setConfirmDialogType(null)
+  }
+  const handleCancelHandleConfirm = () => { setConfirmDialogType(null) }
   return (
     <chakra.div w="full" >
 
@@ -22,7 +43,17 @@ const PreviewRichEditor: FC<PreviewRichEditorProps> = ({
             <div>
               <Badge>プレビュー</Badge>
               リッチエディタ
-              <Switch checked={isEnableRich} onChange={e => setIsEnableRich(e.target.checked)} />
+              <Switch
+                isChecked={isEnableRich}
+                onChange={e => {
+                  e.preventDefault()
+                  if (e.target.checked) {
+                    handleConfirmEnable()
+                  } else {
+                    handleConfirmDisable()
+                  }
+                }}
+              />
             </div>
           </PopoverTrigger>
           <PopoverContent>
@@ -43,12 +74,62 @@ const PreviewRichEditor: FC<PreviewRichEditorProps> = ({
       </HStack>
 
       {isEnableRich
-        ? <RichEditor {...editorProps} />
+        ? <RichEditor
+          {...editorProps}
+          placeholder="⭐️ リッチエディタはプレビュー機能です。リンクを入れたり、太文字にしたりできます。"
+        />
         : <Textarea
           value={textareaValue}
           onChange={(e) => onChangeTextareaValue(e.currentTarget.value)}
         />
       }
+
+      <AlertDialog
+        isOpen={confirmDialogType === "enable"}
+        leastDestructiveRef={enableButtonRef}
+        onClose={handleCancelHandleConfirm}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              リッチエディタを有効にしますか？
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              リッチエディタは現在プレビュー機能です。
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button onClick={handleCancelHandleConfirm}>
+                キャンセル
+              </Button>
+              <Button colorScheme="purple" onClick={handleEnable} ref={enableButtonRef}>
+                有効にする
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
+      <AlertDialog
+        isOpen={confirmDialogType === "disable"}
+        leastDestructiveRef={disableButtonRef}
+        onClose={handleCancelHandleConfirm}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              リッチエディタを無効にしますか？
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <Button onClick={handleCancelHandleConfirm}>
+                キャンセル
+              </Button>
+              <Button colorScheme="purple" onClick={handleDisable} ref={disableButtonRef}>
+                無効にする
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
 
     </chakra.div>
   )
