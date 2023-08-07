@@ -1,23 +1,19 @@
-import { chakra } from "@chakra-ui/react"
 import { OutputData } from "@editorjs/editorjs"
 import { FC } from "react"
-import { ReactEditorJS, i18n, tools } from "../ReactEditorJS"
 
 interface RichViewerProps {
   value: OutputData
 }
 const RichViewer: FC<RichViewerProps> = ({ value }) => {
-  if (typeof window === "undefined") return <></>
   return (
-    <chakra.div className="editorjs">
-      <ReactEditorJS
-        {...{ tools, i18n }}
-        tunes={[]}
-        defaultValue={value}
-        readOnly
-        tools={{}}
-      />
-    </chakra.div>
+    <div className="editorjs-viewer">
+      {value.blocks.map(block =>
+        <div
+          key={block.id}
+          dangerouslySetInnerHTML={{ __html: block.data.text }}
+        />
+      )}
+    </div>
   )
 }
 
