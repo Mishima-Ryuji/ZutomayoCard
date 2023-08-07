@@ -8,6 +8,7 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react'
+import { OutputData } from '@editorjs/editorjs'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import DefaultErrorPage from 'next/error'
 import { useRouter } from 'next/router'
@@ -21,6 +22,7 @@ import { FaPencilAlt, FaTrash } from 'react-icons/fa'
 import Youtube from 'react-youtube'
 import { DefaultLayout } from '~/components/Layout'
 import { CardList } from '~/components/card/List'
+import RichViewer from '~/components/richText/viewer/RichViewer'
 import {
   Card,
   Deck,
@@ -175,18 +177,22 @@ const Page = ({
             />
             <TextSection
               heading="コンセプト"
+              markupedContent={deck.markuped_concept}
               textContent={deck.concept}
             />
             <TextSection
               heading="立ち回り方"
+              markupedContent={deck.markuped_movement}
               textContent={deck.movement}
             />
             <TextSection
               heading="カードの採用理由と代替カード"
+              markupedContent={deck.markuped_cards_adoption}
               textContent={deck.cards_adoption}
             />
             <TextSection
               heading="詳細やその他の情報"
+              markupedContent={deck.markuped_detail}
               textContent={deck.detail}
             />
             {deck.youtube_id !== undefined && (
@@ -217,19 +223,29 @@ export default Page
 
 interface TextSectionProps {
   heading: ReactNode
+  markupedContent: object | null
   textContent: string | undefined
 }
-const TextSection: FC<TextSectionProps> = ({ heading, textContent }) => {
+const TextSection: FC<TextSectionProps> = ({ heading, markupedContent, textContent }) => {
+  const showMarkuped = !!markupedContent
+  const showText = !showMarkuped && textContent !== undefined
   return (
     <>
-      {textContent !== undefined && (
+      {(showMarkuped || showText) &&
         <>
           <Heading fontSize={'xl'} mt={3} mb={2}>
             {heading}
           </Heading>
-          <p>{textContent}</p>
         </>
-      )}
+      }
+      {showMarkuped &&
+        <RichViewer
+          value={markupedContent as OutputData}
+        />
+      }
+      {showText &&
+        <p>{textContent}</p>
+      }
     </>
   )
 }
