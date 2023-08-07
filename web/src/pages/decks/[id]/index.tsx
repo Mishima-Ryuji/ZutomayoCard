@@ -8,7 +8,6 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react'
-import { GetStaticPaths, GetStaticProps } from 'next'
 import DefaultErrorPage from 'next/error'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
@@ -22,38 +21,25 @@ import Youtube from 'react-youtube'
 import { DefaultLayout } from '~/components/Layout'
 import { CardList } from '~/components/card/List'
 import {
-  Card,
-  Deck,
-  Profile,
-  cardConverter,
   cardsRef,
-  deckConverter,
   deckRef,
   deleteDoc,
-  getDoc,
-  getDocs,
-  profileConverter,
-  profileRef,
+  profileRef
 } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
-import {
-  Serialized,
-  deserialize,
-  deserializeArray,
-  serialize,
-  serializeArray,
-} from '~/shared/utils'
 
 interface Params extends ParsedUrlQuery {
   id: string
 }
 
 type Props = {
-  cards: Serialized<Card>[]
-  deck: Serialized<Deck> | null
-  deckOwner: Serialized<Profile> | null
+  // Firebaseの権限エラーを回避するため一旦SGを無効化
+  // cards: Serialized<Card>[]
+  // deck: Serialized<Deck> | null
+  // deckOwner: Serialized<Profile> | null
 }
 
+/* Firebaseの権限エラーを回避するため一旦SGを無効化
 export const getStaticPaths: GetStaticPaths = () => {
   return {
     paths: [],
@@ -82,42 +68,31 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
   }
   return result
 }
+*/
 
 const Page = ({
-  cards: staticCards,
-  deck: staticDeck,
-  deckOwner: staticDeckOwner,
+  // cards: staticCards,
+  // deck: staticDeck,
+  // deckOwner: staticDeckOwner,
 }: Props) => {
   const router = useRouter()
   const deckId = router.query.id
-  const [cards] = useCollectionDataOnce(cardsRef, {
-    initialValue: deserializeArray(staticCards, { ref: cardConverter }),
-  })
+  const [cards] = useCollectionDataOnce(cardsRef)
   const [deck, loadingDeck] = useDocumentDataOnce(
-    typeof deckId === 'string' ? deckRef(deckId) : null,
-    {
-      initialValue: staticDeck
-        ? deserialize(staticDeck, { ref: deckConverter })
-        : undefined,
-    }
+    typeof deckId === 'string' ? deckRef(deckId) : null
   )
   const [deckOwner, loadingDeckOwner] = useDocumentDataOnce(
     deck ? profileRef(deck.created_by) : null,
-    {
-      initialValue: staticDeckOwner
-        ? deserialize(staticDeckOwner, { ref: profileConverter })
-        : undefined,
-    }
   )
   const deckCards = useMemo(() => {
     return cards && deck
       ? cards
-          .filter((card) => deck.card_ids.includes(card.id))
-          .sort(
-            (a, b) =>
-              deck.card_ids.findIndex((id) => a.id === id) -
-              deck.card_ids.findIndex((id) => b.id === id)
-          )
+        .filter((card) => deck.card_ids.includes(card.id))
+        .sort(
+          (a, b) =>
+            deck.card_ids.findIndex((id) => a.id === id) -
+            deck.card_ids.findIndex((id) => b.id === id)
+        )
       : undefined
   }, [cards, deck])
   const { user } = useAuthState()
