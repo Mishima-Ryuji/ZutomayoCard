@@ -16,6 +16,8 @@ export type CardRarity = 'N' | 'N+' | 'R' | 'R+' | 'SR' | 'SR+' | 'UR' | 'SE'
 
 export type CardType = 'character' | 'enchant' | 'area_enchant'
 
+export type CardRank = 'A' | 'B' | 'C' | 'D'
+
 export interface Card extends Document {
   readonly ref: DocRef<Card>
   readonly parent_id: 'cards'
@@ -39,7 +41,7 @@ export interface Card extends Document {
   power?: number
   type?: 'character' | 'enchant' | 'area_enchant'
 
-  rank?: 'A' | 'B' | 'C' | 'D'
+  rank?: CardRank
   rank_description?: string
 
   youtube_id?: string
