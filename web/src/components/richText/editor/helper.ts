@@ -15,4 +15,5 @@ export const editorValueToString = (editorValue: OutputData): string =>
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
     block.data?.text ?? ""
   ).join("\n")
+    .replaceAll(/(<.+?>)|(<.+?\/>)/g, "")
 
