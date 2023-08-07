@@ -9,6 +9,7 @@ import {
   Input,
   Stack
 } from '@chakra-ui/react'
+import { OutputData } from '@editorjs/editorjs'
 import { deleteField } from 'firebase/firestore'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
@@ -45,13 +46,25 @@ export const DeckForm = ({ cards, deck }: Props) => {
   const [showCardSelector, setShowCardSelector] = useState(deck ? false : true)
   const [name, setName] = useState(deck?.name ?? 'My deck')
   const [detail, setDetail] = useState(deck?.detail ?? '')
-  const markupedDetail = useRichEditor({ defaultValue: editorValueFromString(detail) })
+  const markupedDetail = useRichEditor({
+    editorKey: "detail",
+    defaultValue: deck?.markuped_detail as OutputData ?? editorValueFromString(detail),
+  })
   const [concept, setConcept] = useState(deck?.concept ?? '')
-  const markupedConcept = useRichEditor({ defaultValue: editorValueFromString(concept) })
+  const markupedConcept = useRichEditor({
+    editorKey: "concept",
+    defaultValue: deck?.markuped_concept as OutputData ?? editorValueFromString(concept),
+  })
   const [movement, setMovement] = useState(deck?.movement ?? '')
-  const markupedMovement = useRichEditor({ defaultValue: editorValueFromString(movement) })
+  const markupedMovement = useRichEditor({
+    editorKey: "movement",
+    defaultValue: deck?.markuped_movement as OutputData ?? editorValueFromString(movement),
+  })
   const [adoption, setAdoption] = useState(deck?.cards_adoption ?? '')
-  const markupedAdoption = useRichEditor({ defaultValue: editorValueFromString(adoption) })
+  const markupedAdoption = useRichEditor({
+    editorKey: "adoption",
+    defaultValue: deck?.markuped_cards_adoption as OutputData ?? editorValueFromString(adoption),
+  })
   const [youtubeURL, setYoutubeURL] = useState(
     deck?.youtube_id !== undefined
       ? `https://www.youtube.com/watch?v=${deck.youtube_id}`
@@ -175,6 +188,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                 <FormLabel htmlFor=''>コンセプト{isAdmin === false && '(任意)'}</FormLabel>
                 <PreviewRichEditor
                   textareaValue={concept}
+                  defaultEnablePreview={!!(deck?.markuped_concept)}
                   onChangeTextareaValue={value => setConcept(value)}
                   onResetTextareaValue={async () => {
                     const editorValue = await markupedConcept.getCurrentEditorjsInstance()?.save()
@@ -194,6 +208,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                 <FormLabel htmlFor=''>立ち回り方{isAdmin === false && '(任意)'}</FormLabel>
                 <PreviewRichEditor
                   textareaValue={movement}
+                  defaultEnablePreview={!!(deck?.markuped_movement)}
                   onChangeTextareaValue={value => setMovement(value)}
                   onResetTextareaValue={async () => {
                     const editorValue = await markupedMovement.getCurrentEditorjsInstance()?.save()
@@ -215,6 +230,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                 </FormLabel>
                 <PreviewRichEditor
                   textareaValue={adoption}
+                  defaultEnablePreview={!!(deck?.markuped_cards_adoption)}
                   onChangeTextareaValue={value => setAdoption(value)}
                   onResetTextareaValue={async () => {
                     const editorValue = await markupedAdoption.getCurrentEditorjsInstance()?.save()
@@ -236,6 +252,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                 </FormLabel>
                 <PreviewRichEditor
                   textareaValue={detail}
+                  defaultEnablePreview={!!(deck?.markuped_detail)}
                   onChangeTextareaValue={value => setDetail(value)}
                   onResetTextareaValue={async () => {
                     const editorValue = await markupedDetail.getCurrentEditorjsInstance()?.save()

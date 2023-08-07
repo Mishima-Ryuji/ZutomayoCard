@@ -8,15 +8,17 @@ interface PreviewRichEditorProps extends RichEditorProps {
   onChangeTextareaValue: (value: string) => void
   onResetTextareaValue: () => void
   onResetRichEditor: () => void
+  defaultEnablePreview?: boolean
 }
 const PreviewRichEditor: FC<PreviewRichEditorProps> = ({
   textareaValue,
   onChangeTextareaValue,
   onResetTextareaValue,
   onResetRichEditor,
+  defaultEnablePreview = false,
   ...editorProps
 }) => {
-  const [isEnableRich, setIsEnableRich] = useState(false)
+  const [isEnableRich, setIsEnableRich] = useState(defaultEnablePreview)
 
   const [confirmDialogType, setConfirmDialogType] = useState<"enable" | "disable" | null>(null)
   const enableButtonRef = useRef<HTMLButtonElement>(null)

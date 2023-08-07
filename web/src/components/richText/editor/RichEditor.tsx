@@ -6,12 +6,13 @@ import { EditorCore, ReactEditorJS, i18n, tools } from "../ReactEditorJS"
 
 
 export interface RichEditorProps {
+  editorKey: string
   defaultValue: EditorConfig['data']
   onInitialize: (editor: EditorCore) => void
   isInitializing: boolean
   placeholder?: string | false
 }
-const _RichEditor: FC<RichEditorProps> = ({ onInitialize, defaultValue, placeholder = false }) => {
+const _RichEditor: FC<RichEditorProps> = ({ editorKey, onInitialize, defaultValue, placeholder = false }) => {
   if (typeof window === "undefined") return <></>
   return (
     <chakra.div className="editorjs" zIndex={1} position="relative" padding={2} border="solid 2px" borderColor="blue.300" borderRadius="md">
@@ -22,6 +23,7 @@ const _RichEditor: FC<RichEditorProps> = ({ onInitialize, defaultValue, placehol
         onInitialize={onInitialize}
         defaultValue={defaultValue}
         placeholder={placeholder}
+        holder={editorKey}
       />
     </chakra.div>
   )
@@ -30,9 +32,10 @@ const _RichEditor: FC<RichEditorProps> = ({ onInitialize, defaultValue, placehol
 export default _RichEditor
 
 interface UseRichEditorOptions {
+  editorKey: string
   defaultValue?: OutputData
 }
-export function useRichEditor({ defaultValue }: UseRichEditorOptions = {}) {
+export function useRichEditor({ editorKey, defaultValue }: UseRichEditorOptions) {
   const editorCore = useRef<EditorCore>()
   const [isInitializing, setIsInitializing] = useState(true)
   const onInitialize = useCallback((instance: EditorCore) => {
@@ -49,6 +52,7 @@ export function useRichEditor({ defaultValue }: UseRichEditorOptions = {}) {
   }
 
   const props: RichEditorProps = {
+    editorKey,
     onInitialize,
     defaultValue,
     isInitializing,
