@@ -44,6 +44,9 @@ export function useRichEditor({ defaultValue }: UseRichEditorOptions = {}) {
     editorCore.current,
     [],
   )
+  const getCurrentValue = async () => {
+    return await getCurrentEditorjsInstance()?.save()
+  }
 
   const props: RichEditorProps = {
     onInitialize,
@@ -53,6 +56,7 @@ export function useRichEditor({ defaultValue }: UseRichEditorOptions = {}) {
   return {
     props,
     getCurrentEditorjsInstance,
+    getCurrentValue,
     isInitializing,
   }
 }
