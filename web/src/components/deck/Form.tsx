@@ -213,7 +213,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                   onResetTextareaValue={async () => {
                     const editorValue = await markupedMovement.getCurrentEditorjsInstance()?.save()
                     if (editorValue) {
-                      setConcept(editorValueToString(editorValue))
+                      setMovement(editorValueToString(editorValue))
                     }
                   }}
                   onResetRichEditor={() => { }}
@@ -235,7 +235,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                   onResetTextareaValue={async () => {
                     const editorValue = await markupedAdoption.getCurrentEditorjsInstance()?.save()
                     if (editorValue) {
-                      setConcept(editorValueToString(editorValue))
+                      setAdoption(editorValueToString(editorValue))
                     }
                   }}
                   onResetRichEditor={() => { }}
@@ -257,7 +257,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                   onResetTextareaValue={async () => {
                     const editorValue = await markupedDetail.getCurrentEditorjsInstance()?.save()
                     if (editorValue) {
-                      setConcept(editorValueToString(editorValue))
+                      setDetail(editorValueToString(editorValue))
                     }
                   }}
                   onResetRichEditor={() => { }}
