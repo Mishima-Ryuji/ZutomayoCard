@@ -17,6 +17,10 @@ export interface Deck extends Document {
   movement?: string
   cards_adoption?: string
   detail?: string
+  markuped_concept: object | null
+  markuped_movement: object | null
+  markuped_cards_adoption: object | null
+  markuped_detail: object | null
 }
 
 export const deckConverter = getConverter<Deck>(DeckSubcols)

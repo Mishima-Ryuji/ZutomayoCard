@@ -7,8 +7,7 @@ import {
   FormLabel,
   Heading,
   Input,
-  Stack,
-  Textarea,
+  Stack
 } from '@chakra-ui/react'
 import { deleteField } from 'firebase/firestore'
 import { useRouter } from 'next/router'
@@ -18,6 +17,9 @@ import { CardsSelector } from '~/components/card/Selector'
 import { Card, Deck, addDoc, decksRef, updateDoc } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
 import { isBlank } from '~/shared/utils'
+import { useRichEditor } from '../richText/editor'
+import { editorValueFromString, editorValueToString } from '../richText/editor/helper'
+import PreviewRichEditor from '../richText/editor/preview/PreviewRichEditor'
 
 type Props = {
   cards: Card[]
@@ -43,9 +45,13 @@ export const DeckForm = ({ cards, deck }: Props) => {
   const [showCardSelector, setShowCardSelector] = useState(deck ? false : true)
   const [name, setName] = useState(deck?.name ?? 'My deck')
   const [detail, setDetail] = useState(deck?.detail ?? '')
+  const markupedDetail = useRichEditor({ defaultValue: editorValueFromString(detail) })
   const [concept, setConcept] = useState(deck?.concept ?? '')
+  const markupedConcept = useRichEditor({ defaultValue: editorValueFromString(concept) })
   const [movement, setMovement] = useState(deck?.movement ?? '')
+  const markupedMovement = useRichEditor({ defaultValue: editorValueFromString(movement) })
   const [adoption, setAdoption] = useState(deck?.cards_adoption ?? '')
+  const markupedAdoption = useRichEditor({ defaultValue: editorValueFromString(adoption) })
   const [youtubeURL, setYoutubeURL] = useState(
     deck?.youtube_id !== undefined
       ? `https://www.youtube.com/watch?v=${deck.youtube_id}`
@@ -58,6 +64,54 @@ export const DeckForm = ({ cards, deck }: Props) => {
   }, [isAdmin])
 
   const router = useRouter()
+
+  const handleSave = async () => {
+    if (isBlank(user)) {
+      throw new Error('This action requires authentication.')
+    }
+    const youtubeIdCap = /v=(.+)$/.exec(youtubeURL)
+    if (deck) {
+      await updateDoc(deck.ref, {
+        card_ids: selectedCardIds,
+        name,
+        concept: concept !== '' ? concept : deleteField(),
+        movement: movement !== '' ? movement : deleteField(),
+        cards_adoption:
+          adoption !== '' ? adoption : deleteField(),
+        detail: detail !== '' ? detail : deleteField(),
+        youtube_id:
+          youtubeURL !== '' && youtubeIdCap !== null
+            ? youtubeIdCap[1]
+            : deleteField(),
+        markuped_concept: await markupedConcept.getCurrentValue() ?? null,
+        markuped_movement: await markupedMovement.getCurrentValue() ?? null,
+        markuped_cards_adoption: await markupedAdoption.getCurrentValue() ?? null,
+        markuped_detail: await markupedDetail.getCurrentValue() ?? null,
+      })
+      await router.push(`/decks/${deck.id}`)
+    } else {
+      const deckRef = await addDoc(decksRef, {
+        created_by: user.uid,
+        card_ids: selectedCardIds,
+        name,
+        concept: concept !== '' ? concept : undefined,
+        movement: movement !== '' ? movement : undefined,
+        cards_adoption: adoption !== '' ? adoption : undefined,
+        detail: detail !== '' ? detail : undefined,
+        youtube_id:
+          youtubeURL !== '' && youtubeIdCap !== null
+            ? youtubeIdCap[1]
+            : undefined,
+        is_public: isPublic,
+        is_recommended: isRecommended,
+        markuped_concept: markupedConcept,
+        markuped_movement: markupedMovement,
+        markuped_cards_adoption: markupedAdoption,
+        markuped_detail: markupedDetail,
+      })
+      await router.push(`/decks/${deckRef.id}`)
+    }
+  }
   return (
     <>
       <Heading my={3} fontSize={'2xl'}>
@@ -117,44 +171,80 @@ export const DeckForm = ({ cards, deck }: Props) => {
                 )}
               </FormControl>
               <FormControl>
-                <FormLabel>コンセプト{isAdmin === false && '(任意)'}</FormLabel>
-                <Textarea
-                  value={concept}
-                  onChange={(e) => setConcept(e.currentTarget.value)}
+                {/* htmlFor='' はラベルをクリックするとプレビュー切り替えスイッチが反応するバグの回避のため */}
+                <FormLabel htmlFor=''>コンセプト{isAdmin === false && '(任意)'}</FormLabel>
+                <PreviewRichEditor
+                  textareaValue={concept}
+                  onChangeTextareaValue={value => setConcept(value)}
+                  onResetTextareaValue={async () => {
+                    const editorValue = await markupedConcept.getCurrentEditorjsInstance()?.save()
+                    if (editorValue) {
+                      setConcept(editorValueToString(editorValue))
+                    }
+                  }}
+                  onResetRichEditor={() => { }}
+                  {...markupedConcept.props}
                 />
                 <FormHelperText>
                   どのデッキのコンセプトを説明しましょう。
                 </FormHelperText>
               </FormControl>
               <FormControl>
-                <FormLabel>立ち回り方{isAdmin === false && '(任意)'}</FormLabel>
-                <Textarea
-                  value={movement}
-                  onChange={(e) => setMovement(e.currentTarget.value)}
+                {/* htmlFor='' はラベルをクリックするとプレビュー切り替えスイッチが反応するバグの回避のため */}
+                <FormLabel htmlFor=''>立ち回り方{isAdmin === false && '(任意)'}</FormLabel>
+                <PreviewRichEditor
+                  textareaValue={movement}
+                  onChangeTextareaValue={value => setMovement(value)}
+                  onResetTextareaValue={async () => {
+                    const editorValue = await markupedMovement.getCurrentEditorjsInstance()?.save()
+                    if (editorValue) {
+                      setConcept(editorValueToString(editorValue))
+                    }
+                  }}
+                  onResetRichEditor={() => { }}
+                  {...markupedMovement.props}
                 />
                 <FormHelperText>
                   このデッキを使うときの試合開始から終了までの立ち回りを書きましょう。
                 </FormHelperText>
               </FormControl>
               <FormControl>
-                <FormLabel>
+                {/* htmlFor='' はラベルをクリックするとプレビュー切り替えスイッチが反応するバグの回避のため */}
+                <FormLabel htmlFor=''>
                   カードの採用理由と代替カード{isAdmin === false && '(任意)'}
                 </FormLabel>
-                <Textarea
-                  value={adoption}
-                  onChange={(e) => setAdoption(e.currentTarget.value)}
+                <PreviewRichEditor
+                  textareaValue={adoption}
+                  onChangeTextareaValue={value => setAdoption(value)}
+                  onResetTextareaValue={async () => {
+                    const editorValue = await markupedAdoption.getCurrentEditorjsInstance()?.save()
+                    if (editorValue) {
+                      setConcept(editorValueToString(editorValue))
+                    }
+                  }}
+                  onResetRichEditor={() => { }}
+                  {...markupedAdoption.props}
                 />
                 <FormHelperText>
                   採用したカードの採用理由や代替できるカードの説明などをしましょう。
                 </FormHelperText>
               </FormControl>
               <FormControl>
-                <FormLabel>
+                {/* htmlFor='' はラベルをクリックするとプレビュー切り替えスイッチが反応するバグの回避のため */}
+                <FormLabel htmlFor=''>
                   詳細やその他の情報{isAdmin === false && '(任意)'}
                 </FormLabel>
-                <Textarea
-                  value={detail}
-                  onChange={(e) => setDetail(e.currentTarget.value)}
+                <PreviewRichEditor
+                  textareaValue={detail}
+                  onChangeTextareaValue={value => setDetail(value)}
+                  onResetTextareaValue={async () => {
+                    const editorValue = await markupedDetail.getCurrentEditorjsInstance()?.save()
+                    if (editorValue) {
+                      setConcept(editorValueToString(editorValue))
+                    }
+                  }}
+                  onResetRichEditor={() => { }}
+                  {...markupedDetail.props}
                 />
                 <FormHelperText>
                   どのカードをどのタイミングで使うかなどの解説を書きましょう。
@@ -214,45 +304,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                       !/v=(.+)$/.test(youtubeURL))
                   }
                   colorScheme="purple"
-                  onClick={async () => {
-                    if (isBlank(user)) {
-                      throw new Error('This action requires authentication.')
-                    }
-                    const youtubeIdCap = /v=(.+)$/.exec(youtubeURL)
-                    if (deck) {
-                      await updateDoc(deck.ref, {
-                        card_ids: selectedCardIds,
-                        name,
-                        concept: concept !== '' ? concept : deleteField(),
-                        movement: movement !== '' ? movement : deleteField(),
-                        cards_adoption:
-                          adoption !== '' ? adoption : deleteField(),
-                        detail: detail !== '' ? detail : deleteField(),
-                        youtube_id:
-                          youtubeURL !== '' && youtubeIdCap !== null
-                            ? youtubeIdCap[1]
-                            : deleteField(),
-                      })
-                      await router.push(`/decks/${deck.id}`)
-                    } else {
-                      const deckRef = await addDoc(decksRef, {
-                        created_by: user.uid,
-                        card_ids: selectedCardIds,
-                        name,
-                        concept: concept !== '' ? concept : undefined,
-                        movement: movement !== '' ? movement : undefined,
-                        cards_adoption: adoption !== '' ? adoption : undefined,
-                        detail: detail !== '' ? detail : undefined,
-                        youtube_id:
-                          youtubeURL !== '' && youtubeIdCap !== null
-                            ? youtubeIdCap[1]
-                            : undefined,
-                        is_public: isPublic,
-                        is_recommended: isRecommended,
-                      })
-                      await router.push(`/decks/${deckRef.id}`)
-                    }
-                  }}
+                  onClick={handleSave}
                 >
                   保存
                 </Button>
