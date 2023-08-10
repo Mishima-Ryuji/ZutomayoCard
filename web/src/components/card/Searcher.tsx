@@ -352,7 +352,7 @@ const SearchByAttribute = ({ cards, ...otherProps }: Props) => {
                 )
               }
             >
-              A
+              S
             </Checkbox>
             <Checkbox
               value="A"
