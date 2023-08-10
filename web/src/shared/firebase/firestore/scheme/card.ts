@@ -16,7 +16,7 @@ export type CardRarity = 'N' | 'N+' | 'R' | 'R+' | 'SR' | 'SR+' | 'UR' | 'SE'
 
 export type CardType = 'character' | 'enchant' | 'area_enchant'
 
-export type CardRank = 'A' | 'B' | 'C' | 'D'
+export type CardRank = 'S' | 'A' | 'B' | 'C' | 'D'
 
 export interface Card extends Document {
   readonly ref: DocRef<Card>

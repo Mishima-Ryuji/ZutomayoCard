@@ -98,7 +98,7 @@ const SearchByAttribute = ({ cards, ...otherProps }: Props) => {
     'N+',
     'N',
   ])
-  const [ranks, setRanks] = useState<CardRank[]>(['A', 'B', 'C', 'D'])
+  const [ranks, setRanks] = useState<CardRank[]>(['S', 'A', 'B', 'C', 'D'])
   const result = useMemo(() => {
     return cards
       .filter(
@@ -340,6 +340,20 @@ const SearchByAttribute = ({ cards, ...otherProps }: Props) => {
         </CheckboxGroup>
         <CheckboxGroup defaultValue={ranks}>
           <Stack spacing={[3, 5]} direction={'row'} overflow={'auto'}>
+            <Checkbox
+              value="S"
+              defaultChecked
+              isChecked={ranks.includes('S')}
+              onChange={(e) =>
+                setRanks(
+                  e.currentTarget.checked
+                    ? [...ranks, 'S']
+                    : ranks.filter((e) => e !== 'S')
+                )
+              }
+            >
+              A
+            </Checkbox>
             <Checkbox
               value="A"
               defaultChecked
