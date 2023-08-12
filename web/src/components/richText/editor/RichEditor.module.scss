@@ -1,15 +1,19 @@
 .contentEditable {
   outline: none;
   padding: 0.5rem;
-}
-.link {
-  color: rgb(74, 74, 255);
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 0.25em;
-  background-color: rgb(246, 246, 255);
-  ::before {
-    content: '🔗 ';
-    font-size: 0.8em;
+  .link {
+    color: rgb(74, 74, 255);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0.25em;
+    background-color: rgb(246, 246, 255);
+    ::before {
+      content: '🔗 ';
+      font-size: 0.8em;
+    }
+  }
+  strong {
+    font-weight: bold;
+    font-size: 1.1em;
   }
 }

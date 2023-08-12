@@ -5,9 +5,10 @@ import { InitialConfigType, LexicalComposer } from "@lexical/react/LexicalCompos
 import { ContentEditable } from '@lexical/react/LexicalContentEditable'
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
-import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin'
+import { RichTextPlugin as LexicalRichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
 import dynamic from "next/dynamic"
 import { FC, ReactNode } from "react"
+import { ZcwBoldToolbarItem } from "../ZcwBoldPlugin"
 import ZcwLinkPlugin, { ZcwLinkNode, ZcwLinkToolbarItem } from "../ZcwLinkPlugin"
 import styles from "./RichEditor.module.scss"
 
@@ -31,9 +32,10 @@ const RichEditor: FC<RichEditorProps> = ({ editorKey, placeholder }) => {
     <LexicalComposer initialConfig={initialConfig}>
       <HStack spacing={0.5}>
         <ZcwLinkToolbarItem />
+        <ZcwBoldToolbarItem />
       </HStack>
       <Divider />
-      <PlainTextPlugin
+      <LexicalRichTextPlugin
         contentEditable={<ContentEditable className={styles.contentEditable} />}
         placeholder={<>{placeholder}</>}
         ErrorBoundary={LexicalErrorBoundary}
