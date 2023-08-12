@@ -1,6 +1,6 @@
 import { Alert, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Badge, Button, HStack, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Switch, Textarea, chakra } from "@chakra-ui/react"
 import { FC, useRef, useState } from "react"
-import { RichEditor } from ".."
+import RichEditor from "../RichEditor"
 import { RichEditorProps } from "../RichEditor"
 
 interface PreviewRichEditorProps extends RichEditorProps {
