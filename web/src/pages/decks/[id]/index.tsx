@@ -8,7 +8,7 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react'
-import { OutputData } from '@editorjs/editorjs'
+import { SerializedEditorState } from "lexical"
 import { GetStaticPaths, GetStaticProps } from 'next'
 import DefaultErrorPage from 'next/error'
 import { useRouter } from 'next/router'
@@ -240,7 +240,7 @@ const TextSection: FC<TextSectionProps> = ({ heading, markupedContent, textConte
       }
       {showMarkuped &&
         <RichViewer
-          value={markupedContent as OutputData}
+          value={markupedContent as SerializedEditorState}
         />
       }
       {showText &&
