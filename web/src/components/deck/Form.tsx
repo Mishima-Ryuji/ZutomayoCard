@@ -18,9 +18,8 @@ import { CardsSelector } from '~/components/card/Selector'
 import { Card, Deck, addDoc, decksRef, updateDoc } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
 import { isBlank } from '~/shared/utils'
-import { useRichEditor } from '../richText/editor/RichEditor'
 import { editorValueFromString } from '../richText/editor/helper'
-import PreviewRichEditor from '../richText/editor/preview/PreviewRichEditor'
+import PreviewRichEditor, { usePreviewRichEditor } from '../richText/editor/preview/PreviewRichEditor'
 
 type Props = {
   cards: Card[]
@@ -46,22 +45,26 @@ export const DeckForm = ({ cards, deck }: Props) => {
   const [showCardSelector, setShowCardSelector] = useState(deck ? false : true)
   const [name, setName] = useState(deck?.name ?? 'My deck')
   const [detail, setDetail] = useState(deck?.detail ?? '')
-  const markupedDetail = useRichEditor({
+  const markupedDetail = usePreviewRichEditor({
+    defaultEnablePreview: !!deck?.markuped_detail,
     editorKey: "detail",
     defaultValue: deck?.markuped_detail as SerializedEditorState ?? editorValueFromString(detail),
   })
   const [concept, setConcept] = useState(deck?.concept ?? '')
-  const markupedConcept = useRichEditor({
+  const markupedConcept = usePreviewRichEditor({
+    defaultEnablePreview: !!deck?.markuped_concept,
     editorKey: "concept",
     defaultValue: deck?.markuped_concept as SerializedEditorState ?? editorValueFromString(concept),
   })
   const [movement, setMovement] = useState(deck?.movement ?? '')
-  const markupedMovement = useRichEditor({
+  const markupedMovement = usePreviewRichEditor({
+    defaultEnablePreview: !!deck?.markuped_movement,
     editorKey: "movement",
     defaultValue: deck?.markuped_movement as SerializedEditorState ?? editorValueFromString(movement),
   })
   const [adoption, setAdoption] = useState(deck?.cards_adoption ?? '')
-  const markupedAdoption = useRichEditor({
+  const markupedAdoption = usePreviewRichEditor({
+    defaultEnablePreview: !!deck?.markuped_cards_adoption,
     editorKey: "adoption",
     defaultValue: deck?.markuped_cards_adoption as SerializedEditorState ?? editorValueFromString(adoption),
   })
@@ -96,12 +99,27 @@ export const DeckForm = ({ cards, deck }: Props) => {
           youtubeURL !== '' && youtubeIdCap !== null
             ? youtubeIdCap[1]
             : deleteField(),
-        markuped_concept: markupedConcept.getCurrentData() ?? null,
-        markuped_movement: markupedMovement.getCurrentData() ?? null,
-        markuped_cards_adoption: markupedAdoption.getCurrentData() ?? null,
-        markuped_detail: markupedDetail.getCurrentData() ?? null,
+        markuped_concept: markupedConcept.isEnableRich
+          ? (markupedConcept.getCurrentData() ?? null)
+          : null,
+        markuped_movement: markupedMovement.isEnableRich
+          ? (markupedMovement.getCurrentData() ?? null)
+          : null,
+        markuped_cards_adoption: markupedAdoption.isEnableRich
+          ? (markupedAdoption.getCurrentData() ?? null)
+          : null,
+        markuped_detail: markupedDetail.isEnableRich
+          ? (markupedDetail.getCurrentData() ?? null)
+          : null,
       })
-      await router.push(`/decks/${deck.id}`)
+      console.log(
+        markupedConcept.isEnableRich,
+        (markupedConcept.getCurrentData() ?? null),
+        markupedConcept.isEnableRich
+          ? (markupedConcept.getCurrentData() ?? null)
+          : null,
+      )
+      // await router.push(`/decks/${deck.id}`)
     } else {
       const deckRef = await addDoc(decksRef, {
         created_by: user.uid,
@@ -117,10 +135,18 @@ export const DeckForm = ({ cards, deck }: Props) => {
             : undefined,
         is_public: isPublic,
         is_recommended: isRecommended,
-        markuped_concept: markupedConcept.getCurrentData() ?? null,
-        markuped_movement: markupedMovement.getCurrentData() ?? null,
-        markuped_cards_adoption: markupedAdoption.getCurrentData() ?? null,
-        markuped_detail: markupedDetail.getCurrentData() ?? null,
+        markuped_concept: markupedConcept.isEnableRich
+          ? (markupedConcept.getCurrentData() ?? null)
+          : null,
+        markuped_movement: markupedMovement.isEnableRich
+          ? (markupedMovement.getCurrentData() ?? null)
+          : null,
+        markuped_cards_adoption: markupedAdoption.isEnableRich
+          ? (markupedAdoption.getCurrentData() ?? null)
+          : null,
+        markuped_detail: markupedDetail.isEnableRich
+          ? (markupedDetail.getCurrentData() ?? null)
+          : null,
       })
       await router.push(`/decks/${deckRef.id}`)
     }
@@ -187,6 +213,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                 {/* htmlFor='' はラベルをクリックするとプレビュー切り替えスイッチが反応するバグの回避のため */}
                 <FormLabel htmlFor=''>コンセプト{isAdmin === false && '(任意)'}</FormLabel>
                 <PreviewRichEditor
+                  {...markupedConcept.previewProps}
                   textareaValue={concept}
                   defaultEnablePreview={!!(deck?.markuped_concept)}
                   onChangeTextareaValue={value => setConcept(value)}
@@ -204,6 +231,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                 {/* htmlFor='' はラベルをクリックするとプレビュー切り替えスイッチが反応するバグの回避のため */}
                 <FormLabel htmlFor=''>立ち回り方{isAdmin === false && '(任意)'}</FormLabel>
                 <PreviewRichEditor
+                  {...markupedMovement.previewProps}
                   textareaValue={movement}
                   defaultEnablePreview={!!(deck?.markuped_movement)}
                   onChangeTextareaValue={value => setMovement(value)}
@@ -223,6 +251,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                   カードの採用理由と代替カード{isAdmin === false && '(任意)'}
                 </FormLabel>
                 <PreviewRichEditor
+                  {...markupedAdoption.previewProps}
                   textareaValue={adoption}
                   defaultEnablePreview={!!(deck?.markuped_cards_adoption)}
                   onChangeTextareaValue={value => setAdoption(value)}
@@ -242,6 +271,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                   詳細やその他の情報{isAdmin === false && '(任意)'}
                 </FormLabel>
                 <PreviewRichEditor
+                  {...markupedDetail.previewProps}
                   textareaValue={detail}
                   defaultEnablePreview={!!(deck?.markuped_detail)}
                   onChangeTextareaValue={value => setDetail(value)}

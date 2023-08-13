@@ -1,9 +1,10 @@
 import { Alert, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Badge, Button, HStack, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Switch, Textarea, chakra } from "@chakra-ui/react"
 import { FC, useRef, useState } from "react"
-import RichEditor from "../RichEditor"
-import { RichEditorProps } from "../RichEditor"
+import RichEditor, { RichEditorProps, UseRichEditorOptions, useRichEditor } from "../RichEditor"
 
 interface PreviewRichEditorProps extends RichEditorProps {
+  isEnableRich: boolean
+  onChangeIsEnableRich: (isEnableRich: boolean) => void
   textareaValue: string
   onChangeTextareaValue: (value: string) => void
   onResetTextareaValue: () => void
@@ -16,23 +17,23 @@ const PreviewRichEditor: FC<PreviewRichEditorProps> = ({
   onResetTextareaValue,
   onResetRichEditor,
   defaultEnablePreview = false,
+  isEnableRich,
+  onChangeIsEnableRich,
   ...editorProps
 }) => {
-  const [isEnableRich, setIsEnableRich] = useState(defaultEnablePreview)
-
   const [confirmDialogType, setConfirmDialogType] = useState<"enable" | "disable" | null>(null)
   const enableButtonRef = useRef<HTMLButtonElement>(null)
   const disableButtonRef = useRef<HTMLButtonElement>(null)
   const handleConfirmEnable = () => { setConfirmDialogType("enable") }
   const handleEnable = () => {
     onResetRichEditor()
-    setIsEnableRich(true)
+    onChangeIsEnableRich(true)
     setConfirmDialogType(null)
   }
   const handleConfirmDisable = () => { setConfirmDialogType("disable") }
   const handleDisable = () => {
     onResetTextareaValue()
-    setIsEnableRich(false)
+    onChangeIsEnableRich(false)
     setConfirmDialogType(null)
   }
   const handleCancelHandleConfirm = () => { setConfirmDialogType(null) }
@@ -143,3 +144,23 @@ const PreviewRichEditor: FC<PreviewRichEditorProps> = ({
 }
 
 export default PreviewRichEditor
+
+export interface UsePreviewRichEditorOption extends UseRichEditorOptions {
+  defaultEnablePreview: boolean
+}
+export const usePreviewRichEditor = (
+  { defaultEnablePreview, ...richEditorOptions }: UsePreviewRichEditorOption,
+) => {
+  const [isEnableRich, setIsEnableRich] = useState(defaultEnablePreview)
+  const richEditor = useRichEditor(richEditorOptions)
+  const previewProps = {
+    isEnableRich,
+    onChangeIsEnableRich: setIsEnableRich,
+  } satisfies Partial<PreviewRichEditorProps>
+  return {
+    isEnableRich,
+    setIsEnableRich,
+    previewProps,
+    ...richEditor,
+  }
+}

@@ -72,7 +72,7 @@ const RichEditor: FC<RichEditorProps> = ({ editorKey, placeholder, initialState 
 // eslint-disable-next-line @typescript-eslint/require-await
 export default dynamic(async () => RichEditor, { ssr: false })
 
-interface UseRichEditorOptions {
+export interface UseRichEditorOptions {
   editorKey: string
   defaultValue?: SerializedEditorState
 }
