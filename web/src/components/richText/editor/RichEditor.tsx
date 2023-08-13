@@ -1,5 +1,5 @@
 
-import { Divider, HStack } from "@chakra-ui/react"
+import { Box, Divider, HStack } from "@chakra-ui/react"
 import { InitialConfigType, LexicalComposer } from "@lexical/react/LexicalComposer"
 import { ContentEditable } from '@lexical/react/LexicalContentEditable'
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
@@ -40,19 +40,21 @@ const RichEditor: FC<RichEditorProps> = ({ editorKey, placeholder, initialState 
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <HStack spacing={0.5}>
-        <ZcwLinkToolbarItem />
-        <ZcwBoldToolbarItem />
-      </HStack>
-      <Divider />
-      <LexicalRichTextPlugin
-        contentEditable={<ContentEditable className={styles.contentEditable} />}
-        placeholder={<>{placeholder}</>}
-        ErrorBoundary={LexicalErrorBoundary}
-      />
-      <HistoryPlugin />
-      <ZcwLinkPlugin />
-      <RefPlugin editorStateRef={editorStateRef} />
+      <Box border="solid 1px" borderColor="blue.300" rounded="base">
+        <HStack spacing={0.5}>
+          <ZcwLinkToolbarItem />
+          <ZcwBoldToolbarItem />
+        </HStack>
+        <Divider />
+        <LexicalRichTextPlugin
+          contentEditable={<ContentEditable className={styles.contentEditable} />}
+          placeholder={<>{placeholder}</>}
+          ErrorBoundary={LexicalErrorBoundary}
+        />
+        <HistoryPlugin />
+        <ZcwLinkPlugin />
+        <RefPlugin editorStateRef={editorStateRef} />
+      </Box>
     </LexicalComposer>
   )
 }
