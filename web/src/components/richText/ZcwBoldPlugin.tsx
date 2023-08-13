@@ -24,8 +24,8 @@ export const ZcwBoldToolbarItem: FC = () => {
   }
   return (
     <>
-      <Button variant={isBold ? "outline" : "ghost"} onClick={handleToggle}>
-        太文字
+      <Button variant={isBold ? "outline" : "ghost"} onClick={handleToggle} size="sm">
+        𝐁 太文字
       </Button>
     </>
   )

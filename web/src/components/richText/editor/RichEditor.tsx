@@ -8,9 +8,9 @@ import { RichTextPlugin as LexicalRichTextPlugin } from "@lexical/react/LexicalR
 import { $getRoot, EditorState, SerializedEditorState } from "lexical"
 import dynamic from "next/dynamic"
 import { FC, MutableRefObject, ReactNode, useCallback, useRef } from "react"
+import RefPlugin from "../RefPlugin"
 import { ZcwBoldToolbarItem } from "../ZcwBoldPlugin"
 import ZcwLinkPlugin, { ZcwLinkNode, ZcwLinkToolbarItem } from "../ZcwLinkPlugin"
-import RefPlugin from "../RefPlugin"
 import styles from "./RichEditor.module.scss"
 
 export interface RichEditorProps {
@@ -42,7 +42,7 @@ const RichEditor: FC<RichEditorProps> = ({ editorKey, placeholder, initialState 
   const Container = ({ children }: { children: ReactNode }) =>
     editable
       ? <Box border="solid 1px" borderColor="blue.300" rounded="base">
-        <HStack spacing={0.5}>
+        <HStack spacing={0.5} flexWrap="wrap">
           <ZcwLinkToolbarItem />
           <ZcwBoldToolbarItem />
         </HStack>

@@ -58,8 +58,8 @@ export const ZcwLinkToolbarItem: FC = () => {
   }
   return (
     <>
-      <Button variant={isLink ? "outline" : "ghost"} onClick={inputUrlDialog.onOpen}>
-        LINK
+      <Button variant={isLink ? "outline" : "ghost"} onClick={inputUrlDialog.onOpen} size="sm">
+        🔗 リンク
       </Button>
       <AlertDialog
         isOpen={inputUrlDialog.isOpen}
