@@ -5,14 +5,13 @@ import { ContentEditable } from '@lexical/react/LexicalContentEditable'
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
 import { RichTextPlugin as LexicalRichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
-import { EditorState, SerializedEditorState } from "lexical"
+import { $getRoot, EditorState, SerializedEditorState } from "lexical"
 import dynamic from "next/dynamic"
 import { FC, MutableRefObject, ReactNode, useCallback, useRef } from "react"
 import { ZcwBoldToolbarItem } from "../ZcwBoldPlugin"
 import ZcwLinkPlugin, { ZcwLinkNode, ZcwLinkToolbarItem } from "../ZcwLinkPlugin"
-import styles from "./RichEditor.module.scss"
-
 import RefPlugin from "./RefPlugin"
+import styles from "./RichEditor.module.scss"
 
 export interface RichEditorProps {
   editorKey: string
@@ -76,9 +75,15 @@ export function useRichEditor({ editorKey, defaultValue }: UseRichEditorOptions)
   const getCurrentData = useCallback(() => {
     return editorStateRef.current?.toJSON()
   }, [])
+  const getCurrentDataText = useCallback(() => {
+    return editorStateRef.current?.read(() => {
+      return $getRoot().getTextContent()
+    })
+  }, [])
   return {
     editorStateRef,
     props,
     getCurrentData,
+    getCurrentDataText,
   }
 }
