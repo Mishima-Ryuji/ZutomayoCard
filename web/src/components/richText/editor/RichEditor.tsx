@@ -10,7 +10,7 @@ import dynamic from "next/dynamic"
 import { FC, MutableRefObject, ReactNode, useCallback, useRef } from "react"
 import { ZcwBoldToolbarItem } from "../ZcwBoldPlugin"
 import ZcwLinkPlugin, { ZcwLinkNode, ZcwLinkToolbarItem } from "../ZcwLinkPlugin"
-import RefPlugin from "./RefPlugin"
+import RefPlugin from "../RefPlugin"
 import styles from "./RichEditor.module.scss"
 
 export interface RichEditorProps {
