@@ -62,27 +62,31 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
   let cards: Serialized<Card>[] | null = null
   let deck: Serialized<Deck> | null = null
   let deckOwner: Serialized<Profile> | null = null
+
   try {
+
     const cardsSnapshot = await getDocs(cardsRef)
     const cardsData = cardsSnapshot.docs.map((doc) => doc.data())
     cards = serializeArray(cardsData)
+
     const decksSnapshot = params ? await getDoc(deckRef(params.id)) : undefined
     const deckData = decksSnapshot?.data()
     deck = deckData ? serialize(deckData) : null
+
     const deckOwnerSnapshot = deck
       ? await getDoc(profileRef(deck.created_by))
       : undefined
     const deckOwnerData = deckOwnerSnapshot?.data()
     deckOwner = deckOwnerData ? serialize(deckOwnerData) : null
-    const result = {
+
+    return {
       props: {
         cards,
         deck,
         deckOwner,
       },
-      revalidate: 10000,
+      revalidate: 10_000,
     }
-    return result
   } catch (error) {
     console.error(error)
     // サーバ側での権限エラーを回避
@@ -93,7 +97,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
           deck,
           deckOwner,
         },
-        revalidate: 10000,
+        revalidate: 10_000,
       }
     } else {
       throw error
