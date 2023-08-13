@@ -76,7 +76,7 @@ export interface UseRichEditorOptions {
   editorKey: string
   defaultValue?: SerializedEditorState
 }
-export function useRichEditor({ editorKey, defaultValue }: UseRichEditorOptions) {
+export const useRichEditor = ({ editorKey, defaultValue }: UseRichEditorOptions) => {
   const editorStateRef = useRef<EditorState>()
   const props = {
     editorKey,
