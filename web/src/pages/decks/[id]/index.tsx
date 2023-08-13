@@ -59,20 +59,26 @@ export const getStaticPaths: GetStaticPaths = () => {
 export const getStaticProps: GetStaticProps<Props, Params> = async ({
   params,
 }) => {
+  let cards: Serialized<Card>[] | null = null
+  let deck: Serialized<Deck> | null = null
+  let deckOwner: Serialized<Profile> | null = null
   try {
     const cardsSnapshot = await getDocs(cardsRef)
-    const cards = cardsSnapshot.docs.map((doc) => doc.data())
+    const cardsData = cardsSnapshot.docs.map((doc) => doc.data())
+    cards = serializeArray(cardsData)
     const decksSnapshot = params ? await getDoc(deckRef(params.id)) : undefined
-    const deck = decksSnapshot?.data()
+    const deckData = decksSnapshot?.data()
+    deck = deckData ? serialize(deckData) : null
     const deckOwnerSnapshot = deck
       ? await getDoc(profileRef(deck.created_by))
       : undefined
-    const deckOwner = deckOwnerSnapshot?.data()
+    const deckOwnerData = deckOwnerSnapshot?.data()
+    deckOwner = deckOwnerData ? serialize(deckOwnerData) : null
     const result = {
       props: {
-        cards: serializeArray(cards),
-        deck: deck ? serialize(deck) : null,
-        deckOwner: deckOwner ? serialize(deckOwner) : null,
+        cards,
+        deck,
+        deckOwner,
       },
       revalidate: 10000,
     }
@@ -83,9 +89,9 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
     if (isPermissionDeniedOnServer(error)) {
       return {
         props: {
-          cards: null,
-          deck: null,
-          deckOwner: null,
+          cards,
+          deck,
+          deckOwner,
         },
         revalidate: 10000,
       }
