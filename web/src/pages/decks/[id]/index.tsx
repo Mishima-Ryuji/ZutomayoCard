@@ -8,6 +8,7 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react'
+import { FirebaseError } from 'firebase/app'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import DefaultErrorPage from 'next/error'
 import { useRouter } from 'next/router'
@@ -43,7 +44,7 @@ interface Params extends ParsedUrlQuery {
 }
 
 type Props = {
-  cards: Serialized<Card>[]
+  cards: Serialized<Card>[] | null
   deck: Serialized<Deck> | null
   deckOwner: Serialized<Profile> | null
 }
@@ -58,24 +59,45 @@ export const getStaticPaths: GetStaticPaths = () => {
 export const getStaticProps: GetStaticProps<Props, Params> = async ({
   params,
 }) => {
-  const cardsSnapshot = await getDocs(cardsRef)
-  const cards = cardsSnapshot.docs.map((doc) => doc.data())
-  const decksSnapshot = params ? await getDoc(deckRef(params.id)) : undefined
-  const deck = decksSnapshot?.data()
-  const deckOwnerSnapshot = deck
-    ? await getDoc(profileRef(deck.created_by))
-    : undefined
-  const deckOwner = deckOwnerSnapshot?.data()
-  const result = {
-    props: {
-      cards: serializeArray(cards),
-      deck: deck ? serialize(deck) : null,
-      deckOwner: deckOwner ? serialize(deckOwner) : null,
-    },
-    revalidate: 10000,
+  try {
+    const cardsSnapshot = await getDocs(cardsRef)
+    const cards = cardsSnapshot.docs.map((doc) => doc.data())
+    const decksSnapshot = params ? await getDoc(deckRef(params.id)) : undefined
+    const deck = decksSnapshot?.data()
+    const deckOwnerSnapshot = deck
+      ? await getDoc(profileRef(deck.created_by))
+      : undefined
+    const deckOwner = deckOwnerSnapshot?.data()
+    const result = {
+      props: {
+        cards: serializeArray(cards),
+        deck: deck ? serialize(deck) : null,
+        deckOwner: deckOwner ? serialize(deckOwner) : null,
+      },
+      revalidate: 10000,
+    }
+    return result
+  } catch (error) {
+    console.error(error)
+    // サーバ側での権限エラーを回避
+    if (isPermissionDeniedOnServer(error)) {
+      return {
+        props: {
+          cards: null,
+          deck: null,
+          deckOwner: null,
+        },
+        revalidate: 10000,
+      }
+    } else {
+      throw error
+    }
   }
-  return result
 }
+
+const isPermissionDeniedOnServer = (error: unknown) =>
+  error instanceof FirebaseError &&
+  error.code === "permission-denied"
 
 const Page = ({
   cards: staticCards,
@@ -85,7 +107,9 @@ const Page = ({
   const router = useRouter()
   const deckId = router.query.id
   const [cards] = useCollectionDataOnce(cardsRef, {
-    initialValue: deserializeArray(staticCards, { ref: cardConverter }),
+    initialValue: staticCards
+      ? deserializeArray(staticCards, { ref: cardConverter })
+      : undefined,
   })
   const [deck, loadingDeck] = useDocumentDataOnce(typeof deckId === 'string' ? deckRef(deckId) : null,
     {
