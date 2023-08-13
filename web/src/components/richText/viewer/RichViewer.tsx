@@ -1,12 +1,21 @@
+import { SerializedEditorState } from "lexical"
 import { FC } from "react"
+import RichEditor, { useRichEditor } from "../editor/RichEditor"
 
 interface RichViewerProps {
-  value: unknown
+  value: SerializedEditorState
 }
 const RichViewer: FC<RichViewerProps> = ({ value }) => {
+  const { props } = useRichEditor({
+    editorKey: "",
+    defaultValue: value,
+  })
   return (
     <div>
-      not implement
+      <RichEditor
+        {...props}
+        editable={false}
+      />
     </div>
   )
 }
