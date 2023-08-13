@@ -146,21 +146,47 @@ const PreviewRichEditor: FC<PreviewRichEditorProps> = ({
 export default PreviewRichEditor
 
 export interface UsePreviewRichEditorOption extends UseRichEditorOptions {
+  // Textarea
+  textareaDefaultValue: string
+  // RichEditor
   defaultEnablePreview: boolean
 }
 export const usePreviewRichEditor = (
-  { defaultEnablePreview, ...richEditorOptions }: UsePreviewRichEditorOption,
+  {
+    textareaDefaultValue,
+    defaultEnablePreview,
+    ...richEditorOptions
+  }: UsePreviewRichEditorOption,
 ) => {
   const [isEnableRich, setIsEnableRich] = useState(defaultEnablePreview)
+
+  // Textarea
+  const [textareaValue, setTextareaValue] = useState(textareaDefaultValue)
+
+  // RichEditor
   const richEditor = useRichEditor(richEditorOptions)
+
+  // PreviewRichEditor
+  const onResetTextareaValue = () => {
+    setTextareaValue(richEditor.getCurrentDataText() ?? "")
+  }
+  const onResetRichEditor = () => { }
   const previewProps = {
     isEnableRich,
     onChangeIsEnableRich: setIsEnableRich,
+    textareaValue,
+    onChangeTextareaValue: setTextareaValue,
+    onResetTextareaValue,
+    onResetRichEditor,
+    ...richEditor.props,
   } satisfies Partial<PreviewRichEditorProps>
+
   return {
     isEnableRich,
     setIsEnableRich,
+    textareaValue,
+    setTextareaValue,
+    richEditor,
     previewProps,
-    ...richEditor,
   }
 }
