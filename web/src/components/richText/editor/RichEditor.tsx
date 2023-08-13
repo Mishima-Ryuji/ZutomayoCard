@@ -18,8 +18,9 @@ export interface RichEditorProps {
   placeholder?: ReactNode
   initialState?: SerializedEditorState | null
   editorStateRef: MutableRefObject<EditorState | undefined>
+  editable?: boolean
 }
-const RichEditor: FC<RichEditorProps> = ({ editorKey, placeholder, initialState = null, editorStateRef, }) => {
+const RichEditor: FC<RichEditorProps> = ({ editorKey, placeholder, initialState = null, editorStateRef, editable = true, }) => {
   const initialConfig: InitialConfigType = {
     editorState: initialState
       ? editor => {
@@ -35,16 +36,26 @@ const RichEditor: FC<RichEditorProps> = ({ editorKey, placeholder, initialState 
     nodes: [
       ZcwLinkNode,
     ],
+    editable,
   }
 
-  return (
-    <LexicalComposer initialConfig={initialConfig}>
-      <Box border="solid 1px" borderColor="blue.300" rounded="base">
+  const Container = ({ children }: { children: ReactNode }) =>
+    editable
+      ? <Box border="solid 1px" borderColor="blue.300" rounded="base">
         <HStack spacing={0.5}>
           <ZcwLinkToolbarItem />
           <ZcwBoldToolbarItem />
         </HStack>
         <Divider />
+        {children}
+      </Box>
+      : <Box>
+        {children}
+      </Box>
+  return (
+    <LexicalComposer initialConfig={initialConfig}>
+      <Container>
+
         <LexicalRichTextPlugin
           contentEditable={<ContentEditable className={styles.contentEditable} />}
           placeholder={<>{placeholder}</>}
@@ -53,7 +64,7 @@ const RichEditor: FC<RichEditorProps> = ({ editorKey, placeholder, initialState 
         <HistoryPlugin />
         <ZcwLinkPlugin />
         <RefPlugin editorStateRef={editorStateRef} />
-      </Box>
+      </Container>
     </LexicalComposer>
   )
 }
