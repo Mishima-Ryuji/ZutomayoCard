@@ -8,9 +8,9 @@ import { RichTextPlugin as LexicalRichTextPlugin } from "@lexical/react/LexicalR
 import { $getRoot, EditorState, SerializedEditorState } from "lexical"
 import dynamic from "next/dynamic"
 import { FC, MutableRefObject, ReactNode, useCallback, useRef } from "react"
-import RefPlugin from "../RefPlugin"
+import { RefPlugin } from "../RefPlugin"
 import { ZcwBoldToolbarItem } from "../ZcwBoldPlugin"
-import ZcwLinkPlugin, { ZcwLinkNode, ZcwLinkToolbarItem } from "../ZcwLinkPlugin"
+import { ZcwLinkNode, ZcwLinkPlugin, ZcwLinkToolbarItem } from "../ZcwLinkPlugin"
 import styles from "./RichEditor.module.scss"
 
 export interface RichEditorProps {
@@ -20,7 +20,7 @@ export interface RichEditorProps {
   editorStateRef: MutableRefObject<EditorState | undefined>
   editable?: boolean
 }
-const RichEditor: FC<RichEditorProps> = ({ editorKey, placeholder, initialState = null, editorStateRef, editable = true, }) => {
+const RichEditorComponent: FC<RichEditorProps> = ({ editorKey, placeholder, initialState = null, editorStateRef, editable = true, }) => {
   const initialConfig: InitialConfigType = {
     editorState: initialState
       ? editor => {
@@ -69,8 +69,7 @@ const RichEditor: FC<RichEditorProps> = ({ editorKey, placeholder, initialState 
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/require-await
-export default dynamic(async () => RichEditor, { ssr: false })
+export const RichEditor = dynamic(() => Promise.resolve(RichEditorComponent), { ssr: false })
 
 export interface UseRichEditorOptions {
   editorKey: string

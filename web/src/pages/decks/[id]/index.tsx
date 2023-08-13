@@ -22,7 +22,7 @@ import { FaPencilAlt, FaTrash } from 'react-icons/fa'
 import Youtube from 'react-youtube'
 import { DefaultLayout } from '~/components/Layout'
 import { CardList } from '~/components/card/List'
-import RichViewer from '~/components/richText/viewer/RichViewer'
+import { RichViewer } from '~/components/richText/viewer/RichViewer'
 import {
   Card,
   Deck,

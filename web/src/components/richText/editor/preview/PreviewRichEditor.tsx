@@ -1,6 +1,6 @@
 import { Alert, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Badge, Button, HStack, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Switch, Textarea, chakra } from "@chakra-ui/react"
 import { FC, useRef, useState } from "react"
-import RichEditor, { RichEditorProps, UseRichEditorOptions, useRichEditor } from "../RichEditor"
+import { RichEditor, RichEditorProps, UseRichEditorOptions, useRichEditor } from "../RichEditor"
 
 interface PreviewRichEditorProps extends RichEditorProps {
   isEnableRich: boolean
@@ -11,7 +11,7 @@ interface PreviewRichEditorProps extends RichEditorProps {
   onResetRichEditor: () => void
   defaultEnablePreview?: boolean
 }
-const PreviewRichEditor: FC<PreviewRichEditorProps> = ({
+export const PreviewRichEditor: FC<PreviewRichEditorProps> = ({
   textareaValue,
   onChangeTextareaValue,
   onResetTextareaValue,
@@ -142,8 +142,6 @@ const PreviewRichEditor: FC<PreviewRichEditorProps> = ({
     </chakra.div>
   )
 }
-
-export default PreviewRichEditor
 
 export interface UsePreviewRichEditorOption extends UseRichEditorOptions {
   // Textarea

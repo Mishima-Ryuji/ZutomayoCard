@@ -6,7 +6,7 @@ import { FC, MutableRefObject } from "react"
 interface RefPluginProps {
   editorStateRef: MutableRefObject<EditorState | undefined>
 }
-const RefPlugin: FC<RefPluginProps> = ({ editorStateRef }) => {
+export const RefPlugin: FC<RefPluginProps> = ({ editorStateRef }) => {
   const [editor] = useLexicalComposerContext()
   editorStateRef.current = editor.getEditorState()
   return (
@@ -15,5 +15,3 @@ const RefPlugin: FC<RefPluginProps> = ({ editorStateRef }) => {
     </>
   )
 }
-
-export default RefPlugin

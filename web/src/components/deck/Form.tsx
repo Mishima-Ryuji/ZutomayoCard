@@ -19,7 +19,7 @@ import { Card, Deck, addDoc, decksRef, updateDoc } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
 import { isBlank } from '~/shared/utils'
 import { editorValueFromString } from '../richText/editor/helper'
-import PreviewRichEditor, { usePreviewRichEditor } from '../richText/editor/preview/PreviewRichEditor'
+import { PreviewRichEditor, usePreviewRichEditor } from '../richText/editor/preview/PreviewRichEditor'
 
 type Props = {
   cards: Card[]

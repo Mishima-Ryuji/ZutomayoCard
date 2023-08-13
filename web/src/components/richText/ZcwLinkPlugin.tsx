@@ -8,15 +8,13 @@ import { getSelectedNode } from './util/getSelectedNode'
 
 export const ZcwLinkNode = LinkNode
 
-const ZcwLinkPlugin: FC = () => {
+export const ZcwLinkPlugin: FC = () => {
   return (
     <>
       <LexicalLinkPlugin validateUrl={text => true} />
     </>
   )
 }
-
-export default ZcwLinkPlugin
 
 export const ZcwLinkToolbarItem: FC = () => {
   const [editor] = useLexicalComposerContext()
