@@ -16,13 +16,13 @@ import styles from "./RichEditor.module.scss"
 export interface RichEditorProps {
   editorKey: string
   placeholder?: ReactNode
-  initialState?: SerializedEditorState | null
+  initialState?: SerializedEditorState | string | null
   editorStateRef: MutableRefObject<EditorState | undefined>
   editable?: boolean
 }
 const RichEditorComponent: FC<RichEditorProps> = ({ editorKey, placeholder, initialState = null, editorStateRef, editable = true, }) => {
   const initialConfig: InitialConfigType = {
-    editorState: initialState
+    editorState: initialState !== null
       ? editor => {
         const parsedEditorState = editor.parseEditorState(initialState)
         editor.setEditorState(parsedEditorState)
@@ -73,7 +73,7 @@ export const RichEditor = dynamic(() => Promise.resolve(RichEditorComponent), { 
 
 export interface UseRichEditorOptions {
   editorKey: string
-  defaultValue?: SerializedEditorState
+  defaultValue?: RichEditorProps["initialState"]
 }
 export const useRichEditor = ({ editorKey, defaultValue }: UseRichEditorOptions) => {
   const editorStateRef = useRef<EditorState>()

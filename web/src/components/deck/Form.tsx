@@ -18,7 +18,6 @@ import { CardsSelector } from '~/components/card/Selector'
 import { Card, Deck, addDoc, decksRef, updateDoc } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
 import { isBlank } from '~/shared/utils'
-import { editorValueFromString } from '../richText/editor/helper'
 import { PreviewRichEditor, usePreviewRichEditor } from '../richText/editor/preview/PreviewRichEditor'
 
 type Props = {
@@ -48,25 +47,25 @@ export const DeckForm = ({ cards, deck }: Props) => {
     textareaDefaultValue: deck?.detail ?? "",
     defaultEnablePreview: !!deck?.markuped_detail,
     editorKey: "detail",
-    defaultValue: deck?.markuped_detail as SerializedEditorState ?? editorValueFromString(deck?.detail ?? ""),
+    defaultValue: deck?.markuped_detail as SerializedEditorState ?? deck?.detail ?? "",
   })
   const concept = usePreviewRichEditor({
     textareaDefaultValue: deck?.concept ?? "",
     defaultEnablePreview: !!deck?.markuped_concept,
     editorKey: "concept",
-    defaultValue: deck?.markuped_concept as SerializedEditorState ?? editorValueFromString(deck?.concept ?? ""),
+    defaultValue: deck?.markuped_concept as SerializedEditorState ?? deck?.concept ?? "",
   })
   const movement = usePreviewRichEditor({
     textareaDefaultValue: deck?.movement ?? "",
     defaultEnablePreview: !!deck?.markuped_movement,
     editorKey: "movement",
-    defaultValue: deck?.markuped_movement as SerializedEditorState ?? editorValueFromString(deck?.movement ?? ""),
+    defaultValue: deck?.markuped_movement as SerializedEditorState ?? deck?.movement ?? "",
   })
   const adoption = usePreviewRichEditor({
     textareaDefaultValue: deck?.cards_adoption ?? "",
     defaultEnablePreview: !!deck?.markuped_cards_adoption,
     editorKey: "adoption",
-    defaultValue: deck?.markuped_cards_adoption as SerializedEditorState ?? editorValueFromString(deck?.cards_adoption ?? ""),
+    defaultValue: deck?.markuped_cards_adoption as SerializedEditorState ?? deck?.cards_adoption ?? "",
   })
   const [youtubeURL, setYoutubeURL] = useState(
     deck?.youtube_id !== undefined
