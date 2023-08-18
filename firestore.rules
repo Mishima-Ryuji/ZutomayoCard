@@ -59,5 +59,11 @@ service cloud.firestore {
       allow read;
       allow write: if isUserAuthenticated(uid);
     }
+
+    match /uniguriBalloons/{id} {
+      allow read;
+      allow write: if isAdmin();
+    }
+
   }
 }
