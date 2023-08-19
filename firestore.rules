@@ -60,9 +60,12 @@ service cloud.firestore {
       allow write: if isUserAuthenticated(uid);
     }
 
-    match /uniguriBalloons/{id} {
-      allow read;
-      allow write: if isAdmin();
+    match /uniguri_balloons/{id} {
+      allow read: 
+        if isAdmin() 
+          || (existingData().enable && inLimit(existingData().start_at, existingData().end_at));
+      allow write: 
+        if isAdmin();
     }
 
   }
