@@ -13,6 +13,7 @@ export interface UniguriBalloon extends Document {
   start_at: Timestamp  // 表示開始時刻
   end_at: Timestamp    // 表示終了時刻
   random: number      // ランダム取得
+  button: { type: "link", href: string, text: string } | null
 }
 
 export const uniguriBalloonConverter = getConverter<UniguriBalloon>(UniguriBalloonSubcols)

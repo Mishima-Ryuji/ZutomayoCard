@@ -16,6 +16,7 @@ export const FixedUniguriBalloonView: FC = () => {
         <UniguriBalloonView
           message={randomUniguriBalloon.data.message}
           imageUrl={randomUniguriBalloon.data.image_url}
+          button={randomUniguriBalloon.data.button}
         />
       }
     </Box>

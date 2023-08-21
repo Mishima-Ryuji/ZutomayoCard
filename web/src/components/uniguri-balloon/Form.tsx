@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, Badge, Box, Button, Checkbox, Flex, FormControl, FormHelperText, FormLabel, HStack, Icon, InputGroup, ListItem, Spinner, Textarea, UnorderedList } from "@chakra-ui/react"
+import { Alert, AlertIcon, Badge, Box, Button, Checkbox, Collapse, Flex, FormControl, FormHelperText, FormLabel, HStack, Icon, Input, InputGroup, ListItem, Radio, RadioGroup, Spinner, Textarea, UnorderedList } from "@chakra-ui/react"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import Image from "next/image"
 import { ChangeEventHandler, FC, useRef, useState } from "react"
@@ -15,7 +15,9 @@ export type UniguriBalloonInput = Pick<UniguriBalloon,
   | "enable"
   | "start_at"
   | "end_at"
+  | "button"
 >
+const buttonTextMaxLength = 12
 
 type ViewTime = "everytime" | "with-limit"
 
@@ -30,10 +32,12 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
   const [enable, setEnable] = useState(defaultValue.enable ?? false)
   const [startAt, setStartAt] = useState(defaultValue.start_at ?? minTimestamp)
   const [endAt, setEndAt] = useState(defaultValue.end_at ?? maxTimestamp)
+  const [button, setButton] = useState(defaultValue.button ?? null)
 
   const isValidMessage = message.trim() !== ""
   const isValidImageUrl = imageUrl !== null
-  const isValid = isValidMessage && isValidImageUrl
+  const isValidButton = button === null || (button?.type === "link" && button.text.length <= buttonTextMaxLength)
+  const isValid = isValidMessage && isValidImageUrl && isValidButton
 
   const now = new Date().valueOf()
   const inLimit = startAt.toMillis() <= now && now <= endAt.toMillis()
@@ -74,6 +78,7 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
       enable,
       start_at: startAt,
       end_at: endAt,
+      button,
     })
   }
 
@@ -136,6 +141,65 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
         </FormHelperText>
       </FormControl>
 
+      <FormControl my={8}>
+        <FormLabel>
+          3. ボタン
+        </FormLabel>
+        <FormHelperText>
+          吹き出しの下にボタンを設置できます。
+        </FormHelperText>
+
+        <RadioGroup
+          value={button?.type ?? "hidden"}
+          onChange={(value) => setButton(value === "link"
+            ? { type: "link", href: "https://zutomayo-card.com", text: "トップページへ" }
+            : null
+          )}
+        >
+          <Radio value="hidden">
+            表示しない
+          </Radio>
+          <Radio value="link">
+            リンクボタン
+          </Radio>
+        </RadioGroup>
+
+        <Collapse in={button?.type === "link"}>
+          <Box>
+            <FormControl p={4}>
+              <FormLabel>テキスト</FormLabel>
+              <Input
+                value={button?.text}
+                onChange={e => setButton(p => p && ({ ...p, text: e.target.value }))}
+                placeholder="例) デッキのページを見る"
+                isInvalid={!isValidButton}
+              />
+              <FormHelperText>
+                <UnorderedList>
+                  <ListItem>
+                    ボタンに表示されるテキストを入力してください。
+                  </ListItem>
+                  <ListItem>
+                    {buttonTextMaxLength}文字まで入力可能です。
+                  </ListItem>
+                </UnorderedList>
+              </FormHelperText>
+            </FormControl>
+            <FormControl p={4}>
+              <FormLabel>リンク</FormLabel>
+              <Input
+                value={button?.href}
+                onChange={e => setButton(p => p && ({ ...p, href: e.target.value }))}
+              />
+              <FormHelperText>
+                ユーザがボタンをクリックしたときに移動するページです
+              </FormHelperText>
+            </FormControl>
+          </Box>
+        </Collapse>
+
+      </FormControl>
+
       {/* <FormControl my={8}>
         <FormLabel>
           3. 表示期間
@@ -181,7 +245,7 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
 
       <FormControl my={8}>
         <FormLabel>
-          3. 公開設定
+          4. 公開設定
         </FormLabel>
         <Checkbox
           isChecked={enable}
@@ -194,9 +258,10 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
       {imageUrl !== null &&
         <FormControl my={8}>
           <FormLabel>
-            4. プレビュー
+            5. プレビュー
           </FormLabel>
           <FormHelperText>
+            表示が崩れていないか確認してください。
             トップページの右下に表示されます。
           </FormHelperText>
           <Flex flexDir="column">
@@ -213,6 +278,7 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
                   mode="sp"
                   message={message}
                   imageUrl={imageUrl}
+                  button={button}
                 />
               </Flex>
             </Box>
@@ -229,6 +295,7 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
                   mode="pc"
                   message={message}
                   imageUrl={imageUrl}
+                  button={button}
                 />
               </Flex>
             </Box>

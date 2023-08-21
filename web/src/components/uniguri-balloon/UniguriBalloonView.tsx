@@ -1,5 +1,6 @@
 import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Center, Fade, Flex, VStack, useBreakpoint, useDisclosure } from "@chakra-ui/react"
 import Image from "next/image"
+import Link from "next/link"
 import { FC, Fragment, useEffect, useRef, useState } from "react"
 import BalloonImg from "~/../public/uniguri_balloon/balloon.png"
 import { UniguriBalloon } from "~/shared/firebase/firestore/scheme/uniguriBalloon"
@@ -8,6 +9,7 @@ interface UniguriBalloonViewProps {
   mode?: "sp" | "pc"
   message: UniguriBalloon["message"]
   imageUrl: UniguriBalloon["image_url"]
+  button: UniguriBalloon["button"]
 }
 export const UniguriBalloonView: FC<UniguriBalloonViewProps> = ({ mode: propsMode, ...props }) => {
   const defaultMode = useBreakpoint() === "base" ? "sp" : "pc"
@@ -98,8 +100,9 @@ const SpUniguriBalloon: FC<SpUniguriBalloonProps> = ({ message, imageUrl }) => {
 interface PcUniguriBalloonProps {
   message: UniguriBalloon["message"]
   imageUrl: UniguriBalloon["image_url"]
+  button: UniguriBalloon["button"]
 }
-const PcUniguriBalloon: FC<PcUniguriBalloonProps> = ({ message, imageUrl }) => {
+const PcUniguriBalloon: FC<PcUniguriBalloonProps> = ({ message, imageUrl, button }) => {
   const [uniguriImageLoaded, setUniguriImageLoaded] = useState(false)
   const [balloonImageLoaded, setBalloonImageLoaded] = useState(false)
   const imageLoaded = uniguriImageLoaded && balloonImageLoaded
@@ -136,6 +139,19 @@ const PcUniguriBalloon: FC<PcUniguriBalloonProps> = ({ message, imageUrl }) => {
             </Text>
           </Box>
         </Flex>
+        {button !== null &&
+          <Link href={button.href}>
+            <Button
+              colorScheme="purple"
+              size="sm"
+              position="absolute"
+              left="0"
+              bottom="16px"
+            >
+              {button.text}
+            </Button>
+          </Link>
+        }
         <Box
           position="absolute"
           right={0}
