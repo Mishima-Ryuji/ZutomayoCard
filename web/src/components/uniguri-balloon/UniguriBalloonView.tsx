@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Center, Fade, Flex, VStack, useBreakpoint, useDisclosure } from "@chakra-ui/react"
+import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Center, Fade, Flex, Spacer, VStack, useBreakpoint, useDisclosure } from "@chakra-ui/react"
 import Image from "next/image"
 import Link from "next/link"
 import { FC, Fragment, useEffect, useRef, useState } from "react"
@@ -23,8 +23,9 @@ export const UniguriBalloonView: FC<UniguriBalloonViewProps> = ({ mode: propsMod
 interface SpUniguriBalloonProps {
   message: UniguriBalloon["message"]
   imageUrl: UniguriBalloon["image_url"]
+  button: UniguriBalloon["button"]
 }
-const SpUniguriBalloon: FC<SpUniguriBalloonProps> = ({ message, imageUrl }) => {
+const SpUniguriBalloon: FC<SpUniguriBalloonProps> = ({ message, imageUrl, button }) => {
   const dialog = useDisclosure()
   const closeButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -73,6 +74,16 @@ const SpUniguriBalloon: FC<SpUniguriBalloonProps> = ({ message, imageUrl }) => {
                     {message}
                   </Text>
                 </Box>
+                {button !== null &&
+                  <Link href={button.href}>
+                    <Button
+                      colorScheme="purple"
+                    >
+                      {button.text}
+                    </Button>
+                  </Link>
+                }
+                <Spacer height="10" />
                 <Image
                   src={imageUrl}
                   alt="うにぐりくん"
