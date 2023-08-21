@@ -9,6 +9,7 @@ import {
   Menu,
   MenuButton,
   MenuDivider,
+  MenuGroup,
   MenuItem,
   MenuList,
   Portal,
@@ -49,8 +50,9 @@ export const DefaultLayout = ({
   noBanner = false,
 }: Props) => {
   const [showLoginPopup, setShowLoginPopup] = useState(false)
-  const { user } = useAuthState()
+  const { user, isAdmin } = useAuthState()
   const toast = useToast()
+
   return (
     <>
       <Head {...head} />
@@ -135,6 +137,18 @@ export const DefaultLayout = ({
                     </>
                   )}
                   <MenuDivider />
+                  {isAdmin &&
+                    <>
+                      <MenuGroup title="管理者ページ">
+                        <Link href="/admin/uniguri-balloon">
+                          <MenuItem>
+                            うにぐりの一言
+                          </MenuItem>
+                        </Link>
+                        <MenuDivider />
+                      </MenuGroup>
+                    </>
+                  }
                   <Link href={`/about`}>
                     <MenuItem>運営について</MenuItem>
                   </Link>
