@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, Badge, Box, Button, Checkbox, Collapse, Flex, FormControl, FormHelperText, FormLabel, HStack, Icon, InputGroup, ListItem, Radio, RadioGroup, Spinner, Textarea, UnorderedList } from "@chakra-ui/react"
+import { Alert, AlertIcon, Badge, Box, Button, Checkbox, Flex, FormControl, FormHelperText, FormLabel, HStack, Icon, InputGroup, ListItem, Spinner, Textarea, UnorderedList } from "@chakra-ui/react"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import Image from "next/image"
 import { ChangeEventHandler, FC, useRef, useState } from "react"
@@ -6,7 +6,6 @@ import { FiFile } from "react-icons/fi"
 import { v4 as uuidv4 } from "uuid"
 import { Timestamp, after, fb, maxTimestamp, minTimestamp, set } from "~/firebase"
 import { UniguriBalloon } from "~/shared/firebase/firestore/scheme/uniguriBalloon"
-import { InputTimestamp } from "../InputTimestamp"
 import { SelectUniguriBalloonImage } from "./SelectUniguriBalloonImage"
 import { UniguriBalloonView } from "./UniguriBalloonView"
 
@@ -40,7 +39,9 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
   const inLimit = startAt.toMillis() <= now && now <= endAt.toMillis()
 
   const [viewTime, setViewTime] = useState<ViewTime>(
-    (defaultValue.start_at && defaultValue.enable) ? "everytime" : "with-limit"
+    (defaultValue.start_at && (defaultValue.enable ?? false))
+      ? "everytime"
+      : "with-limit"
   )
 
   const [isUploading, setIsUploading] = useState(false)
@@ -101,7 +102,7 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
         <FormLabel>
           2. 画像
         </FormLabel>
-        {imageUrl &&
+        {imageUrl !== null &&
           <Image
             src={imageUrl}
             alt={message + "の画像"}
@@ -190,7 +191,7 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
         </Checkbox>
       </FormControl>
 
-      {imageUrl &&
+      {imageUrl !== null &&
         <FormControl my={8}>
           <FormLabel>
             4. プレビュー
