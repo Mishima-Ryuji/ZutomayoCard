@@ -1,16 +1,17 @@
 import { Checkbox, FormControl, FormLabel } from "@chakra-ui/react"
-import { FC, useState } from "react"
+import { FC, ReactNode, useState } from "react"
 import { UniguriBalloon } from "~/shared/firebase/firestore/scheme/uniguriBalloon"
 
 interface InputUniguriBalloonPublishProps {
   enable: UniguriBalloon["enable"]
   onChange: (enable: UniguriBalloon["enable"]) => void
+  label?: ReactNode
 }
-export const InputUniguriBalloonPublish: FC<InputUniguriBalloonPublishProps> = ({ enable, onChange }) => {
+export const InputUniguriBalloonPublish: FC<InputUniguriBalloonPublishProps> = ({ enable, onChange, label = "公開設定" }) => {
   return (
     <FormControl my={8}>
       <FormLabel>
-        4. 公開設定
+        {label}
       </FormLabel>
       <Checkbox
         isChecked={enable}

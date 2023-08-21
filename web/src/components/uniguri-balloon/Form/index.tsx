@@ -6,7 +6,7 @@ import { InputUniguriBalloonButton, useInputUniguriBalloonButton } from "./butto
 import { InputUniguriBalloonImage, useInputUniguriBalloonImage } from "./image"
 import { InputUniguriBalloonMessage, useInputUniguriBalloonMessage } from "./message"
 import { UniguriBalloonPreview } from "./preview"
-import { useInputUniguriBalloonPublish } from "./publish"
+import { InputUniguriBalloonPublish, useInputUniguriBalloonPublish } from "./publish"
 import { useInputUniguriBalloonViewTime } from "./viewTime"
 
 export type UniguriBalloonInput = Pick<UniguriBalloon,
@@ -73,13 +73,17 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
         label="3. ボタン"
         {...button.props}
       />
+      <InputUniguriBalloonPublish
+        label="4. 公開設定"
+        {...enable.props}
+      />
       {/* <InputUniguriBalloonViewTime
       {...viewTime.props}
       /> */}
 
       {imageUrl.value !== null &&
         <UniguriBalloonPreview
-          label="4. プレビュー"
+          label="5. プレビュー"
           message={message.value}
           button={button.value}
           imageUrl={imageUrl.value}
