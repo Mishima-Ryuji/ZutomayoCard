@@ -7,10 +7,10 @@ import {
   FormLabel,
   Heading,
   Input,
-  Stack,
-  Textarea,
+  Stack
 } from '@chakra-ui/react'
 import { deleteField } from 'firebase/firestore'
+import { SerializedEditorState } from "lexical"
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { CardList } from '~/components/card/List'
@@ -18,6 +18,7 @@ import { CardsSelector } from '~/components/card/Selector'
 import { Card, Deck, addDoc, decksRef, updateDoc } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
 import { isBlank } from '~/shared/utils'
+import { PreviewRichEditor, usePreviewRichEditor } from '../richText/editor/preview/PreviewRichEditor'
 
 type Props = {
   cards: Card[]
@@ -42,10 +43,30 @@ export const DeckForm = ({ cards, deck }: Props) => {
   }, [cards, selectedCardIds])
   const [showCardSelector, setShowCardSelector] = useState(deck ? false : true)
   const [name, setName] = useState(deck?.name ?? 'My deck')
-  const [detail, setDetail] = useState(deck?.detail ?? '')
-  const [concept, setConcept] = useState(deck?.concept ?? '')
-  const [movement, setMovement] = useState(deck?.movement ?? '')
-  const [adoption, setAdoption] = useState(deck?.cards_adoption ?? '')
+  const detail = usePreviewRichEditor({
+    textareaDefaultValue: deck?.detail ?? "",
+    defaultEnablePreview: !!deck?.markuped_detail,
+    editorKey: "detail",
+    defaultValue: deck?.markuped_detail as SerializedEditorState ?? deck?.detail ?? "",
+  })
+  const concept = usePreviewRichEditor({
+    textareaDefaultValue: deck?.concept ?? "",
+    defaultEnablePreview: !!deck?.markuped_concept,
+    editorKey: "concept",
+    defaultValue: deck?.markuped_concept as SerializedEditorState ?? deck?.concept ?? "",
+  })
+  const movement = usePreviewRichEditor({
+    textareaDefaultValue: deck?.movement ?? "",
+    defaultEnablePreview: !!deck?.markuped_movement,
+    editorKey: "movement",
+    defaultValue: deck?.markuped_movement as SerializedEditorState ?? deck?.movement ?? "",
+  })
+  const adoption = usePreviewRichEditor({
+    textareaDefaultValue: deck?.cards_adoption ?? "",
+    defaultEnablePreview: !!deck?.markuped_cards_adoption,
+    editorKey: "adoption",
+    defaultValue: deck?.markuped_cards_adoption as SerializedEditorState ?? deck?.cards_adoption ?? "",
+  })
   const [youtubeURL, setYoutubeURL] = useState(
     deck?.youtube_id !== undefined
       ? `https://www.youtube.com/watch?v=${deck.youtube_id}`
@@ -58,6 +79,71 @@ export const DeckForm = ({ cards, deck }: Props) => {
   }, [isAdmin])
 
   const router = useRouter()
+
+  const handleSave = async () => {
+    if (isBlank(user)) {
+      throw new Error('This action requires authentication.')
+    }
+    const youtubeIdCap = /v=(.+)$/.exec(youtubeURL)
+    if (deck) {
+      await updateDoc(deck.ref, {
+        card_ids: selectedCardIds,
+        name,
+        concept: concept.textareaValue !== '' ? concept.textareaValue : deleteField(),
+        movement: movement.textareaValue !== '' ? movement.textareaValue : deleteField(),
+        cards_adoption:
+          adoption.textareaValue !== '' ? adoption.textareaValue : deleteField(),
+        detail: detail.textareaValue !== '' ? detail.textareaValue : deleteField(),
+        youtube_id:
+          youtubeURL !== '' && youtubeIdCap !== null
+            ? youtubeIdCap[1]
+            : deleteField(),
+        markuped_concept: concept.isEnableRich
+          ? (concept.richEditor.getCurrentData() ?? null)
+          : null,
+        markuped_movement: movement.isEnableRich
+          ? (movement.richEditor.getCurrentData() ?? null)
+          : null,
+        markuped_cards_adoption: adoption.isEnableRich
+          ? (adoption.richEditor.getCurrentData() ?? null)
+          : null,
+        markuped_detail: detail.isEnableRich
+          ? (detail.richEditor.getCurrentData() ?? null)
+          : null,
+      })
+      await router.push(`/decks/${deck.id}`)
+    } else {
+      const deckRef = await addDoc(decksRef, {
+        created_by: user.uid,
+        card_ids: selectedCardIds,
+        name,
+        concept: concept.textareaValue !== '' ? concept.textareaValue : undefined,
+        movement: movement.textareaValue !== '' ? movement.textareaValue : undefined,
+        cards_adoption:
+          adoption.textareaValue !== '' ? adoption.textareaValue : deleteField(),
+        detail: detail.textareaValue !== '' ? detail.textareaValue : deleteField(),
+        youtube_id:
+          youtubeURL !== '' && youtubeIdCap !== null
+            ? youtubeIdCap[1]
+            : undefined,
+        is_public: isPublic,
+        is_recommended: isRecommended,
+        markuped_concept: concept.isEnableRich
+          ? (concept.richEditor.getCurrentData() ?? null)
+          : null,
+        markuped_movement: movement.isEnableRich
+          ? (movement.richEditor.getCurrentData() ?? null)
+          : null,
+        markuped_cards_adoption: adoption.isEnableRich
+          ? (adoption.richEditor.getCurrentData() ?? null)
+          : null,
+        markuped_detail: detail.isEnableRich
+          ? (detail.richEditor.getCurrentData() ?? null)
+          : null,
+      })
+      await router.push(`/decks/${deckRef.id}`)
+    }
+  }
   return (
     <>
       <Heading my={3} fontSize={'2xl'}>
@@ -117,44 +203,44 @@ export const DeckForm = ({ cards, deck }: Props) => {
                 )}
               </FormControl>
               <FormControl>
-                <FormLabel>コンセプト{isAdmin === false && '(任意)'}</FormLabel>
-                <Textarea
-                  value={concept}
-                  onChange={(e) => setConcept(e.currentTarget.value)}
+                {/* htmlFor='' はラベルをクリックするとプレビュー切り替えスイッチが反応するバグの回避のため */}
+                <FormLabel htmlFor=''>コンセプト{isAdmin === false && '(任意)'}</FormLabel>
+                <PreviewRichEditor
+                  {...concept.previewProps}
                 />
                 <FormHelperText>
                   どのデッキのコンセプトを説明しましょう。
                 </FormHelperText>
               </FormControl>
               <FormControl>
-                <FormLabel>立ち回り方{isAdmin === false && '(任意)'}</FormLabel>
-                <Textarea
-                  value={movement}
-                  onChange={(e) => setMovement(e.currentTarget.value)}
+                {/* htmlFor='' はラベルをクリックするとプレビュー切り替えスイッチが反応するバグの回避のため */}
+                <FormLabel htmlFor=''>立ち回り方{isAdmin === false && '(任意)'}</FormLabel>
+                <PreviewRichEditor
+                  {...movement.previewProps}
                 />
                 <FormHelperText>
                   このデッキを使うときの試合開始から終了までの立ち回りを書きましょう。
                 </FormHelperText>
               </FormControl>
               <FormControl>
-                <FormLabel>
+                {/* htmlFor='' はラベルをクリックするとプレビュー切り替えスイッチが反応するバグの回避のため */}
+                <FormLabel htmlFor=''>
                   カードの採用理由と代替カード{isAdmin === false && '(任意)'}
                 </FormLabel>
-                <Textarea
-                  value={adoption}
-                  onChange={(e) => setAdoption(e.currentTarget.value)}
+                <PreviewRichEditor
+                  {...adoption.previewProps}
                 />
                 <FormHelperText>
                   採用したカードの採用理由や代替できるカードの説明などをしましょう。
                 </FormHelperText>
               </FormControl>
               <FormControl>
-                <FormLabel>
+                {/* htmlFor='' はラベルをクリックするとプレビュー切り替えスイッチが反応するバグの回避のため */}
+                <FormLabel htmlFor=''>
                   詳細やその他の情報{isAdmin === false && '(任意)'}
                 </FormLabel>
-                <Textarea
-                  value={detail}
-                  onChange={(e) => setDetail(e.currentTarget.value)}
+                <PreviewRichEditor
+                  {...detail.previewProps}
                 />
                 <FormHelperText>
                   どのカードをどのタイミングで使うかなどの解説を書きましょう。
@@ -214,45 +300,7 @@ export const DeckForm = ({ cards, deck }: Props) => {
                       !/v=(.+)$/.test(youtubeURL))
                   }
                   colorScheme="purple"
-                  onClick={async () => {
-                    if (isBlank(user)) {
-                      throw new Error('This action requires authentication.')
-                    }
-                    const youtubeIdCap = /v=(.+)$/.exec(youtubeURL)
-                    if (deck) {
-                      await updateDoc(deck.ref, {
-                        card_ids: selectedCardIds,
-                        name,
-                        concept: concept !== '' ? concept : deleteField(),
-                        movement: movement !== '' ? movement : deleteField(),
-                        cards_adoption:
-                          adoption !== '' ? adoption : deleteField(),
-                        detail: detail !== '' ? detail : deleteField(),
-                        youtube_id:
-                          youtubeURL !== '' && youtubeIdCap !== null
-                            ? youtubeIdCap[1]
-                            : deleteField(),
-                      })
-                      await router.push(`/decks/${deck.id}`)
-                    } else {
-                      const deckRef = await addDoc(decksRef, {
-                        created_by: user.uid,
-                        card_ids: selectedCardIds,
-                        name,
-                        concept: concept !== '' ? concept : undefined,
-                        movement: movement !== '' ? movement : undefined,
-                        cards_adoption: adoption !== '' ? adoption : undefined,
-                        detail: detail !== '' ? detail : undefined,
-                        youtube_id:
-                          youtubeURL !== '' && youtubeIdCap !== null
-                            ? youtubeIdCap[1]
-                            : undefined,
-                        is_public: isPublic,
-                        is_recommended: isRecommended,
-                      })
-                      await router.push(`/decks/${deckRef.id}`)
-                    }
-                  }}
+                  onClick={handleSave}
                 >
                   保存
                 </Button>

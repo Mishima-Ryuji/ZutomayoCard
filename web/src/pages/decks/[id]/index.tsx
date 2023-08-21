@@ -8,11 +8,12 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react'
+import { SerializedEditorState } from "lexical"
 import { GetStaticPaths, GetStaticProps } from 'next'
 import DefaultErrorPage from 'next/error'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
-import { useMemo } from 'react'
+import { FC, ReactNode, useMemo } from 'react'
 import {
   useCollectionDataOnce,
   useDocumentDataOnce,
@@ -21,6 +22,7 @@ import { FaPencilAlt, FaTrash } from 'react-icons/fa'
 import Youtube from 'react-youtube'
 import { DefaultLayout } from '~/components/Layout'
 import { CardList } from '~/components/card/List'
+import { RichViewer } from '~/components/richText/viewer/RichViewer'
 import {
   Card,
   Deck,
@@ -112,12 +114,12 @@ const Page = ({
   const deckCards = useMemo(() => {
     return cards && deck
       ? cards
-          .filter((card) => deck.card_ids.includes(card.id))
-          .sort(
-            (a, b) =>
-              deck.card_ids.findIndex((id) => a.id === id) -
-              deck.card_ids.findIndex((id) => b.id === id)
-          )
+        .filter((card) => deck.card_ids.includes(card.id))
+        .sort(
+          (a, b) =>
+            deck.card_ids.findIndex((id) => a.id === id) -
+            deck.card_ids.findIndex((id) => b.id === id)
+        )
       : undefined
   }, [cards, deck])
   const { user } = useAuthState()
@@ -173,38 +175,26 @@ const Page = ({
               selectedCardIds={deck.card_ids}
               counter
             />
-            {deck.concept !== undefined && (
-              <>
-                <Heading fontSize={'xl'} mt={3} mb={2}>
-                  コンセプト
-                </Heading>
-                <p>{deck.concept}</p>
-              </>
-            )}
-            {deck.movement !== undefined && (
-              <>
-                <Heading fontSize={'xl'} mt={3} mb={2}>
-                  立ち回り方
-                </Heading>
-                <p>{deck.movement}</p>
-              </>
-            )}
-            {deck.cards_adoption !== undefined && (
-              <>
-                <Heading fontSize={'xl'} mt={3} mb={2}>
-                  カードの採用理由と代替カード
-                </Heading>
-                <p>{deck.cards_adoption}</p>
-              </>
-            )}
-            {deck.detail !== undefined && (
-              <>
-                <Heading fontSize={'xl'} mt={3} mb={2}>
-                  詳細やその他の情報
-                </Heading>
-                <p>{deck.detail}</p>
-              </>
-            )}
+            <TextSection
+              heading="コンセプト"
+              markupedContent={deck.markuped_concept}
+              textContent={deck.concept}
+            />
+            <TextSection
+              heading="立ち回り方"
+              markupedContent={deck.markuped_movement}
+              textContent={deck.movement}
+            />
+            <TextSection
+              heading="カードの採用理由と代替カード"
+              markupedContent={deck.markuped_cards_adoption}
+              textContent={deck.cards_adoption}
+            />
+            <TextSection
+              heading="詳細やその他の情報"
+              markupedContent={deck.markuped_detail}
+              textContent={deck.detail}
+            />
             {deck.youtube_id !== undefined && (
               <>
                 <Heading fontSize={'xl'} mt={7} mb={2}>
@@ -230,3 +220,32 @@ const Page = ({
 }
 
 export default Page
+
+interface TextSectionProps {
+  heading: ReactNode
+  markupedContent: object | null
+  textContent: string | undefined
+}
+const TextSection: FC<TextSectionProps> = ({ heading, markupedContent, textContent }) => {
+  const showMarkuped = !!markupedContent
+  const showText = !showMarkuped && textContent !== undefined
+  return (
+    <>
+      {(showMarkuped || showText) &&
+        <>
+          <Heading fontSize={'xl'} mt={3} mb={2}>
+            {heading}
+          </Heading>
+        </>
+      }
+      {showMarkuped &&
+        <RichViewer
+          value={markupedContent as SerializedEditorState}
+        />
+      }
+      {showText &&
+        <p>{textContent}</p>
+      }
+    </>
+  )
+}
