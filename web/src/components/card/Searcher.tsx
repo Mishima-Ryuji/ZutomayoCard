@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
 import { CardList } from '~/components/card/List'
-import { Card, CardElement, CardRarity, CardType } from '~/firebase'
+import { Card, CardElement, CardRank, CardRarity, CardType } from '~/firebase'
 import { cardsSorter } from '~/models/card'
 import { isBlank } from '~/shared/utils'
 import { PromiseVoid } from '~/types'
@@ -98,6 +98,7 @@ const SearchByAttribute = ({ cards, ...otherProps }: Props) => {
     'N+',
     'N',
   ])
+  const [ranks, setRanks] = useState<CardRank[]>(['S', 'A', 'B', 'C', 'D'])
   const result = useMemo(() => {
     return cards
       .filter(
@@ -107,10 +108,12 @@ const SearchByAttribute = ({ cards, ...otherProps }: Props) => {
           card.type !== undefined &&
           types.includes(card.type) &&
           card.rarity !== undefined &&
-          rarities.includes(card.rarity)
+          rarities.includes(card.rarity) &&
+          card.rank !== undefined &&
+          ranks.includes(card.rank)
       )
       .sort(cardsSorter)
-  }, [elements, types, rarities])
+  }, [elements, types, rarities, ranks, cards])
   return (
     <>
       <Stack gap={5} mb={6}>
@@ -332,6 +335,80 @@ const SearchByAttribute = ({ cards, ...otherProps }: Props) => {
               }
             >
               N+
+            </Checkbox>
+          </Stack>
+        </CheckboxGroup>
+        <CheckboxGroup defaultValue={ranks}>
+          <Stack spacing={[3, 5]} direction={'row'} overflow={'auto'}>
+            <Checkbox
+              value="S"
+              defaultChecked
+              isChecked={ranks.includes('S')}
+              onChange={(e) =>
+                setRanks(
+                  e.currentTarget.checked
+                    ? [...ranks, 'S']
+                    : ranks.filter((e) => e !== 'S')
+                )
+              }
+            >
+              S
+            </Checkbox>
+            <Checkbox
+              value="A"
+              defaultChecked
+              isChecked={ranks.includes('A')}
+              onChange={(e) =>
+                setRanks(
+                  e.currentTarget.checked
+                    ? [...ranks, 'A']
+                    : ranks.filter((e) => e !== 'A')
+                )
+              }
+            >
+              A
+            </Checkbox>
+            <Checkbox
+              value="B"
+              defaultChecked
+              isChecked={ranks.includes('B')}
+              onChange={(e) =>
+                setRanks(
+                  e.currentTarget.checked
+                    ? [...ranks, 'B']
+                    : ranks.filter((e) => e !== 'B')
+                )
+              }
+            >
+              B
+            </Checkbox>
+            <Checkbox
+              value="C"
+              defaultChecked
+              isChecked={ranks.includes('C')}
+              onChange={(e) =>
+                setRanks(
+                  e.currentTarget.checked
+                    ? [...ranks, 'C']
+                    : ranks.filter((e) => e !== 'C')
+                )
+              }
+            >
+              C
+            </Checkbox>
+            <Checkbox
+              value="D"
+              defaultChecked
+              isChecked={ranks.includes('D')}
+              onChange={(e) =>
+                setRanks(
+                  e.currentTarget.checked
+                    ? [...ranks, 'D']
+                    : ranks.filter((e) => e !== 'D')
+                )
+              }
+            >
+              D
             </Checkbox>
           </Stack>
         </CheckboxGroup>
