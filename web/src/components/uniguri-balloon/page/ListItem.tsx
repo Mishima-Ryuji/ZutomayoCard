@@ -1,8 +1,10 @@
-import { Badge, Box, Divider, Flex, HStack, IconButton } from "@chakra-ui/react"
+import { Badge, Box, Divider, Flex, HStack, IconButton, VStack, chakra } from "@chakra-ui/react"
 import Image from "next/image"
 import Link from "next/link"
 import { FC } from "react"
+import { useAuthState } from "react-firebase-hooks/auth"
 import { FaEdit } from "react-icons/fa"
+import { fb } from "~/firebase"
 import { UniguriBalloon } from "~/shared/firebase/firestore/scheme/uniguriBalloon"
 import { DateText } from "./DateText"
 
@@ -12,6 +14,10 @@ interface UniguriBalloonListItemProps {
 export const UniguriBalloonListItem: FC<UniguriBalloonListItemProps> = ({ uniguriBalloon }) => {
   const now = new Date().valueOf()
   const inLimit = uniguriBalloon.start_at.toMillis() <= now && now <= uniguriBalloon.end_at.toMillis()
+
+  const [user] = useAuthState(fb.auth)
+
+  const createdByMe = user?.uid === uniguriBalloon.author_id
 
   return (
     <Flex direction="column">
@@ -44,25 +50,32 @@ export const UniguriBalloonListItem: FC<UniguriBalloonListItemProps> = ({ unigur
             </Box>
           </HStack>
 
-          <HStack my={2} spacing={1}>
-            {uniguriBalloon.enable
-              ? inLimit
-                ? <Badge colorScheme="blue" variant="outline">
-                  公開中
-                </Badge>
+          <VStack my={2} alignItems="flex-start" spacing="0">
+            <HStack spacing={1} flexWrap="wrap">
+              {uniguriBalloon.enable
+                ? inLimit
+                  ? <Badge colorScheme="blue" variant="outline">
+                    公開中
+                  </Badge>
+                  : <Badge colorScheme="gray">
+                    公開期間外
+                  </Badge>
                 : <Badge colorScheme="gray">
-                  公開期間外
+                  非公開
                 </Badge>
-              : <Badge colorScheme="gray">
-                非公開
-              </Badge>
-            }
-            <span>
+              }
+              {createdByMe &&
+                <Badge colorScheme="green">
+                  自分が作成
+                </Badge>
+              }
+            </HStack>
+            <chakra.span fontSize="sm">
               <DateText date={uniguriBalloon.created_at.toDate()} />
               {" "}
               作成
-            </span>
-          </HStack>
+            </chakra.span>
+          </VStack>
 
         </Box>
 
