@@ -30,28 +30,34 @@ const SpUniguriBalloon: FC<SpUniguriBalloonProps> = ({ message, imageUrl }) => {
   useEffect(() => {
     setShowClose(dialog.isOpen)
   }, [dialog.isOpen])
+
+  const [uniguriImageLoaded, setUniguriImageLoaded] = useState(false)
+
   return (
     <>
-      <Box
-        minWidth={100}
-        minHeight={100}
-        transition="all 0.3s"
-        _hover={{
-          transform: "scale(1.05)",
-        }}
-        _active={{
-          transform: "translateY(-10px)",
-        }}
-        onClick={dialog.onOpen}
-      >
-        <Image
-          src={imageUrl}
-          alt="うにぐりくん"
-          width={100}
-          height={100}
-          style={{ height: "auto", userSelect: "none" }}
-        />
-      </Box>
+      <Fade in={uniguriImageLoaded}>
+        <Box
+          minWidth={100}
+          minHeight={100}
+          transition="all 0.3s"
+          _hover={{
+            transform: "scale(1.05)",
+          }}
+          _active={{
+            transform: "translateY(-10px)",
+          }}
+          onClick={dialog.onOpen}
+        >
+          <Image
+            src={imageUrl}
+            alt="うにぐりくん"
+            width={100}
+            height={100}
+            style={{ height: "auto", userSelect: "none" }}
+            onLoadingComplete={() => setUniguriImageLoaded(true)}
+          />
+        </Box>
+      </Fade>
       <AlertDialog isOpen={dialog.isOpen} onClose={dialog.onClose} leastDestructiveRef={closeButtonRef}>
         <AlertDialogOverlay>
           <AlertDialogContent mx={2}>
@@ -94,58 +100,66 @@ interface PcUniguriBalloonProps {
   imageUrl: UniguriBalloon["image_url"]
 }
 const PcUniguriBalloon: FC<PcUniguriBalloonProps> = ({ message, imageUrl }) => {
+  const [uniguriImageLoaded, setUniguriImageLoaded] = useState(false)
+  const [balloonImageLoaded, setBalloonImageLoaded] = useState(false)
+  const imageLoaded = uniguriImageLoaded && balloonImageLoaded
   return (
-    <Box
-      w={350} minW={350} maxW={350}
-      h={150} minH={150} maxH={150}
-      display="inline-block"
-      position="relative"
-    >
-      <Image
-        src={BalloonImg}
-        alt="吹き出し"
-        width={300}
-        height={300}
-        style={{ height: "auto", position: "absolute", top: 0, left: 0, userSelect: "none" }}
-      />
-      <Flex
-        position="absolute"
-        left="27px"
-        top="22px"
-        width="233px"
-        height="79px"
-        fontSize={message.length <= 20 ? "22px" : "16px"}
-        lineHeight="1.2em"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Box>
-          <Text>
-            {message}
-          </Text>
-        </Box>
-      </Flex>
+    <Fade in={imageLoaded}>
       <Box
-        position="absolute"
-        right={0}
-        bottom={0}
-        transition="all 0.3s"
-        _hover={{
-          transform: "scale(1.05)",
-        }}
-        _active={{
-          transform: "translateY(-10px)",
-        }}
+        w={350} minW={350} maxW={350}
+        h={150} minH={150} maxH={150}
+        display="inline-block"
+        position="relative"
       >
         <Image
-          src={imageUrl}
-          alt="うにぐりくん"
-          width={100}
-          height={100}
-          style={{ height: "auto", userSelect: "none" }}
+          src={BalloonImg}
+          alt="吹き出し"
+          width={300}
+          height={300}
+          style={{ height: "auto", position: "absolute", top: 0, left: 0, userSelect: "none" }}
+          onLoadingComplete={() => setBalloonImageLoaded(true)}
         />
+        <Flex
+          position="absolute"
+          left="27px"
+          top="22px"
+          width="233px"
+          height="79px"
+          fontSize={message.length <= 20 ? "22px" : "16px"}
+          lineHeight="1.2em"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Box>
+            <Text>
+              {message}
+            </Text>
+          </Box>
+        </Flex>
+        <Box
+          position="absolute"
+          right={0}
+          bottom={0}
+          transition="all 0.3s"
+          _hover={{
+            transform: "scale(1.05)",
+          }}
+          _active={{
+            transform: "translateY(-10px)",
+          }}
+        >
+          <Image
+            src={imageUrl}
+            alt="うにぐりくん"
+            width={100}
+            height={100}
+            style={{ height: "auto", userSelect: "none" }}
+            onLoadingComplete={() => setUniguriImageLoaded(true)}
+          />
+        </Box>
       </Box>
-    </Box>)
+    </Fade>
+  )
 }
 
 interface TextProps {
