@@ -135,7 +135,7 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
         </FormHelperText>
       </FormControl>
 
-      <FormControl my={8}>
+      {/* <FormControl my={8}>
         <FormLabel>
           3. 表示期間
         </FormLabel>
@@ -176,11 +176,11 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
           </Box>
         </Collapse>
 
-      </FormControl>
+      </FormControl> */}
 
       <FormControl my={8}>
         <FormLabel>
-          4. 公開設定
+          3. 公開設定
         </FormLabel>
         <Checkbox
           isChecked={enable}
@@ -193,7 +193,7 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
       {imageUrl &&
         <FormControl my={8}>
           <FormLabel>
-            5. プレビュー
+            4. プレビュー
           </FormLabel>
           <FormHelperText>
             トップページの右下に表示されます。
