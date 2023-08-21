@@ -5,9 +5,8 @@ import { DefaultLayout } from '~/components/Layout'
 import { UniguriBalloonListItem } from '~/components/uniguri-balloon/page/ListItem'
 import { useListUniguriBalloons } from '~/hooks/uniguri-balloon/useListUniguriBalloons'
 
-interface Props {
-}
-const ListUniguriBalloonPage: NextPage<Props> = ({ }) => {
+
+const ListUniguriBalloonPage: NextPage = () => {
   const uniguriBalloons = useListUniguriBalloons()
   return (
     <DefaultLayout

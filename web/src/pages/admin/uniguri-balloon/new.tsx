@@ -12,6 +12,7 @@ const defaultInput: UniguriBalloonInput = {
   enable: false,
   start_at: set(Timestamp.now(), { hour: 0, minute: 0, second: 0, milliSeccond: 0 }),
   end_at: set(after(Timestamp.now(), { day: 1 }), { hour: 0, minute: 0, second: 0, milliSeccond: 0 }),
+  button: null,
 }
 
 const NewUniguriBalloonPage: NextPage = () => {

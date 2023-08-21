@@ -9,9 +9,7 @@ import { useDeleteUniguriBalloons } from '~/hooks/uniguri-balloon/useDeleteUnigu
 import { useUpdateUniguriBalloon } from '~/hooks/uniguri-balloon/useUpdateUniguriBalloon'
 import { uniguriBalloonRef } from '~/shared/firebase/firestore/scheme/uniguriBalloon'
 
-interface Props {
-}
-const EditUniguriBalloonPage: NextPage<Props> = () => {
+const EditUniguriBalloonPage: NextPage = () => {
   const router = useRouter()
   const uniguriBalloonId = router.query.id
 
@@ -24,16 +22,16 @@ const EditUniguriBalloonPage: NextPage<Props> = () => {
   const { isDeleting, onDelete } = useDeleteUniguriBalloons({
     onDelete: () => {
       // 削除したページにCmd+Shift+Zさせないためにreplace
-      router.replace(`/admin/uniguri-balloon`)
+      void router.replace(`/admin/uniguri-balloon`)
     },
   })
 
   return (
     <DefaultLayout head={{
-      title: `${uniguriBalloon?.message} の編集`,
+      title: `${uniguriBalloon?.message ?? "うにぐりの一言"} の編集`,
     }}>
       <Heading my={3}>
-        {uniguriBalloon?.message
+        {(uniguriBalloon?.message) != null
           ? uniguriBalloon.message.substring(0, 12) + "..."
           : <Spinner />} の編集
       </Heading>
