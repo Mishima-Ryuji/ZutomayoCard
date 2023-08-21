@@ -70,7 +70,7 @@ export const UniguriBalloonForm: FC<UniguriBalloonFormProps> = ({ defaultValue, 
         {...imageUrl.props}
       />
       <InputUniguriBalloonButton
-        label="3. ボタン"
+        label="3. ボタン(任意)"
         {...button.props}
       />
       <InputUniguriBalloonPublish
