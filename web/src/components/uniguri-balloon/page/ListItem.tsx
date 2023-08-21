@@ -23,13 +23,13 @@ export const UniguriBalloonListItem: FC<UniguriBalloonListItemProps> = ({ unigur
     <Flex direction="column">
       <Flex p={2} alignItems="flex-start">
 
-        <Box px={1} py={4}>
+        <Box px={1} py={4} flexShrink="0">
           <Image
             src={uniguriBalloon.image_url}
             alt={uniguriBalloon.message}
             width={48}
             height={48}
-            style={{ objectFit: "contain" }}
+            style={{ objectFit: "contain", minWidth: "fit-content", minHeight: "fit-content" }}
           />
         </Box>
 
