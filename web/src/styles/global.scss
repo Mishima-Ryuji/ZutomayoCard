@@ -1,3 +1,27 @@
 p {
   white-space: pre-wrap;
 }
+
+.editorjs {
+  .cdx-block {
+    padding: 0;
+  }
+  .ce-block {
+    a {
+      color: blue;
+      text-decoration: underline;
+    }
+  }
+  .codex-editor__redactor {
+    padding: 0 !important;
+  }
+  .ce-popover--opened {
+  }
+}
+
+.editorjs-viewer {
+  a {
+    color: blue;
+    text-decoration: underline;
+  }
+}
