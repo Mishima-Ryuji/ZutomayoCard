@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react"
 import { FC } from "react"
-import { useRandomUniguriBalloon } from "~/hooks/uniguri-balloon/useRandomUniguriBalloon"
+import { useRandomUniguriBalloon } from "~/hooks/uniguri_balloon/useRandomUniguriBalloon"
 import { UniguriBalloonView } from "../../UniguriBalloonView"
 
 export const FixedUniguriBalloonView: FC = () => {

@@ -3,7 +3,7 @@ import { NextPage } from 'next'
 import { default as NextLink } from 'next/link'
 import { DefaultLayout } from '~/components/Layout'
 import { UniguriBalloonListItem } from '~/components/uniguri_balloon/page/ListItem'
-import { useListUniguriBalloons } from '~/hooks/uniguri-balloon/useListUniguriBalloons'
+import { useListUniguriBalloons } from '~/hooks/uniguri_balloon/useListUniguriBalloons'
 
 
 const ListUniguriBalloonPage: NextPage = () => {

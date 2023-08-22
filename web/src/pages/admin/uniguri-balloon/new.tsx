@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { DefaultLayout } from '~/components/Layout'
 import { UniguriBalloonForm, UniguriBalloonInput } from '~/components/uniguri_balloon/Form'
 import { Timestamp, after, set } from '~/firebase'
-import { useAddUniguriBalloon } from '~/hooks/uniguri-balloon/useAddUniguriBalloon'
+import { useAddUniguriBalloon } from '~/hooks/uniguri_balloon/useAddUniguriBalloon'
 
 const defaultInput: UniguriBalloonInput = {
   message: "",

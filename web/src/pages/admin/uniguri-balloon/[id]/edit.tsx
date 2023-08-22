@@ -5,8 +5,8 @@ import { useDocumentDataOnce } from 'react-firebase-hooks/firestore'
 import { DefaultLayout } from '~/components/Layout'
 import { UniguriBalloonForm } from '~/components/uniguri_balloon/Form'
 import { DeleteButton } from '~/components/uniguri_balloon/page/edit/DeleteButton'
-import { useDeleteUniguriBalloons } from '~/hooks/uniguri-balloon/useDeleteUniguriBalloons'
-import { useUpdateUniguriBalloon } from '~/hooks/uniguri-balloon/useUpdateUniguriBalloon'
+import { useDeleteUniguriBalloons } from '~/hooks/uniguri_balloon/useDeleteUniguriBalloons'
+import { useUpdateUniguriBalloon } from '~/hooks/uniguri_balloon/useUpdateUniguriBalloon'
 import { uniguriBalloonRef } from '~/shared/firebase/firestore/scheme/uniguriBalloon'
 
 const EditUniguriBalloonPage: NextPage = () => {
