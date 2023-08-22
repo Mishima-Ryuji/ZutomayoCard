@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { UniguriBalloonInput } from "~/components/uniguri-balloon/Form"
+import { UniguriBalloonInput } from "~/components/uniguri_balloon/Form"
 import { DocRef, addDoc, fb } from "~/firebase"
 import { UniguriBalloon, uniguriBalloonsRef } from "~/shared/firebase/firestore/scheme/uniguriBalloon"
 import { isBlank } from "~/shared/utils"

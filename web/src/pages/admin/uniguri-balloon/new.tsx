@@ -2,7 +2,7 @@ import { Flex, Heading } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { DefaultLayout } from '~/components/Layout'
-import { UniguriBalloonForm, UniguriBalloonInput } from '~/components/uniguri-balloon/Form'
+import { UniguriBalloonForm, UniguriBalloonInput } from '~/components/uniguri_balloon/Form'
 import { Timestamp, after, set } from '~/firebase'
 import { useAddUniguriBalloon } from '~/hooks/uniguri-balloon/useAddUniguriBalloon'
 
