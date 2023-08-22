@@ -8,7 +8,6 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react'
-import { FirebaseError } from 'firebase/app'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import DefaultErrorPage from 'next/error'
 import { useRouter } from 'next/router'
@@ -22,6 +21,7 @@ import { FaPencilAlt, FaTrash } from 'react-icons/fa'
 import Youtube from 'react-youtube'
 import { DefaultLayout } from '~/components/Layout'
 import { CardList } from '~/components/card/List'
+import { isPermissionDenied } from '~/errors/isPermissionDeniedOnServer'
 import {
   Card,
   Deck,
@@ -90,7 +90,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
   } catch (error) {
     console.error(error)
     // サーバ側での権限エラーを回避
-    if (isPermissionDeniedOnServer(error)) {
+    if (isPermissionDenied(error)) {
       return {
         props: {
           cards,
@@ -104,10 +104,6 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
     }
   }
 }
-
-const isPermissionDeniedOnServer = (error: unknown) =>
-  error instanceof FirebaseError &&
-  error.code === "permission-denied"
 
 const Page = ({
   cards: staticCards,
