@@ -18,7 +18,11 @@ class Firebase {
   public readonly functions: FirebaseFunctions
 
   constructor() {
-    const app = initializeApp({
+    const apps = getApps()
+    let app: FirebaseApp
+    // initializeAppの二重起動を防ぐために起動済みのFirebaseAppがないか確認する
+    if (apps.length === 0) {
+      app = initializeApp({
       apiKey: process.env.NEXT_PUBLIC_FB_API_KEY,
       authDomain: process.env.NEXT_PUBLIC_FB_AUTH_DOMAIN,
       databaseURL: process.env.NEXT_PUBLIC_FB_DATABASE_URL,
@@ -28,14 +32,32 @@ class Firebase {
       appId: process.env.NEXT_PUBLIC_FB_APP_ID,
       measurementId: process.env.NEXT_PUBLIC_FB_MEASUREMENT_ID,
     })
+      this.setupDb(app)
+      this.setupFunctions()
+    } else {
+      app = getApp()
+    }
+  }
 
-    this.auth = getAuth()
-    this.db = initializeFirestore(app, {
+  get auth() {
+    return getAuth()
+  }
+  private setupDb(app: FirebaseApp) {
+    initializeFirestore(app, {
       ignoreUndefinedProperties: true,
     })
-    this.storage = getStorage()
-    this.functions = getFunctions()
-    this.functions.region = 'asia-northeast1'
+  }
+  get db() {
+    return getFirestore()
+  }
+  get storage() {
+    return getStorage()
+  }
+  private setupFunctions() {
+    this.functions.region = "asia-northeast1"
+  }
+  get functions() {
+    return getFunctions()
   }
 
   static getInstance() {
