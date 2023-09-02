@@ -1,21 +1,16 @@
 import { getAnalytics } from 'firebase/analytics'
-import { initializeApp } from 'firebase/app'
-import { Auth, getAuth } from 'firebase/auth'
-import { Firestore, initializeFirestore } from 'firebase/firestore'
+import { FirebaseApp, getApp, getApps, initializeApp } from 'firebase/app'
+import { connectAuthEmulator, getAuth } from 'firebase/auth'
+import { connectFirestoreEmulator, getFirestore, initializeFirestore } from 'firebase/firestore'
 import {
-  Functions as FirebaseFunctions,
   getFunctions,
-  httpsCallable,
+  httpsCallable
 } from 'firebase/functions'
-import { FirebaseStorage, getStorage } from 'firebase/storage'
+import { connectStorageEmulator, getStorage } from 'firebase/storage'
 import { Functions } from '~/firebase'
 
 class Firebase {
   public static instance: Firebase
-  public readonly auth: Auth
-  public readonly db: Firestore
-  public readonly storage: FirebaseStorage
-  public readonly functions: FirebaseFunctions
 
   constructor() {
     const apps = getApps()
@@ -23,17 +18,18 @@ class Firebase {
     // initializeAppの二重起動を防ぐために起動済みのFirebaseAppがないか確認する
     if (apps.length === 0) {
       app = initializeApp({
-      apiKey: process.env.NEXT_PUBLIC_FB_API_KEY,
-      authDomain: process.env.NEXT_PUBLIC_FB_AUTH_DOMAIN,
-      databaseURL: process.env.NEXT_PUBLIC_FB_DATABASE_URL,
-      projectId: process.env.NEXT_PUBLIC_FB_PROJECT_ID,
-      storageBucket: process.env.NEXT_PUBLIC_FB_STORAGE_BUCKET,
-      messagingSenderId: process.env.NEXT_PUBLIC_FB_MESSAGING_SENDER_ID,
-      appId: process.env.NEXT_PUBLIC_FB_APP_ID,
-      measurementId: process.env.NEXT_PUBLIC_FB_MEASUREMENT_ID,
-    })
+        apiKey: process.env.NEXT_PUBLIC_FB_API_KEY,
+        authDomain: process.env.NEXT_PUBLIC_FB_AUTH_DOMAIN,
+        databaseURL: process.env.NEXT_PUBLIC_FB_DATABASE_URL,
+        projectId: process.env.NEXT_PUBLIC_FB_PROJECT_ID,
+        storageBucket: process.env.NEXT_PUBLIC_FB_STORAGE_BUCKET,
+        messagingSenderId: process.env.NEXT_PUBLIC_FB_MESSAGING_SENDER_ID,
+        appId: process.env.NEXT_PUBLIC_FB_APP_ID,
+        measurementId: process.env.NEXT_PUBLIC_FB_MEASUREMENT_ID,
+      })
       this.setupDb(app)
       this.setupFunctions()
+      this.setupEmulators()
     } else {
       app = getApp()
     }
@@ -65,6 +61,13 @@ class Firebase {
       Firebase.instance = new Firebase()
     }
     return Firebase.instance
+  }
+
+  private setupEmulators() {
+    console.info("⭐️ use firebase emulators")
+    connectAuthEmulator(this.auth, "http://127.0.0.1:9099")
+    connectFirestoreEmulator(this.db, "127.0.0.1", 8080)
+    connectStorageEmulator(this.storage, "127.0.0.1", 9199)
   }
 
   get analytics() {
