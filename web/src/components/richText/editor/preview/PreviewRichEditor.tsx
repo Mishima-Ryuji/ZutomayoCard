@@ -168,7 +168,7 @@ export const usePreviewRichEditor = (
   const onResetTextareaValue = () => {
     setTextareaValue(richEditor.getCurrentDataText() ?? "")
   }
-  const onResetRichEditor = () => { } // TODO RichEditor初期化時のリセット処理
+  const onResetRichEditor = () => void 0 // TODO RichEditor初期化時のリセット処理
   const previewProps = {
     isEnableRich,
     onChangeIsEnableRich: setIsEnableRich,
