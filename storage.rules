@@ -15,5 +15,10 @@ service firebase.storage {
     match /resized_cards/{id} {
       allow read;
     }
+    
+    match /uniguri_balloons/{id} {
+      allow read;
+      allow create, update: if isAdmin() ;
+    }
   }
 }

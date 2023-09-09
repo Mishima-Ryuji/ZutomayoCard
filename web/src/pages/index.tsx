@@ -23,6 +23,7 @@ import { FaTwitter } from 'react-icons/fa'
 import { DefaultLayout } from '~/components/Layout'
 import { LoginPopup } from '~/components/auth/LoginPopup'
 import { CardList } from '~/components/card/List'
+import { FixedUniguriBalloonView } from '~/components/uniguri_balloon/page/top/FixedUniguriBalloonView'
 import { Card, cardConverter, cardsRef } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
 import { Serialized, deserializeArray, serializeArray } from '~/shared/utils'
@@ -214,6 +215,7 @@ const Page = ({ cards: staticCards }: Props) => {
         </Tabs>
       </Flex>
       {formattedCards && <CardList cards={formattedCards} />}
+      <FixedUniguriBalloonView />
     </DefaultLayout>
   )
 }
