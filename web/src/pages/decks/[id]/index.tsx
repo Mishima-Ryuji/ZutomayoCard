@@ -23,6 +23,7 @@ import Youtube from 'react-youtube'
 import { DefaultLayout } from '~/components/Layout'
 import { CardList } from '~/components/card/List'
 import { RichViewer } from '~/components/richText/viewer/RichViewer'
+import { isPermissionDenied } from '~/errors/isPermissionDeniedOnServer'
 import {
   Card,
   Deck,
@@ -35,23 +36,17 @@ import {
   getDoc,
   getDocs,
   profileConverter,
-  profileRef,
+  profileRef
 } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
-import {
-  Serialized,
-  deserialize,
-  deserializeArray,
-  serialize,
-  serializeArray,
-} from '~/shared/utils'
+import { Serialized, deserialize, deserializeArray, serialize, serializeArray } from '~/shared/utils'
 
 interface Params extends ParsedUrlQuery {
   id: string
 }
 
 type Props = {
-  cards: Serialized<Card>[]
+  cards: Serialized<Card>[] | null
   deck: Serialized<Deck> | null
   deckOwner: Serialized<Profile> | null
 }
@@ -66,23 +61,50 @@ export const getStaticPaths: GetStaticPaths = () => {
 export const getStaticProps: GetStaticProps<Props, Params> = async ({
   params,
 }) => {
-  const cardsSnapshot = await getDocs(cardsRef)
-  const cards = cardsSnapshot.docs.map((doc) => doc.data())
-  const decksSnapshot = params ? await getDoc(deckRef(params.id)) : undefined
-  const deck = decksSnapshot?.data()
-  const deckOwnerSnapshot = deck
-    ? await getDoc(profileRef(deck.created_by))
-    : undefined
-  const deckOwner = deckOwnerSnapshot?.data()
-  const result = {
-    props: {
-      cards: serializeArray(cards),
-      deck: deck ? serialize(deck) : null,
-      deckOwner: deckOwner ? serialize(deckOwner) : null,
-    },
-    revalidate: 10000,
+  let cards: Serialized<Card>[] | null = null
+  let deck: Serialized<Deck> | null = null
+  let deckOwner: Serialized<Profile> | null = null
+
+  try {
+
+    const cardsSnapshot = await getDocs(cardsRef)
+    const cardsData = cardsSnapshot.docs.map((doc) => doc.data())
+    cards = serializeArray(cardsData)
+
+    const decksSnapshot = params ? await getDoc(deckRef(params.id)) : undefined
+    const deckData = decksSnapshot?.data()
+    deck = deckData ? serialize(deckData) : null
+
+    const deckOwnerSnapshot = deck
+      ? await getDoc(profileRef(deck.created_by))
+      : undefined
+    const deckOwnerData = deckOwnerSnapshot?.data()
+    deckOwner = deckOwnerData ? serialize(deckOwnerData) : null
+
+    return {
+      props: {
+        cards,
+        deck,
+        deckOwner,
+      },
+      revalidate: 10_000,
+    }
+  } catch (error) {
+    console.error(error)
+    // サーバ側での権限エラーを回避
+    if (isPermissionDenied(error)) {
+      return {
+        props: {
+          cards,
+          deck,
+          deckOwner,
+        },
+        revalidate: 10_000,
+      }
+    } else {
+      throw error
+    }
   }
-  return result
 }
 
 const Page = ({
@@ -93,15 +115,16 @@ const Page = ({
   const router = useRouter()
   const deckId = router.query.id
   const [cards] = useCollectionDataOnce(cardsRef, {
-    initialValue: deserializeArray(staticCards, { ref: cardConverter }),
+    initialValue: staticCards
+      ? deserializeArray(staticCards, { ref: cardConverter })
+      : undefined,
   })
-  const [deck, loadingDeck] = useDocumentDataOnce(
-    typeof deckId === 'string' ? deckRef(deckId) : null,
+  const [deck, loadingDeck] = useDocumentDataOnce(typeof deckId === 'string' ? deckRef(deckId) : null,
     {
       initialValue: staticDeck
         ? deserialize(staticDeck, { ref: deckConverter })
         : undefined,
-    }
+    },
   )
   const [deckOwner, loadingDeckOwner] = useDocumentDataOnce(
     deck ? profileRef(deck.created_by) : null,
@@ -109,7 +132,7 @@ const Page = ({
       initialValue: staticDeckOwner
         ? deserialize(staticDeckOwner, { ref: profileConverter })
         : undefined,
-    }
+    },
   )
   const deckCards = useMemo(() => {
     return cards && deck
