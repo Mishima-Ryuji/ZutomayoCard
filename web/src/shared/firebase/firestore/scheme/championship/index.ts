@@ -3,7 +3,8 @@ import { getConverter } from '../../converter'
 import { Document } from '../../document'
 import { ChampionshipSubcols } from '../subcollections'
 
-export type ChampionshipColor = "green" | "purple" | "red" | "blue" | "yellow"
+export const championshipColors = ["green", "purple", "red", "blue", "yellow"] as const
+export type ChampionshipColor = (typeof championshipColors)[number]
 
 export interface Championship extends Document {
   readonly ref: DocRef<Championship>
