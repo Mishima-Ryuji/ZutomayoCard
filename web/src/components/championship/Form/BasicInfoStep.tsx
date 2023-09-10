@@ -94,7 +94,7 @@ export const useBasicInfoStep = ({ defaultValue }: BasicInfoStepTypes["hookOptio
     ),
     time_limit_at: controlledFormFieldOf(
       timeLimitAt, setTimeLimitAt,
-      { isValid: Timestamp.now() <= timeLimitAt },
+      { isValid: Timestamp.now() <= timeLimitAt && timeLimitAt.valueOf() <= holdAt.valueOf() },
     ),
   }
   return {
