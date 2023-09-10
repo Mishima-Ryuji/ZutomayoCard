@@ -1,5 +1,7 @@
 import { Box, Input, Textarea } from "@chakra-ui/react"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
+import { getDoc, profileRef } from "~/firebase"
+import { useAuthState } from "~/hooks/useAuthState"
 import { Championship } from "~/shared/firebase/firestore/scheme/championship"
 import { FormField } from "./FormField"
 import { FormStep } from "./FormStep"
@@ -57,6 +59,24 @@ export const useHostInfoStep = ({ defaultValue }: HostInfoStepTypes["hookOptions
   const [hostUid, setHostUid] = useState(defaultValue.host_uid)
   const [hostName, setHostName] = useState(defaultValue.host_name)
   const [hostContact, setHostContact] = useState(defaultValue.host_contact)
+  const { user, loading } = useAuthState()
+  useEffect(() => {
+    if (loading || !user) return
+    (async () => {
+      // useAuthStateのprofileを使うとprofileをloading中なのにprofileLoadingがfalseになってしまうため手動で取得
+      const snapshot = await getDoc(profileRef(user.uid))
+      const profile = snapshot.data()
+      setHostUid(user.uid)
+      if (profile) {
+        // profile
+        setHostName(profile.name)
+        setHostContact(profile.contact)
+      } else {
+        if (user.displayName !== null) setHostName(user.displayName)
+        if (user.email !== null && user.emailVerified) setHostContact(user.email)
+      }
+    })()
+  }, [loading, user])
   const fields: HostInfoStepFields = {
     host_uid: controlledFormFieldOf(
       hostUid, setHostUid,
