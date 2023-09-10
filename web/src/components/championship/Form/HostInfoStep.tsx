@@ -36,19 +36,21 @@ export const InputHostInfoStep: FC<InputHostInfoStepProps> = ({
 }) => {
   return (
     <Box>
-      <FormField label="9. 主催者名">
+      <FormField label="9. 主催者名" errors={fields.host_name.errors}>
         <Input
           value={fields.host_name.value}
           onChange={e => fields.host_name.onChange(e.target.value)}
           isInvalid={!fields.host_name.isValid}
+          placeholder="例) ずと まよお"
         />
       </FormField>
 
-      <FormField label="10. 主催者の連絡先">
+      <FormField label="10. 主催者の連絡先" errors={fields.host_contact.errors}>
         <Textarea
           value={fields.host_contact.value}
           onChange={e => fields.host_contact.onChange(e.target.value)}
           isInvalid={!fields.host_contact.isValid}
+          placeholder="例) メール:uniguri@gmail.com、Twitter:@zutomayolove"
         />
       </FormField>
     </Box>

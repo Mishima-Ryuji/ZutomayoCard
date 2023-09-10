@@ -38,15 +38,16 @@ export const InputBasicInfoStep: FC<InputBasicInfoStepProps> = ({
 }) => {
   return (
     <Box>
-      <FormField label="1. 大会名">
+      <FormField label="1. 大会名" errors={fields.name.errors}>
         <Input
           value={fields.name.value}
           onChange={e => fields.name.onChange(e.target.value)}
           isInvalid={!fields.name.isValid}
+          placeholder="例) ずとまろ会"
         />
       </FormField>
 
-      <FormField label="2. 開催日">
+      <FormField label="2. 開催日" errors={fields.hold_at.errors}>
         <InputTimestamp
           value={fields.hold_at.value}
           onChange={holdAt => fields.hold_at.onChange(holdAt)}
@@ -54,15 +55,16 @@ export const InputBasicInfoStep: FC<InputBasicInfoStepProps> = ({
         />
       </FormField>
 
-      <FormField label="3. 開催場所">
+      <FormField label="3. 開催場所" errors={fields.place.errors}>
         <Textarea
           value={fields.place.value}
           onChange={e => fields.place.onChange(e.target.value)}
           isInvalid={!fields.place.isValid}
+          placeholder="例) 東京都 渋谷区 付近"
         />
       </FormField>
 
-      <FormField label="4. 申し込み締切日">
+      <FormField label="4. 申し込み締切日" errors={fields.time_limit_at.errors}>
         <InputTimestamp
           value={fields.time_limit_at.value}
           onChange={holdAt => fields.time_limit_at.onChange(holdAt)}

@@ -31,7 +31,7 @@ export const InputThemeInfoStep: FC<InputThemeInfoStepProps> = ({
 }) => {
   return (
     <Box>
-      <FormField label="11. カラー">
+      <FormField label="11. カラー" errors={fields.color.errors}>
         <InputChampionshipColor
           color={fields.color.value}
           onChangeColor={fields.color.onChange}

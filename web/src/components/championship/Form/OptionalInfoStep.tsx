@@ -36,35 +36,39 @@ export const InputOptionalInfoStep: FC<InputOptionalInfoStepProps> = ({
 }) => {
   return (
     <Box>
-      <FormField label="5. 大会形式">
+      <FormField label="5. 大会形式" errors={fields.format.errors}>
         <Textarea
           value={fields.format.value}
           onChange={e => fields.format.onChange(e.target.value)}
           isInvalid={!fields.format.isValid}
+          placeholder="例) トーナメント"
         />
       </FormField>
 
-      <FormField label="6. 参加費">
+      <FormField label="6. 参加費" errors={fields.entry_fee.errors}>
         <Textarea
           value={fields.entry_fee.value}
           onChange={e => fields.entry_fee.onChange(e.target.value)}
           isInvalid={!fields.entry_fee.isValid}
+          placeholder="例) 無料、20000円÷参加人数"
         />
       </FormField>
 
-      <FormField label="7. 持ち物">
+      <FormField label="7. 持ち物" errors={fields.need_items.errors}>
         <Textarea
           value={fields.need_items.value}
           onChange={e => fields.need_items.onChange(e.target.value)}
           isInvalid={!fields.need_items.isValid}
+          placeholder="例) デッキ、しゃもじ"
         />
       </FormField>
 
-      <FormField label="8. その他 注意事項">
+      <FormField label="8. その他 注意事項" errors={fields.detail.errors}>
         <Textarea
           value={fields.detail.value}
           onChange={e => fields.detail.onChange(e.target.value)}
           isInvalid={!fields.detail.isValid}
+          placeholder="例) 集まれ！腕に自信のあるずとまろ！"
         />
       </FormField>
     </Box>
