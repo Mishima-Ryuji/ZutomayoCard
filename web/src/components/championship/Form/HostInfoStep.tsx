@@ -3,9 +3,8 @@ import { FC, useState } from "react"
 import { Championship } from "~/shared/firebase/firestore/scheme/championship"
 import { FormField } from "./FormField"
 import { FormStep } from "./FormStep"
-import { isValidAll } from "./util"
 import { ControlledFormField, InputStepTypes } from "./type"
-import { controlledFormFieldOf } from "./util"
+import { controlledFormFieldOf, isValidAll } from "./util"
 
 export type HostInfoInput = Pick<Championship,
   | "host_uid"
@@ -75,6 +74,13 @@ export const useHostInfoStep = ({ defaultValue }: HostInfoStepTypes["hookOptions
   return {
     fields,
     isValid: isValidAll(fields),
+    get input(): HostInfoInput {
+      return {
+        host_uid: hostUid,
+        host_name: hostName,
+        host_contact: hostContact,
+      }
+    },
     props: {
       input: {
         fields,

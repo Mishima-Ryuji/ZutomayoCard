@@ -3,9 +3,8 @@ import { FC, useState } from "react"
 import { Championship } from "~/shared/firebase/firestore/scheme/championship"
 import { FormField } from "./FormField"
 import { FormStep } from "./FormStep"
-import { isValidAll } from "./util"
 import { ControlledFormField, InputStepTypes } from "./type"
-import { controlledFormFieldOf } from "./util"
+import { controlledFormFieldOf, isValidAll } from "./util"
 
 export type OptionalInfoInput = Pick<Championship,
   | "format"
@@ -98,6 +97,14 @@ export const useOptionalInfoStep = ({ defaultValue }: OptionalInfoStepTypes["hoo
   return {
     fields,
     isValid: isValidAll(fields),
+    get input(): OptionalInfoInput {
+      return {
+        format,
+        entry_fee: entryFee,
+        need_items: needItems,
+        detail,
+      }
+    },
     props: {
       input: {
         fields,

@@ -52,6 +52,11 @@ export const useThemeInfoStep = ({ defaultValue }: ThemeInfoStepTypes["hookOptio
   return {
     fields,
     isValid: isValidAll(fields),
+    get input(): ThemeInfoInput {
+      return {
+        color,
+      }
+    },
     props: {
       input: {
         fields,

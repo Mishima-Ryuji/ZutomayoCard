@@ -100,6 +100,14 @@ export const useBasicInfoStep = ({ defaultValue }: BasicInfoStepTypes["hookOptio
   return {
     fields,
     isValid: isValidAll(fields),
+    get input(): BasicInfoInput {
+      return {
+        name,
+        hold_at: holdAt,
+        place,
+        time_limit_at: timeLimitAt,
+      }
+    },
     props: {
       input: {
         fields,
