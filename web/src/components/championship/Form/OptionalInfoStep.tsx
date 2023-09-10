@@ -79,19 +79,19 @@ export const useOptionalInfoStep = ({ defaultValue }: OptionalInfoStepTypes["hoo
   const fields: OptionalInfoFields = {
     format: controlledFormFieldOf(
       format, setFormat,
-      { isValid: true },
+      { errors: () => void 0 },
     ),
     entry_fee: controlledFormFieldOf(
       entryFee, setEntryFee,
-      { isValid: true },
+      { errors: () => void 0 },
     ),
     need_items: controlledFormFieldOf(
       needItems, setNeedItems,
-      { isValid: true },
+      { errors: () => void 0 },
     ),
     detail: controlledFormFieldOf(
       detail, setDetail,
-      { isValid: true },
+      { errors: () => void 0 },
     ),
   }
   return {

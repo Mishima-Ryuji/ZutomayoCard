@@ -46,7 +46,11 @@ export const useThemeInfoStep = ({ defaultValue }: ThemeInfoStepTypes["hookOptio
   const fields: ThemeInfoStepFields = {
     color: controlledFormFieldOf(
       color, setColor,
-      { isValid: championshipColors.includes(color) }
+      {
+        errors: e => {
+          if (!(championshipColors.includes(color))) e.push("大会のカラーが不正です。")
+        },
+      }
     ),
   }
   return {

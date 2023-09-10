@@ -15,11 +15,13 @@ export interface ControlledFormField<T> {
   value: T
   onChange: (value: T) => void
   isValid: boolean
+  errors: string[]
 }
 
 export interface UncontrolledFormField<T> {
   getValue(): T
   isValid: boolean
+  errors: string[]
 }
 
 export type FormField<T> = ControlledFormField<T> | UncontrolledFormField<T>

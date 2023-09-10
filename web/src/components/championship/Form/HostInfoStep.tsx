@@ -80,15 +80,27 @@ export const useHostInfoStep = ({ defaultValue }: HostInfoStepTypes["hookOptions
   const fields: HostInfoStepFields = {
     host_uid: controlledFormFieldOf(
       hostUid, setHostUid,
-      { isValid: hostUid !== "" }
+      {
+        errors: e => {
+          if (hostUid === "") e.push("ログインする必要があります。")
+        },
+      }
     ),
     host_name: controlledFormFieldOf(
       hostName, setHostName,
-      { isValid: hostName.trim() !== "" }
+      {
+        errors: e => {
+          if (hostName.trim() === "") e.push("主催者名は必須です。")
+        },
+      }
     ),
     host_contact: controlledFormFieldOf(
       hostContact, setHostContact,
-      { isValid: hostContact.trim() !== "" }
+      {
+        errors: e => {
+          if (hostContact.trim() === "") e.push("主催者の連絡先は必須です。")
+        },
+      }
     ),
   }
   return {

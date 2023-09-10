@@ -82,19 +82,36 @@ export const useBasicInfoStep = ({ defaultValue }: BasicInfoStepTypes["hookOptio
   const fields: BasicInfoStepFields = {
     name: controlledFormFieldOf(
       name, setName,
-      { isValid: name.trim() !== "" },
+      {
+        errors: e => {
+          if (name.trim() === "") e.push("大会名は必須です。")
+        },
+      },
     ),
     hold_at: controlledFormFieldOf(
       holdAt, setHoldAt,
-      { isValid: Timestamp.now() <= holdAt },
+      {
+        errors: e => {
+          if (holdAt < Timestamp.now()) e.push("現在よりも後の日付を入力する必要があります。")
+        },
+      },
     ),
     place: controlledFormFieldOf(
       place, setPlace,
-      { isValid: place.trim() !== "" },
+      {
+        errors: e => {
+          if (place.trim() === "") e.push("開催場所は必須です。")
+        },
+      },
     ),
     time_limit_at: controlledFormFieldOf(
       timeLimitAt, setTimeLimitAt,
-      { isValid: Timestamp.now() <= timeLimitAt && timeLimitAt.valueOf() <= holdAt.valueOf() },
+      {
+        errors: e => {
+          if (timeLimitAt < Timestamp.now()) e.push("現在よりも後の日付を入力する必要があります。")
+          if (holdAt.valueOf() < timeLimitAt.valueOf()) e.push("開催日よりも前の時刻を入力する必要があります。")
+        },
+      },
     ),
   }
   return {
