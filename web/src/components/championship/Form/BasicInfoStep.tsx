@@ -5,6 +5,7 @@ import { Timestamp } from "~/firebase"
 import { Championship } from "~/shared/firebase/firestore/scheme/championship"
 import { FormField } from "./FormField"
 import { FormStep } from "./FormStep"
+import { Suggest, SuggestButton } from "./Suggest"
 import { ControlledFormField, InputStepTypes } from "./type"
 import { controlledFormFieldOf, isValidAll } from "./util"
 
@@ -62,6 +63,11 @@ export const InputBasicInfoStep: FC<InputBasicInfoStepProps> = ({
           isInvalid={!fields.place.isValid}
           placeholder="例) 東京都 渋谷区 付近"
         />
+        <Suggest>
+          <SuggestButton onClick={() => fields.place.onChange(fields.place.value + "オンライン")}>
+            オンライン
+          </SuggestButton>
+        </Suggest>
       </FormField>
 
       <FormField label="4. 申し込み締切日" errors={fields.time_limit_at.errors}>

@@ -1,8 +1,9 @@
-import { Box, Textarea } from "@chakra-ui/react"
+import { Box, Button, Textarea } from "@chakra-ui/react"
 import { FC, useState } from "react"
 import { Championship } from "~/shared/firebase/firestore/scheme/championship"
 import { FormField } from "./FormField"
 import { FormStep } from "./FormStep"
+import { Suggest, SuggestButton } from "./Suggest"
 import { ControlledFormField, InputStepTypes } from "./type"
 import { controlledFormFieldOf, isValidAll } from "./util"
 
@@ -28,6 +29,8 @@ export const OptionalInfoStep: FC = () => {
   )
 }
 
+const formatSuggestions = ["トーナメント", "総当たり", "スイスドロー", "トーナメント", "ダブルエリミネーション"]
+
 export interface InputOptionalInfoStepProps {
   fields: OptionalInfoFields
 }
@@ -43,6 +46,14 @@ export const InputOptionalInfoStep: FC<InputOptionalInfoStepProps> = ({
           isInvalid={!fields.format.isValid}
           placeholder="例) トーナメント"
         />
+        <Suggest>
+          {formatSuggestions.map(format =>
+            <Button key={format} size="xs" onClick={() => fields.format.onChange(fields.format.value + format)}>
+              {format}
+            </Button>
+          )}
+        </Suggest>
+
       </FormField>
 
       <FormField label="6. 参加費" errors={fields.entry_fee.errors}>
@@ -52,6 +63,11 @@ export const InputOptionalInfoStep: FC<InputOptionalInfoStepProps> = ({
           isInvalid={!fields.entry_fee.isValid}
           placeholder="例) 無料、20000円÷参加人数"
         />
+        <Suggest>
+          <SuggestButton onClick={() => fields.entry_fee.onChange(fields.entry_fee.value + "無料")}>
+            無料
+          </SuggestButton>
+        </Suggest>
       </FormField>
 
       <FormField label="7. 持ち物" errors={fields.need_items.errors}>
@@ -61,6 +77,11 @@ export const InputOptionalInfoStep: FC<InputOptionalInfoStepProps> = ({
           isInvalid={!fields.need_items.isValid}
           placeholder="例) デッキ、しゃもじ"
         />
+        <Suggest>
+          <SuggestButton onClick={() => fields.need_items.onChange(fields.need_items.value + "デッキ")}>
+            デッキ
+          </SuggestButton>
+        </Suggest>
       </FormField>
 
       <FormField label="8. その他 注意事項" errors={fields.detail.errors}>
