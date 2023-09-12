@@ -1,6 +1,6 @@
 import { Heading, Stepper, useSteps } from '@chakra-ui/react'
 import { NextPage } from 'next'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Celebration, useCelebration } from '~/components/Celebration'
 import { DefaultLayout } from '~/components/Layout'
 import { Toggle } from '~/components/Toggle'
@@ -46,6 +46,15 @@ const NewChampionshipPage: NextPage = () => {
     index: 0,
     count: 4,
   })
+  const stepperRef = useRef<HTMLDivElement>(null)
+  const handlePrev = () => {
+    goToPrevious()
+    stepperRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+  const handleNext = () => {
+    goToNext()
+    stepperRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
   const isBasicInfoStep = activeStep === 0
   const isOptionalInfoStep = activeStep === 1
   const isHostInfoStep = activeStep === 2
@@ -83,6 +92,7 @@ const NewChampionshipPage: NextPage = () => {
     }
   )
   const { celebrate } = useCelebration()
+
   return (
     <DefaultLayout head={{ title: "大会の登録" }}>
 
@@ -90,7 +100,7 @@ const NewChampionshipPage: NextPage = () => {
         大会の登録
       </Heading>
 
-      <Stepper index={activeStep} w="full" overflowX="auto" my="8">
+      <Stepper index={activeStep} w="full" overflowX="auto" my="8" ref={stepperRef}>
         <BasicInfoStep />
         <OptionalInfoStep />
         <HostInfoStep />
@@ -103,8 +113,8 @@ const NewChampionshipPage: NextPage = () => {
         />
         <Navigation
           mt={4}
-          prev={{ isDisabled: true, onClick: goToPrevious }}
-          next={{ isDisabled: !basicInfoStep.isValid, onClick: goToNext }}
+          prev={{ isDisabled: true, onClick: handlePrev }}
+          next={{ isDisabled: !basicInfoStep.isValid, onClick: handleNext }}
         />
       </Toggle>
 
@@ -114,8 +124,8 @@ const NewChampionshipPage: NextPage = () => {
         />
         <Navigation
           mt={4}
-          prev={{ isDisabled: false, onClick: goToPrevious }}
-          next={{ isDisabled: !optionalInfoStep.isValid, onClick: goToNext }}
+          prev={{ isDisabled: false, onClick: handlePrev }}
+          next={{ isDisabled: !optionalInfoStep.isValid, onClick: handleNext }}
         />
       </Toggle>
 
@@ -125,8 +135,8 @@ const NewChampionshipPage: NextPage = () => {
         />
         <Navigation
           mt={4}
-          prev={{ isDisabled: false, onClick: goToPrevious }}
-          next={{ isDisabled: !hostInfoStep.isValid, onClick: goToNext }}
+          prev={{ isDisabled: false, onClick: handlePrev }}
+          next={{ isDisabled: !hostInfoStep.isValid, onClick: handleNext }}
         />
       </Toggle>
 
@@ -136,8 +146,8 @@ const NewChampionshipPage: NextPage = () => {
         />
         <Navigation
           mt={4}
-          prev={{ isDisabled: false, onClick: goToPrevious }}
-          next={{ isDisabled: !themeInfoStep.isValid, onClick: goToNext }}
+          prev={{ isDisabled: false, onClick: handlePrev }}
+          next={{ isDisabled: !themeInfoStep.isValid, onClick: handleNext }}
         />
       </Toggle>
 
@@ -147,7 +157,7 @@ const NewChampionshipPage: NextPage = () => {
           isSubmitting={isCreating}
           isSubmitted={isCreated}
           onSubmit={handleCreate}
-          onPrev={goToPrevious}
+          onPrev={handlePrev}
         />
         <Celebration />
       </Toggle>
