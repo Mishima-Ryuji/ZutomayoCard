@@ -37,7 +37,8 @@
     "subcols",
     "uids",
     "vercel",
-    "chakra"
+    "chakra",
+    "eyecatch"
   ],
   "typescript.tsdk": "node_modules/typescript/lib"
 }
