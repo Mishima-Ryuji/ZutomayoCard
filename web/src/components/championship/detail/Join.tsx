@@ -15,6 +15,8 @@ interface JoinChampionshipFormProps {
   championship: Championship
 }
 export const JoinChampionshipForm: FC<JoinChampionshipFormProps> = ({ championship }) => {
+  const isTimeLimited = championship.time_limit_at.toMillis() <= Date.now()
+
   const [name, setName] = useState("")
   const [contact, setContact] = useState("")
   const [detail, setDetail] = useState("")
@@ -104,13 +106,13 @@ export const JoinChampionshipForm: FC<JoinChampionshipFormProps> = ({ championsh
 
   return (
     <Box>
-      <Heading size="lg" mb="3">
+      <Heading size="lg">
         {championship.name}
         {isJoined ? "の応募内容" : "に応募"}
       </Heading>
 
-      {notLogin
-        ? <Alert status="warning" my="3">
+      {notLogin &&
+        <Alert status="warning" my="3">
           <AlertIcon />
           <Stack>
             <AlertTitle>
@@ -126,7 +128,19 @@ export const JoinChampionshipForm: FC<JoinChampionshipFormProps> = ({ championsh
             </HStack>
           </Stack>
         </Alert>
-        : <>
+      }
+      {isTimeLimited &&
+        <Alert status="warning" my="3">
+          <AlertIcon />
+          <Stack>
+            <AlertTitle>
+              この大会の応募期間は終了しています。
+            </AlertTitle>
+          </Stack>
+        </Alert>
+      }
+      {!notLogin &&
+        <>
           <FormField
             label="名前"
             errors={fields.name.errors}
@@ -134,6 +148,7 @@ export const JoinChampionshipForm: FC<JoinChampionshipFormProps> = ({ championsh
             <Input
               value={name}
               onChange={e => setName(e.target.value)}
+              isDisabled={isTimeLimited}
             />
           </FormField>
 
@@ -145,6 +160,7 @@ export const JoinChampionshipForm: FC<JoinChampionshipFormProps> = ({ championsh
             <Textarea
               value={contact}
               onChange={e => setContact(e.target.value)}
+              isDisabled={isTimeLimited}
             />
           </FormField>
 
@@ -155,6 +171,7 @@ export const JoinChampionshipForm: FC<JoinChampionshipFormProps> = ({ championsh
             <Textarea
               value={detail}
               onChange={e => setDetail(e.target.value)}
+              isDisabled={isTimeLimited}
             />
           </FormField>
 
@@ -162,7 +179,7 @@ export const JoinChampionshipForm: FC<JoinChampionshipFormProps> = ({ championsh
             <Button
               size="lg"
               colorScheme={championship.color}
-              isDisabled={!isValid || isSubmitting}
+              isDisabled={!isValid || isSubmitting || isTimeLimited}
               onClick={handleSubmit}
             >
               {isJoined ? "応募内容を更新" : "応募確定"}
@@ -172,7 +189,7 @@ export const JoinChampionshipForm: FC<JoinChampionshipFormProps> = ({ championsh
                 variant="outline"
                 colorScheme={championship.color}
                 onClick={handleCancel}
-                isDisabled={isCanceling}
+                isDisabled={isCanceling || isTimeLimited}
               >
                 応募をキャンセル
               </Button>
@@ -180,6 +197,7 @@ export const JoinChampionshipForm: FC<JoinChampionshipFormProps> = ({ championsh
           </VStack>
         </>
       }
+
       <LoginPopup
         show={loginPopup.isOpen}
         onHide={loginPopup.onClose}
