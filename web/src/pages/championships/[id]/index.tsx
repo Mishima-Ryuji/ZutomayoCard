@@ -1,17 +1,25 @@
 import { Box } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useDocumentDataOnce } from 'react-firebase-hooks/firestore'
+import { useDocumentData } from 'react-firebase-hooks/firestore'
 import { DefaultLayout } from '~/components/Layout'
 import { ChampionshipEyecatch } from '~/components/championship/Eyecatch'
+import { ChampionshipInfo } from '~/components/championship/detail/ChampionshipInfo'
+import { useAuthState } from '~/hooks/useAuthState'
 import { championshipRef } from '~/shared/firebase/firestore/scheme/championship'
 
 interface Props {
 }
 const ChampionshipDetailPage: NextPage<Props> = () => {
   const router = useRouter()
-  const championshipId = router.query.id as string
-  const [championship] = useDocumentDataOnce(championshipRef(championshipId))
+  const championshipId = router.query.id
+  const [championship] = useDocumentData(
+    typeof championshipId === "string"
+      ? championshipRef(championshipId)
+      : null
+  )
+  const { user } = useAuthState()
+  const isHost = user?.uid === championship?.host_uid
   return (
     <DefaultLayout head={{}}>
       {championship &&
