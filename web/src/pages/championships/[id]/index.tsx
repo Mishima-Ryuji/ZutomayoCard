@@ -1,4 +1,4 @@
-import { Box, Card, Grid, GridItem, Skeleton, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import { Box, Card, CardBody, Grid, GridItem, Skeleton, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import { Timestamp } from 'firebase/firestore'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
 import { DefaultLayout } from '~/components/Layout'
 import { ChampionshipEyecatch } from '~/components/championship/Eyecatch'
+import { ChampionshipSideMenu } from '~/components/championship/SideMenu'
 import { ChampionshipInfo } from '~/components/championship/detail/ChampionshipInfo'
 import { ChampionshipEditForm } from '~/components/championship/detail/Edit'
 import { JoinChampionshipForm } from '~/components/championship/detail/Join'
@@ -101,10 +102,10 @@ const ChampionshipDetailPage: NextPage<Props> = ({
               </Tab>
           }
         </TabList>
-        <Grid templateColumns={{ base: "100%", md: "1fr auto" }} gap="8">
+        <Grid templateColumns={{ base: "100%", md: "1fr auto" }} gap="8" textAlign="start">
           <GridItem>
             <Card>
-              <TabPanels textAlign="start">
+              <TabPanels>
                 <TabPanel>
                   {championship
                     ? <ChampionshipInfo
@@ -137,7 +138,12 @@ const ChampionshipDetailPage: NextPage<Props> = ({
             </Card>
           </GridItem>
           <GridItem>
-            サイドバーサイドバーサイドバー
+            <ChampionshipSideMenu />
+            <Card my="8">
+              <CardBody>
+                hoge
+              </CardBody>
+            </Card>
           </GridItem>
         </Grid>
       </Tabs>

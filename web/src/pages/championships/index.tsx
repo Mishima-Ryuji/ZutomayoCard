@@ -1,12 +1,12 @@
-import { Alert, AlertIcon, AlertTitle, Box, Button, Card, CardBody, CardHeader, Link as ChakraLink, Divider, Grid, GridItem, Heading, List, ListItem, Spinner, VStack, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
+import { Alert, AlertIcon, AlertTitle, Box, Button, Card, CardBody, CardHeader, Divider, Grid, GridItem, Heading, Spinner, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
 import { FirebaseError } from 'firebase/app'
 import { documentId, query, where } from 'firebase/firestore'
 import { NextPage } from 'next'
-import NextLink from "next/link"
 import { FC } from 'react'
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore'
 import { DefaultLayout } from '~/components/Layout'
 import { ChampionshipList } from '~/components/championship/List'
+import { ChampionshipSideMenu } from '~/components/championship/SideMenu'
 import { useAuthState } from '~/hooks/useAuthState'
 import { joinedChampionshipRefs, participantToChampionshipRef } from '~/models/championship'
 import { Championship, championshipsRef } from '~/shared/firebase/firestore/scheme/championship'
@@ -47,7 +47,7 @@ const ChampionshipsListPage: NextPage<Props> = () => {
           />
         </GridItem>
         <GridItem py="3">
-          <SideBar />
+          <ChampionshipSideMenu />
         </GridItem>
       </Grid>
     </DefaultLayout >
@@ -131,30 +131,5 @@ const SummarySection: FC<SummarySectionProps> = ({ championships, joinedChampion
         />
       }
     </Card>
-  )
-}
-
-const SideBar: FC = () => {
-  return (
-    <VStack alignItems="flex-start">
-      <List>
-        <ListItem>
-          <ChakraLink as={NextLink} href="/championships">
-            ▶︎ ダッシュボード
-          </ChakraLink>
-        </ListItem>
-        <ListItem>
-          <ChakraLink as={NextLink} href="/championships#ongoing">
-            ▶︎ 開催中の大会
-          </ChakraLink>
-        </ListItem>
-        <Divider my="3" />
-        <ListItem>
-          <ChakraLink as={NextLink} href="/championships/new">
-            ▶︎ 大会の登録
-          </ChakraLink>
-        </ListItem>
-      </List >
-    </VStack >
   )
 }
