@@ -7,6 +7,7 @@ import { DefaultLayout } from '~/components/Layout'
 import { ChampionshipEyecatch } from '~/components/championship/Eyecatch'
 import { ChampionshipInfo } from '~/components/championship/detail/ChampionshipInfo'
 import { ChampionshipEditForm } from '~/components/championship/detail/Edit'
+import { JoinChampionshipForm } from '~/components/championship/detail/Join'
 import { useAuthState } from '~/hooks/useAuthState'
 import { championshipRef } from '~/shared/firebase/firestore/scheme/championship'
 
@@ -73,7 +74,12 @@ const ChampionshipDetailPage: NextPage<Props> = () => {
                     }
                   </TabPanel>
                   : <TabPanel>
-                    応募たぶ
+                    {championship
+                      ? <JoinChampionshipForm
+                        championship={championship}
+                      />
+                      : <Spinner />
+                    }
                   </TabPanel>
                 }
                 <TabPanel>
