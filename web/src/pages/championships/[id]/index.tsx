@@ -2,6 +2,7 @@ import { Box, Card, Grid, GridItem, Skeleton, Spinner, Tab, TabList, TabPanel, T
 import { Timestamp } from 'firebase/firestore'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
 import { DefaultLayout } from '~/components/Layout'
 import { ChampionshipEyecatch } from '~/components/championship/Eyecatch'
@@ -23,6 +24,14 @@ const ChampionshipDetailPage: NextPage<Props> = () => {
   )
   const { user } = useAuthState()
   const isHost = user?.uid === championship?.host_uid
+
+  const [tab, setTab] = useState(0)
+  useEffect(() => {
+    const tab = router.query.tab
+    if (tab === "join") {
+      setTab(1)
+    }
+  }, [router.query.tab])
   return (
     <DefaultLayout head={{}}>
       <Box px={["0", "12"]} py="12" w="full">
@@ -36,7 +45,13 @@ const ChampionshipDetailPage: NextPage<Props> = () => {
         </Skeleton>
       </Box>
 
-      <Tabs variant="soft-rounded" colorScheme={championship?.color} align="center">
+      <Tabs
+        variant="soft-rounded"
+        colorScheme={championship?.color ?? "gray"}
+        align="center"
+        index={tab}
+        onChange={setTab}
+      >
         <TabList my="6">
           <Tab>
             大会情報
