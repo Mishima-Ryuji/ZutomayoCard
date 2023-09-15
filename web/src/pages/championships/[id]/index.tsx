@@ -70,14 +70,13 @@ const ChampionshipDetailPage: NextPage<Props> = ({
   return (
     <DefaultLayout head={{}}>
       <Box px={["0", "12"]} py="12" w="full">
-        <Skeleton isLoaded={!!championship}>
-          <ChampionshipEyecatch
-            name={championship?.name ?? "..."}
-            hostName={championship?.host_name ?? "..."}
-            holdAt={championship?.hold_at ?? Timestamp.fromMillis(0)}
-            color={championship?.color ?? "green"}
-          />
-        </Skeleton>
+        <ChampionshipEyecatch
+          isLoading={!championship}
+          name={championship?.name ?? "..."}
+          hostName={championship?.host_name ?? "..."}
+          holdAt={championship?.hold_at ?? Timestamp.fromMillis(0)}
+          color={championship?.color ?? "green"}
+        />
       </Box>
 
       <Tabs
