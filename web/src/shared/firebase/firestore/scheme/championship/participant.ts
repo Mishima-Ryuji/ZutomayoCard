@@ -11,7 +11,7 @@ export interface Participant extends Document {
   name: string
   detail: string
   contact: string
-  uid: string | null // 匿名認証を利用すれば要らなくなる(idがでよくなる)
+  uid: string // 認証必須
 }
 
 export const participantConverter = getConverter<Participant>(ParticipantSubcols)
