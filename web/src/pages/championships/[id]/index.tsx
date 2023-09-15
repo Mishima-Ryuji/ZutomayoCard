@@ -22,16 +22,17 @@ const ChampionshipDetailPage: NextPage<Props> = () => {
   const isHost = user?.uid === championship?.host_uid
   return (
     <DefaultLayout head={{}}>
-      {championship &&
         <Box px={["0", "12"]} py="12" w="full">
+        <Skeleton isLoaded={!!championship}>
           <ChampionshipEyecatch
-            name={championship.name}
-            hostName={championship.host_name}
-            holdAt={championship.hold_at}
-            color={championship.color}
+            name={championship?.name ?? "..."}
+            hostName={championship?.host_name ?? "..."}
+            holdAt={championship?.hold_at ?? Timestamp.fromMillis(0)}
+            color={championship?.color ?? "green"}
           />
+        </Skeleton>
         </Box>
-      }
+
     </DefaultLayout>
   )
 }
