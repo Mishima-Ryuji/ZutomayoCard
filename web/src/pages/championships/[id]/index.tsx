@@ -1,6 +1,6 @@
 import { Box, Card, Grid, GridItem, Skeleton, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import { Timestamp } from 'firebase/firestore'
-import { NextPage } from 'next'
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
@@ -9,18 +9,53 @@ import { ChampionshipEyecatch } from '~/components/championship/Eyecatch'
 import { ChampionshipInfo } from '~/components/championship/detail/ChampionshipInfo'
 import { ChampionshipEditForm } from '~/components/championship/detail/Edit'
 import { JoinChampionshipForm } from '~/components/championship/detail/Join'
+import { getDoc, getDocs } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
-import { championshipRef } from '~/shared/firebase/firestore/scheme/championship'
+import { Championship, championshipConverter, championshipRef, championshipsRef } from '~/shared/firebase/firestore/scheme/championship'
+import { Serialized, deserialize, serialize } from '~/shared/utils'
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const championships = await getDocs(championshipsRef)
+  return {
+    paths: championships.docs.map(doc => `/championships/${doc.id}`),
+    fallback: "blocking",
+  }
+}
+
+export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
+  const id = ctx.params?.id
+  if (typeof id !== "string") {
+    return {
+      notFound: true,
+    }
+  }
+  const snapshot = await getDoc(championshipRef(id))
+  const championship = snapshot.data()
+  if (!championship) {
+    return {
+      notFound: true,
+    }
+  }
+  return {
+    props: {
+      championship: serialize(championship),
+    },
+  }
+}
 
 interface Props {
+  championship: Serialized<Championship>
 }
-const ChampionshipDetailPage: NextPage<Props> = () => {
+const ChampionshipDetailPage: NextPage<Props> = ({
+  championship: staticChampionship
+}) => {
   const router = useRouter()
   const championshipId = router.query.id
   const [championship] = useDocumentData(
     typeof championshipId === "string"
       ? championshipRef(championshipId)
-      : null
+      : null,
+    { initialValue: deserialize(staticChampionship, { ref: championshipConverter }) },
   )
   const { user } = useAuthState()
   const isHost = user?.uid === championship?.host_uid
