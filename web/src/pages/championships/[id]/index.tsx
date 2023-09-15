@@ -1,4 +1,4 @@
-import { Box, Card, Grid, GridItem, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import { Box, Card, Grid, GridItem, Skeleton, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import { Timestamp } from 'firebase/firestore'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
@@ -6,6 +6,7 @@ import { useDocumentData } from 'react-firebase-hooks/firestore'
 import { DefaultLayout } from '~/components/Layout'
 import { ChampionshipEyecatch } from '~/components/championship/Eyecatch'
 import { ChampionshipInfo } from '~/components/championship/detail/ChampionshipInfo'
+import { ChampionshipEditForm } from '~/components/championship/detail/Edit'
 import { useAuthState } from '~/hooks/useAuthState'
 import { championshipRef } from '~/shared/firebase/firestore/scheme/championship'
 
@@ -64,7 +65,12 @@ const ChampionshipDetailPage: NextPage<Props> = () => {
                 </TabPanel>
                 {isHost
                   ? <TabPanel>
-                    編集たぶ
+                    {championship
+                      ? <ChampionshipEditForm
+                        defaultValue={championship}
+                      />
+                      : <Spinner />
+                    }
                   </TabPanel>
                   : <TabPanel>
                     応募たぶ
