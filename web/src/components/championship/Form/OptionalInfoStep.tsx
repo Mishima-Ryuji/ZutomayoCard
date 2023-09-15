@@ -29,7 +29,7 @@ export const OptionalInfoStep: FC = () => {
   )
 }
 
-const formatSuggestions = ["トーナメント", "総当たり", "スイスドロー", "トーナメント", "ダブルエリミネーション"]
+const formatSuggestions = ["トーナメント", "総当たり", "スイスドロー", "ダブルエリミネーション"]
 
 export interface InputOptionalInfoStepProps {
   fields: OptionalInfoFields
