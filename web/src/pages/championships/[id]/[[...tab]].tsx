@@ -70,7 +70,7 @@ const ChampionshipDetailPage: NextPage<Props> = ({
 
   const [tab, setTab] = useState(0)
   useEffect(() => {
-    const tab = router.query.tab
+    const tab = router.query.tab?.[0]
     if (tab === "join") {
       setTab(1)
     }
@@ -202,7 +202,7 @@ const SideBar: FC<SideBarProps> = ({ championship, participants }) => {
                 まだ参加者がいません。
                 <ChakraLink
                   as={NextLink}
-                  href={`/championships/${championship.id}?tab=join`}
+                  href={`/championships/${championship.id}/join`}
                   color={championship.color}
                 >
                   応募する

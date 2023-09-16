@@ -36,7 +36,7 @@ export const ChampionshipListItem: FC<ChampionshipListItemProps> = ({ championsh
         </Button>
         <Button
           as={NextLink}
-          href={`/championships/${championship.id}?tab=join`}
+          href={`/championships/${championship.id}/join`}
           variant="outline"
           colorScheme={championship.color}
           leftIcon={<>✋</>}
