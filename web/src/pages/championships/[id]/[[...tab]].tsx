@@ -145,12 +145,10 @@ const ChampionshipDetailPage: NextPage<Props> = ({
             </Card>
           </GridItem>
           <GridItem maxW="250px">
-            {championship && participants &&
-              <SideBar
-                championship={championship}
-                participants={participants}
-              />
-            }
+            <SideBar
+              championship={championship}
+              participants={participants}
+            />
           </GridItem>
         </Grid>
       </Tabs>
@@ -161,58 +159,65 @@ const ChampionshipDetailPage: NextPage<Props> = ({
 export default ChampionshipDetailPage
 
 interface SideBarProps {
-  championship: Championship
-  participants: Participant[]
+  championship: Championship | undefined
+  participants: Participant[] | undefined
 }
 const SideBar: FC<SideBarProps> = ({ championship, participants }) => {
   return (
     <>
       <ChampionshipSideMenu />
-      <Card my="8">
-        <CardBody>
-          <Heading size="md">
-            主催者
-          </Heading>
-          <Text my="2">
-            {championship.host_name}
-          </Text>
-          <Text color="gray.500">
-            {championship.host_contact}
-          </Text>
-        </CardBody>
-      </Card>
-      <Card>
-        <CardBody>
-          <Heading size="md">
-            参加者
-          </Heading>
-          <List>
-            {participants.map(participant =>
-              <ListItem key={participant.id}>
-                <Text>
-                  {participant.name}
-                </Text>
-                <Text color="gray.500" pl="4">
-                  {participant.contact}
-                </Text>
-              </ListItem>
-            )}
-            {participants.length === 0 &&
-              <ListItem>
-                まだ参加者がいません。
-                <ChakraLink
-                  as={NextLink}
-                  href={`/championships/${championship.id}/join`}
-                  color={championship.color}
-                >
-                  応募する
-                </ChakraLink>
-                。
-              </ListItem>
-            }
-          </List>
-        </CardBody>
-      </Card>
+
+      {championship &&
+        <Card my="8">
+          <CardBody>
+            <Heading size="md">
+              主催者
+            </Heading>
+            <Text my="2">
+              {championship.host_name}
+            </Text>
+            <Text color="gray.500">
+              {championship.host_contact}
+            </Text>
+          </CardBody>
+        </Card>
+      }
+
+      {championship && participants &&
+        <Card>
+          <CardBody>
+            <Heading size="md">
+              参加者
+            </Heading>
+            <List>
+              {participants.map(participant =>
+                <ListItem key={participant.id}>
+                  <Text>
+                    {participant.name}
+                  </Text>
+                  <Text color="gray.500" pl="4">
+                    {participant.contact}
+                  </Text>
+                </ListItem>
+              )}
+              {participants.length === 0 &&
+                <ListItem>
+                  まだ参加者がいません。
+                  <ChakraLink
+                    as={NextLink}
+                    href={`/championships/${championship.id}/join`}
+                    color={championship.color}
+                  >
+                    応募する
+                  </ChakraLink>
+                  。
+                </ListItem>
+              }
+            </List>
+          </CardBody>
+        </Card>
+      }
+
     </>
   )
 }
