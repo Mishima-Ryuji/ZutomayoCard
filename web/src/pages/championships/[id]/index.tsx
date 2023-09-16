@@ -1,9 +1,10 @@
-import { Box, Card, CardBody, Grid, GridItem, Skeleton, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import { Box, Card, CardBody, Link as ChakraLink, Grid, GridItem, Heading, List, ListItem, Skeleton, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
 import { Timestamp } from 'firebase/firestore'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
+import NextLink from "next/link"
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { useDocumentData } from 'react-firebase-hooks/firestore'
+import { FC, useEffect, useState } from 'react'
+import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore'
 import { DefaultLayout } from '~/components/Layout'
 import { ChampionshipEyecatch } from '~/components/championship/Eyecatch'
 import { ChampionshipSideMenu } from '~/components/championship/SideMenu'
@@ -13,6 +14,7 @@ import { JoinChampionshipForm } from '~/components/championship/detail/Join'
 import { getDoc, getDocs } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
 import { Championship, championshipConverter, championshipRef, championshipsRef } from '~/shared/firebase/firestore/scheme/championship'
+import { Participant, participantsRef } from '~/shared/firebase/firestore/scheme/championship/participant'
 import { Serialized, deserialize, serialize } from '~/shared/utils'
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -60,6 +62,11 @@ const ChampionshipDetailPage: NextPage<Props> = ({
   )
   const { user } = useAuthState()
   const isHost = user?.uid === championship?.host_uid
+
+  const [participants] = useCollectionData(championship !== undefined
+    ? participantsRef(championship.id)
+    : null
+  )
 
   const [tab, setTab] = useState(0)
   useEffect(() => {
@@ -137,13 +144,13 @@ const ChampionshipDetailPage: NextPage<Props> = ({
               </TabPanels>
             </Card>
           </GridItem>
-          <GridItem>
-            <ChampionshipSideMenu />
-            <Card my="8">
-              <CardBody>
-                hoge
-              </CardBody>
-            </Card>
+          <GridItem maxW="250px">
+            {championship && participants &&
+              <SideBar
+                championship={championship}
+                participants={participants}
+              />
+            }
           </GridItem>
         </Grid>
       </Tabs>
@@ -152,3 +159,60 @@ const ChampionshipDetailPage: NextPage<Props> = ({
   )
 }
 export default ChampionshipDetailPage
+
+interface SideBarProps {
+  championship: Championship
+  participants: Participant[]
+}
+const SideBar: FC<SideBarProps> = ({ championship, participants }) => {
+  return (
+    <>
+      <ChampionshipSideMenu />
+      <Card my="8">
+        <CardBody>
+          <Heading size="md">
+            主催者
+          </Heading>
+          <Text my="2">
+            {championship.host_name}
+          </Text>
+          <Text color="gray.500">
+            {championship.host_contact}
+          </Text>
+        </CardBody>
+      </Card>
+      <Card>
+        <CardBody>
+          <Heading size="md">
+            参加者
+          </Heading>
+          <List>
+            {participants.map(participant =>
+              <ListItem key={participant.id}>
+                <Text>
+                  {participant.name}
+                </Text>
+                <Text color="gray.500" pl="4">
+                  {participant.contact}
+                </Text>
+              </ListItem>
+            )}
+            {participants.length === 0 &&
+              <ListItem>
+                まだ参加者がいません。
+                <ChakraLink
+                  as={NextLink}
+                  href={`/championships/${championship.id}?tab=join`}
+                  color={championship.color}
+                >
+                  応募する
+                </ChakraLink>
+                。
+              </ListItem>
+            }
+          </List>
+        </CardBody>
+      </Card>
+    </>
+  )
+}
