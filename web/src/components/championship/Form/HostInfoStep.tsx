@@ -63,7 +63,7 @@ export const useHostInfoStep = ({ defaultValue }: HostInfoStepTypes["hookOptions
   useUserDataEffect(userData => {
     setHostUid(userData.uid)
     if (userData.name !== undefined) setHostName(userData.name)
-    if (userData.contact !== undefined) setHostName(userData.contact)
+    if (userData.contact !== undefined) setHostContact(userData.contact)
   })
   const fields: HostInfoStepFields = {
     host_uid: controlledFormFieldOf(
