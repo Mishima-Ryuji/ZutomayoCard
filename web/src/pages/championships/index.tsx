@@ -1,20 +1,39 @@
 import { Alert, AlertIcon, AlertTitle, Box, Button, Card, CardBody, CardHeader, Divider, Grid, GridItem, Heading, Spinner, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
 import { FirebaseError } from 'firebase/app'
 import { documentId, query, where } from 'firebase/firestore'
-import { NextPage } from 'next'
+import { GetStaticProps, NextPage } from 'next'
 import { FC } from 'react'
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore'
 import { DefaultLayout } from '~/components/Layout'
 import { ChampionshipList } from '~/components/championship/List'
 import { ChampionshipSideMenu } from '~/components/championship/SideMenu'
+import { getDocs } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
 import { joinedChampionshipRefs, participantToChampionshipRef } from '~/models/championship'
-import { Championship, championshipsRef } from '~/shared/firebase/firestore/scheme/championship'
+import { Championship, championshipConverter, championshipsRef } from '~/shared/firebase/firestore/scheme/championship'
+import { Serialized, deserializeArray, serializeArray } from '~/shared/utils'
+
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  const snapshot = await getDocs(championshipsRef)
+  const championships = snapshot.docs.map(doc => doc.data())
+  return {
+    props: {
+      championships: serializeArray(championships),
+    },
+  }
+}
 
 interface Props {
+  championships?: Serialized<Championship>[]
 }
-const ChampionshipsListPage: NextPage<Props> = () => {
-  const [championships] = useCollectionDataOnce(championshipsRef)
+const ChampionshipsListPage: NextPage<Props> = ({
+  championships: staticChampionships,
+}) => {
+  const [championships] = useCollectionDataOnce(championshipsRef, {
+    initialValue: typeof staticChampionships !== "undefined"
+      ? deserializeArray(staticChampionships, { ref: championshipConverter })
+      : undefined,
+  })
   const joinedChampionships = useJoinedChampionships()
   return (
     <DefaultLayout head={{ title: "大会ダッシュボード" }}>
