@@ -39,6 +39,7 @@ const defaultValue: ChampionshipInput = {
   host_name: "",
   host_contact: "",
   color: "green",
+  image: null,
 }
 
 const NewChampionshipPage: NextPage = () => {

@@ -27,6 +27,7 @@ export interface Championship extends Document {
   host_uid: string                    // 主催者 のユーザID
   // テーマ情報(ThemeInfo)
   color: ChampionshipColor
+  image: string | null
 }
 
 export const championshipConverter = getConverter<Championship>(ChampionshipSubcols)

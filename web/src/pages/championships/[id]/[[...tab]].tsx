@@ -84,6 +84,7 @@ const ChampionshipDetailPage: NextPage<Props> = ({
           hostName={championship?.host_name ?? "..."}
           holdAt={championship?.hold_at ?? Timestamp.fromMillis(0)}
           color={championship?.color ?? "green"}
+          image={championship?.image ?? null}
         />
       </Box>
 
