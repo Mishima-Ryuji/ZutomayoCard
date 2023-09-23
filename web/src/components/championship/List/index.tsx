@@ -1,6 +1,5 @@
-import { Card, Grid, GridItem, Icon, Input, InputGroup, InputLeftElement, Spinner } from "@chakra-ui/react"
+import { Card, Grid, GridItem, Spinner } from "@chakra-ui/react"
 import { FC } from "react"
-import { FaSearch } from "react-icons/fa"
 import { Championship } from "~/shared/firebase/firestore/scheme/championship"
 import { ChampionshipListItem } from "./ListItem"
 
@@ -11,20 +10,8 @@ interface ChampionshipListProps {
   withSearchBar?: boolean
   searchPlaceholder?: string
 }
-export const ChampionshipList: FC<ChampionshipListProps> = ({ variant = "card", championships, withSearchBar = true, searchPlaceholder = "大会を検索", userId }) => {
+export const ChampionshipList: FC<ChampionshipListProps> = ({ variant = "card", championships, userId }) => {
   const content = <>
-    {withSearchBar &&
-      <InputGroup bg="Background" size="lg">
-        <InputLeftElement pointerEvents='none'>
-          <Icon as={FaSearch} />
-        </InputLeftElement>
-        <Input
-          variant="outline"
-          roundedBottom="none"
-          placeholder={searchPlaceholder}
-        />
-      </InputGroup>
-    }
     <Grid
       templateColumns={{ base: "repeat(1, 1fr)", lg: "repeat(2, 1fr)" }}
       gap="6"
