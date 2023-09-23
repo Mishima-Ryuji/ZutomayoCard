@@ -110,8 +110,8 @@ const ChampionshipDetailPage: NextPage<Props> = ({
               </Tab>
           }
         </TabList>
-        <Grid templateColumns={{ base: "100%", md: "1fr auto" }} gap="8" textAlign="start">
-          <GridItem>
+        <Grid templateColumns={{ base: "100%", md: "1fr auto" }} gap="8" textAlign="start" w="full">
+          <GridItem minW="100px">
             <Card>
               <TabPanels>
                 <TabPanel>

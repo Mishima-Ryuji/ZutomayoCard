@@ -13,6 +13,14 @@ export const ChampionshipInfo: FC<ChampionshipInfoProps> = ({ championship }) =>
         <Table size={["sm", "md"]}>
           <Tbody>
             <Tr>
+              <Th>
+                大会名
+              </Th>
+              <Td>
+                {championship.name}
+              </Td>
+            </Tr>
+            <Tr>
               <Th>開催場所</Th>
               <Td>{championship.place}</Td>
             </Tr>
