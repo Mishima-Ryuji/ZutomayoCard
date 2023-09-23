@@ -33,9 +33,10 @@ export const ThemeInfoStep: FC = () => {
 
 interface InputThemeInfoStepProps {
   fields: ThemeInfoStepFields
+  isDisabled?: boolean
 }
 export const InputThemeInfoStep: FC<InputThemeInfoStepProps> = ({
-  fields,
+  fields, isDisabled = false,
 }) => {
   const { upload, props: fileUploadProps } = useFileUpload()
   const [handleUpload] = useToastCallback(
@@ -59,13 +60,13 @@ export const InputThemeInfoStep: FC<InputThemeInfoStepProps> = ({
   )
   return (
     <Box>
-      <FormField label="11. カラー" errors={fields.color.errors}>
+      <FormField label="11. カラー" errors={fields.color.errors} isDisabled={isDisabled}>
         <InputChampionshipColor
           color={fields.color.value}
           onChangeColor={fields.color.onChange}
         />
       </FormField>
-      <FormField label="12. 画像 (任意)" helperText="大会のトップページなどに表示されるアイキャッチを指定できます。" errors={fields.image.errors}>
+      <FormField label="12. 画像 (任意)" helperText="大会のトップページなどに表示されるアイキャッチを指定できます。" errors={fields.image.errors} isDisabled={isDisabled}>
         {(fields.image.value != null) &&
           <Image
             src={fields.image.value}

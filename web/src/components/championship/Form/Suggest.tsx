@@ -1,4 +1,4 @@
-import { Box, Button, ButtonProps, HStack } from "@chakra-ui/react"
+import { Box, Button, ButtonProps, HStack, useFormControlContext } from "@chakra-ui/react"
 import { FC, ReactNode } from "react"
 
 interface SuggestProps {
@@ -18,9 +18,11 @@ export const Suggest: FC<SuggestProps> = ({ children }) => {
 
 type SuggestButtonProps = ButtonProps
 export const SuggestButton: FC<SuggestButtonProps> = (props) => {
+  const control = useFormControlContext()
   return (
     <Button
       size="xs"
+      isDisabled={control.isDisabled}
       {...props}
     />
   )

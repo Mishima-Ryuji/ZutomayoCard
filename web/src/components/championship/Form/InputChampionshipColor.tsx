@@ -1,4 +1,4 @@
-import { Box, ButtonProps, Divider, HStack, chakra } from "@chakra-ui/react"
+import { Box, ButtonProps, Divider, HStack, chakra, useFormControlContext } from "@chakra-ui/react"
 import { FC } from "react"
 import { ChampionshipColor, championshipColors } from "~/shared/firebase/firestore/scheme/championship"
 
@@ -7,8 +7,9 @@ interface InputChampionshipColorProps {
   onChangeColor: (color: ChampionshipColor) => void
 }
 export const InputChampionshipColor: FC<InputChampionshipColorProps> = ({ color: currentColor, onChangeColor }) => {
+  const control = useFormControlContext()
   return (
-    <Box p={[4]} bg="gray.100" w="fit-content" maxW="full" rounded="md">
+    <Box p={[4]} bg="gray.100" w="fit-content" maxW="full" rounded="md" opacity={control.isDisabled ? 0.5 : 1}>
       <HStack justifyContent="flex-start">
         <ColorCircle
           color={currentColor}
@@ -28,6 +29,7 @@ export const InputChampionshipColor: FC<InputChampionshipColorProps> = ({ color:
             size={["30px", "40px"]}
             selected={currentColor === color}
             onClick={() => onChangeColor(color)}
+            isDisabled={control.isDisabled}
           />
         )}
       </HStack>
@@ -39,8 +41,9 @@ type ColorCircleProps = ButtonProps & {
   color: ChampionshipColor
   size?: ButtonProps["width"]
   selected?: boolean
+  isDisabled?: boolean
 }
-const ColorCircle: FC<ColorCircleProps> = ({ color, size = "50px", selected = false, ...buttonProps }) => {
+const ColorCircle: FC<ColorCircleProps> = ({ color, size = "50px", selected = false, isDisabled = false, ...buttonProps }) => {
   return (
     <chakra.button
       width={size}
@@ -51,6 +54,7 @@ const ColorCircle: FC<ColorCircleProps> = ({ color, size = "50px", selected = fa
       borderColor={selected ? `${color}.200` : "transparent"}
       borderRadius="100%"
       {...buttonProps}
+      onClick={isDisabled ? () => {/* 何もしない */ } : buttonProps.onClick}
     />
   )
 }

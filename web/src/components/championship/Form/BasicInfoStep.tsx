@@ -33,13 +33,15 @@ export const BasicInfoStep: FC = () => {
 
 interface InputBasicInfoStepProps {
   fields: BasicInfoStepFields
+  isDisabled?: boolean
 }
 export const InputBasicInfoStep: FC<InputBasicInfoStepProps> = ({
   fields,
+  isDisabled = false,
 }) => {
   return (
     <Box>
-      <FormField label="1. 大会名" errors={fields.name.errors}>
+      <FormField label="1. 大会名" errors={fields.name.errors} isDisabled={isDisabled}>
         <Input
           value={fields.name.value}
           onChange={e => fields.name.onChange(e.target.value)}
@@ -48,7 +50,7 @@ export const InputBasicInfoStep: FC<InputBasicInfoStepProps> = ({
         />
       </FormField>
 
-      <FormField label="2. 開催日" errors={fields.hold_at.errors}>
+      <FormField label="2. 開催日" errors={fields.hold_at.errors} isDisabled={isDisabled}>
         <InputTimestamp
           value={fields.hold_at.value}
           onChange={holdAt => fields.hold_at.onChange(holdAt)}
@@ -56,7 +58,7 @@ export const InputBasicInfoStep: FC<InputBasicInfoStepProps> = ({
         />
       </FormField>
 
-      <FormField label="3. 開催場所" errors={fields.place.errors}>
+      <FormField label="3. 開催場所" errors={fields.place.errors} isDisabled={isDisabled}>
         <Textarea
           value={fields.place.value}
           onChange={e => fields.place.onChange(e.target.value)}
@@ -64,13 +66,13 @@ export const InputBasicInfoStep: FC<InputBasicInfoStepProps> = ({
           placeholder="例) 東京都 渋谷区 付近"
         />
         <Suggest>
-          <SuggestButton onClick={() => fields.place.onChange(fields.place.value + "オンライン")}>
+          <SuggestButton onClick={() => fields.place.onChange(fields.place.value + "オンライン")} isDisabled={isDisabled}>
             オンライン
           </SuggestButton>
         </Suggest>
       </FormField>
 
-      <FormField label="4. 申し込み締切日" errors={fields.time_limit_at.errors}>
+      <FormField label="4. 申し込み締切日" errors={fields.time_limit_at.errors} isDisabled={isDisabled}>
         <InputTimestamp
           value={fields.time_limit_at.value}
           onChange={holdAt => fields.time_limit_at.onChange(holdAt)}

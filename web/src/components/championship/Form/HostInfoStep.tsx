@@ -29,13 +29,14 @@ export const HostInfoStep: FC = () => {
 
 interface InputHostInfoStepProps {
   fields: HostInfoStepFields
+  isDisabled?: boolean
 }
 export const InputHostInfoStep: FC<InputHostInfoStepProps> = ({
-  fields,
+  fields, isDisabled = false,
 }) => {
   return (
     <Box>
-      <FormField label="9. 主催者名" errors={fields.host_name.errors}>
+      <FormField label="9. 主催者名" errors={fields.host_name.errors} isDisabled={isDisabled}>
         <Input
           value={fields.host_name.value}
           onChange={e => fields.host_name.onChange(e.target.value)}
@@ -44,7 +45,7 @@ export const InputHostInfoStep: FC<InputHostInfoStepProps> = ({
         />
       </FormField>
 
-      <FormField label="10. 主催者の連絡先" errors={fields.host_contact.errors}>
+      <FormField label="10. 主催者の連絡先" errors={fields.host_contact.errors} isDisabled={isDisabled}>
         <Textarea
           value={fields.host_contact.value}
           onChange={e => fields.host_contact.onChange(e.target.value)}

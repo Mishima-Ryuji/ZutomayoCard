@@ -1,4 +1,4 @@
-import { Box, Button, Textarea } from "@chakra-ui/react"
+import { Box, Textarea } from "@chakra-ui/react"
 import { FC, useState } from "react"
 import { Championship } from "~/shared/firebase/firestore/scheme/championship"
 import { FormField } from "./FormField"
@@ -33,13 +33,14 @@ const formatSuggestions = ["トーナメント", "総当たり", "スイスド�
 
 export interface InputOptionalInfoStepProps {
   fields: OptionalInfoFields
+  isDisabled?: boolean
 }
 export const InputOptionalInfoStep: FC<InputOptionalInfoStepProps> = ({
-  fields
+  fields, isDisabled,
 }) => {
   return (
     <Box>
-      <FormField label="5. 大会形式" errors={fields.format.errors}>
+      <FormField label="5. 大会形式" errors={fields.format.errors} isDisabled={isDisabled}>
         <Textarea
           value={fields.format.value}
           onChange={e => fields.format.onChange(e.target.value)}
@@ -48,15 +49,15 @@ export const InputOptionalInfoStep: FC<InputOptionalInfoStepProps> = ({
         />
         <Suggest>
           {formatSuggestions.map(format =>
-            <Button key={format} size="xs" onClick={() => fields.format.onChange(fields.format.value + format)}>
+            <SuggestButton key={format} size="xs" onClick={() => fields.format.onChange(fields.format.value + format)}>
               {format}
-            </Button>
+            </SuggestButton>
           )}
         </Suggest>
 
       </FormField>
 
-      <FormField label="6. 参加費" errors={fields.entry_fee.errors}>
+      <FormField label="6. 参加費" errors={fields.entry_fee.errors} isDisabled={isDisabled}>
         <Textarea
           value={fields.entry_fee.value}
           onChange={e => fields.entry_fee.onChange(e.target.value)}
@@ -64,13 +65,13 @@ export const InputOptionalInfoStep: FC<InputOptionalInfoStepProps> = ({
           placeholder="例) 無料、20000円÷参加人数"
         />
         <Suggest>
-          <SuggestButton onClick={() => fields.entry_fee.onChange(fields.entry_fee.value + "無料")}>
+          <SuggestButton onClick={() => fields.entry_fee.onChange(fields.entry_fee.value + "無料")} >
             無料
           </SuggestButton>
         </Suggest>
       </FormField>
 
-      <FormField label="7. 持ち物" errors={fields.need_items.errors}>
+      <FormField label="7. 持ち物" errors={fields.need_items.errors} isDisabled={isDisabled}>
         <Textarea
           value={fields.need_items.value}
           onChange={e => fields.need_items.onChange(e.target.value)}
@@ -84,7 +85,7 @@ export const InputOptionalInfoStep: FC<InputOptionalInfoStepProps> = ({
         </Suggest>
       </FormField>
 
-      <FormField label="8. その他 注意事項" errors={fields.detail.errors}>
+      <FormField label="8. その他 注意事項" errors={fields.detail.errors} isDisabled={isDisabled}>
         <Textarea
           value={fields.detail.value}
           onChange={e => fields.detail.onChange(e.target.value)}

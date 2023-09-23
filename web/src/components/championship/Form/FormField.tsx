@@ -6,16 +6,18 @@ interface FormFieldProps {
   helperText?: ReactNode
   errors?: string[]
   children?: ReactNode
+  isDisabled?: boolean
 }
 export const FormField: FC<FormFieldProps> = ({
-  label, helperText, errors, children
+  label, helperText, errors, children,
+  isDisabled = false,
 }) => {
   return (
-    <FormControl mb="6" isInvalid={errors && errors.length >= 1}>
+    <FormControl mb="6" isInvalid={errors && errors.length >= 1} isDisabled={isDisabled}>
       {label !== undefined && <FormLabel>{label}</FormLabel>}
       {children}
       {helperText !== undefined && <FormHelperText>{helperText}</FormHelperText>}
-      {errors?.map(error =>
+      {!isDisabled && errors?.map(error =>
         <FormErrorMessage key={error}>
           {error}
         </FormErrorMessage>

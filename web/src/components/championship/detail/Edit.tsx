@@ -1,6 +1,6 @@
-import { Box, Button, Spacer } from "@chakra-ui/react"
+import { Alert, AlertIcon, AlertTitle, Box, Button, Spacer } from "@chakra-ui/react"
 import { FC } from "react"
-import { updateDoc } from "~/firebase"
+import { Timestamp, updateDoc } from "~/firebase"
 import { useToastCallback } from "~/hooks/useToastCallback"
 import { Championship, championshipRef } from "~/shared/firebase/firestore/scheme/championship"
 import { InputBasicInfoStep, useBasicInfoStep } from "../Form/BasicInfoStep"
@@ -38,12 +38,22 @@ export const ChampionshipEditForm: FC<ChampionshipEditFormProps> = ({ defaultVal
     }
   )
 
+  const isHold = defaultValue.hold_at < Timestamp.now()
+
   return (
     <Box>
-      <InputBasicInfoStep {...basicInfo.props.input} />
-      <InputOptionalInfoStep {...optionalInfo.props.input} />
-      <InputHostInfoStep {...hostInfo.props.input} />
-      <InputThemeInfoStep {...themeInfo.props.input} />
+      {isHold &&
+        <Alert status="warning" my="4">
+          <AlertIcon />
+          <AlertTitle>
+            終了した大会の情報は編集できません
+          </AlertTitle>
+        </Alert>
+      }
+      <InputBasicInfoStep {...basicInfo.props.input} isDisabled={isHold} />
+      <InputOptionalInfoStep {...optionalInfo.props.input} isDisabled={isHold} />
+      <InputHostInfoStep {...hostInfo.props.input} isDisabled={isHold} />
+      <InputThemeInfoStep {...themeInfo.props.input} isDisabled={isHold} />
       <Spacer height="8" />
       <Button colorScheme="purple" isDisabled={!isValid || isSaving} onClick={handleSave}>
         更新

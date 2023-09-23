@@ -1,4 +1,4 @@
-import { Button, Icon, InputGroup, Spinner } from "@chakra-ui/react"
+import { Button, Icon, InputGroup, Spinner, useFormControlContext } from "@chakra-ui/react"
 import { StorageReference, UploadMetadata, uploadBytes } from "firebase/storage"
 import { ChangeEventHandler, ReactNode, useRef, useState } from "react"
 import { FiFile } from "react-icons/fi"
@@ -22,6 +22,8 @@ export const FileUpload = ({
 
   const handleClick = () => inputRef.current?.click()
 
+  const control = useFormControlContext()
+
   return (
     <InputGroup onClick={handleClick} mb={3}>
       <input
@@ -35,7 +37,7 @@ export const FileUpload = ({
       <Button
         leftIcon={<Icon as={FiFile} />}
         rightIcon={isUploading ? <Spinner /> : undefined}
-        isDisabled={isUploading}
+        isDisabled={control.isDisabled || isUploading}
       >
         {children}
       </Button>
