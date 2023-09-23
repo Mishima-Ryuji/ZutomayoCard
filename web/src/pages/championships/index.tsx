@@ -35,6 +35,7 @@ const ChampionshipsListPage: NextPage<Props> = ({
       : undefined,
   })
   const joinedChampionships = useJoinedChampionships()
+  const { user } = useAuthState()
   return (
     <DefaultLayout head={{ title: "大会ダッシュボード" }}>
       <Heading mt="20" mb="12" size={["lg", "xl"]}>
@@ -63,6 +64,7 @@ const ChampionshipsListPage: NextPage<Props> = ({
           </Heading>
           <ChampionshipList
             championships={championships}
+            userId={user?.uid}
           />
         </GridItem>
         <GridItem py="3">

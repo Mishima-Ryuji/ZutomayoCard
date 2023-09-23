@@ -6,8 +6,9 @@ import { Championship } from "~/shared/firebase/firestore/scheme/championship"
 
 interface ChampionshipListItemProps {
   championship: Championship
+  userId?: string | undefined
 }
-export const ChampionshipListItem: FC<ChampionshipListItemProps> = ({ championship }) => {
+export const ChampionshipListItem: FC<ChampionshipListItemProps> = ({ championship, userId }) => {
   const name = championship.name.length >= 40 ? championship.name.substring(0, 40) + "..." : championship.name
   return (
     <Card key={championship.id} variant="elevated">
@@ -34,15 +35,17 @@ export const ChampionshipListItem: FC<ChampionshipListItemProps> = ({ championsh
         >
           詳細
         </Button>
-        <Button
-          as={NextLink}
-          href={`/championships/${championship.id}/join`}
-          variant="outline"
-          colorScheme={championship.color}
-          leftIcon={<>✋</>}
-        >
-          応募
-        </Button>
+        {userId !== championship.host_uid &&
+          <Button
+            as={NextLink}
+            href={`/championships/${championship.id}/join`}
+            variant="outline"
+            colorScheme={championship.color}
+            leftIcon={<>✋</>}
+          >
+            応募
+          </Button>
+        }
       </CardFooter>
     </Card>
   )

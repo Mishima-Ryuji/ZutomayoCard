@@ -7,10 +7,11 @@ import { ChampionshipListItem } from "./ListItem"
 interface ChampionshipListProps {
   variant?: "card" | "simple"
   championships: Championship[] | undefined
+  userId?: string | undefined
   withSearchBar?: boolean
   searchPlaceholder?: string
 }
-export const ChampionshipList: FC<ChampionshipListProps> = ({ variant = "card", championships, withSearchBar = true, searchPlaceholder = "大会を検索" }) => {
+export const ChampionshipList: FC<ChampionshipListProps> = ({ variant = "card", championships, withSearchBar = true, searchPlaceholder = "大会を検索", userId }) => {
   const content = <>
     {withSearchBar &&
       <InputGroup bg="Background" size="lg">
@@ -34,6 +35,7 @@ export const ChampionshipList: FC<ChampionshipListProps> = ({ variant = "card", 
         <GridItem key={championship.id}>
           <ChampionshipListItem
             championship={championship}
+            userId={userId}
           />
         </GridItem>
       ) ?? <Spinner />}
