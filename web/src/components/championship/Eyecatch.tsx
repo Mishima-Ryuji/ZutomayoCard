@@ -17,7 +17,7 @@ type ChampionshipEyecatchProps = BoxProps & {
 export const ChampionshipEyecatch: FC<ChampionshipEyecatchProps> = ({ isLoading, color, hostName, name: rawName, holdAt, image, ...boxProps }) => {
   const name = rawName.length >= 20 ? rawName.substring(0, 20) + "..." : rawName
   return (
-    <Skeleton isLoaded={!isLoading}>
+    <Skeleton isLoaded={!isLoading} w="full">
       <SlideFade
         in={!isLoading}
         transition={{ enter: { delay: 0.3, duration: 1.2 } }}

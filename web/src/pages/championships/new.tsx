@@ -159,6 +159,13 @@ const NewChampionshipPage: NextPage = () => {
           isSubmitted={isCreated}
           onSubmit={handleCreate}
           onPrev={handlePrev}
+          eyecatchPreview={{
+            name: basicInfoStep.input.name,
+            hold_at: basicInfoStep.input.hold_at,
+            color: themeInfoStep.input.color,
+            image: themeInfoStep.input.image,
+            host_name: hostInfoStep.input.host_name,
+          }}
         />
         <Celebration />
       </Toggle>

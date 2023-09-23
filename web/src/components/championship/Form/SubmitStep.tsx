@@ -1,6 +1,8 @@
-import { Alert, AlertIcon, Button, Collapse, Spinner, VStack } from "@chakra-ui/react"
+import { Alert, AlertIcon, Button, Collapse, Container, Spinner, VStack } from "@chakra-ui/react"
 import NextLink from "next/link"
 import { FC } from "react"
+import { Championship } from "~/shared/firebase/firestore/scheme/championship"
+import { ChampionshipEyecatch } from "../Eyecatch"
 
 interface SubmitStepContentProps {
   isSubmitting: boolean
@@ -8,6 +10,13 @@ interface SubmitStepContentProps {
   onSubmit: () => void
   onPrev: () => void
   nextLink: string | null
+  eyecatchPreview: Pick<Championship,
+    | "name"
+    | "image"
+    | "color"
+    | "hold_at"
+    | "host_name"
+  >
 }
 export const SubmitStepContent: FC<SubmitStepContentProps> = ({
   isSubmitting,
@@ -15,14 +24,26 @@ export const SubmitStepContent: FC<SubmitStepContentProps> = ({
   onSubmit,
   onPrev,
   nextLink,
+  eyecatchPreview,
 }) => {
   return (
-    <VStack spacing="4">
+    <VStack spacing="4" w="full">
       <Alert status="info">
         <AlertIcon />
         準備ができました！
         大会を登録できます
       </Alert>
+
+      <Container>
+        <ChampionshipEyecatch
+          name={eyecatchPreview.name}
+          image={eyecatchPreview.image}
+          color={eyecatchPreview.color}
+          holdAt={eyecatchPreview.hold_at}
+          hostName={eyecatchPreview.host_name}
+          isLoading={false}
+        />
+      </Container>
 
       <Button
         size="lg"
@@ -49,6 +70,6 @@ export const SubmitStepContent: FC<SubmitStepContentProps> = ({
           戻る
         </Button>
       </VStack>
-    </VStack>
+    </VStack >
   )
 }
