@@ -10,8 +10,7 @@ import {
   StackDivider,
   Tab,
   TabList,
-  Tabs,
-  Text,
+  Tabs
 } from '@chakra-ui/react'
 import { getDocs } from 'firebase/firestore'
 import { GetStaticProps } from 'next'
@@ -23,6 +22,7 @@ import { FaTwitter } from 'react-icons/fa'
 import { DefaultLayout } from '~/components/Layout'
 import { LoginPopup } from '~/components/auth/LoginPopup'
 import { CardList } from '~/components/card/List'
+import { TopMenuItem, TopMenuItemLinkHeading } from '~/components/top/MenuItem'
 import { FixedUniguriBalloonView } from '~/components/uniguri_balloon/page/top/FixedUniguriBalloonView'
 import { Card, cardConverter, cardsRef } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
@@ -74,99 +74,60 @@ const Page = ({ cards: staticCards }: Props) => {
         </CardHeader>
         <CardBody>
           <Stack divider={<StackDivider />} spacing="3">
-            <Box>
-              <Flex align={'center'}>
-                <Image
-                  src="/elements/darkness.png"
-                  alt="項目の印"
-                  width={25}
-                  height={25}
-                />
+            <TopMenuItem
+              imageSrc='/elements/darkness.png'
+              heading={
+                <TopMenuItemLinkHeading href="/search">
+                  カードの検索と詳しい情報
+                </TopMenuItemLinkHeading>
+              }
+            >
+              効果やカード名でレアリティで検索したり、対戦での使い方を動画付きで解説しています。
+            </TopMenuItem>
+            <TopMenuItem
+              imageSrc='/elements/electricity.png'
+              heading={
+                <TopMenuItemLinkHeading href="/decks">
+                  デッキ検索と構築
+                </TopMenuItemLinkHeading>
+              }
+            >
+              対戦ガチ勢のデッキを検索したり、自分のオリジナルのデッキを作って共有できます。
+            </TopMenuItem>
+            <TopMenuItem
+              imageSrc='/elements/flame.png'
+              heading={user ? (
                 <Heading
                   size="xs"
                   textTransform="uppercase"
                   color={'purple.600'}
                 >
-                  <Link href={'/search'}>カードの検索と詳しい情報</Link>
+                  <Link href={'/profiles/edit'}>トレード相手の検索</Link>
                 </Heading>
-              </Flex>
-              <Text pt="2" fontSize="sm">
-                効果やカード名でレアリティで検索したり、対戦での使い方を動画付きで解説しています。
-              </Text>
-            </Box>
-            <Box>
-              <Flex align={'center'}>
-                <Image
-                  src="/elements/electricity.png"
-                  alt="項目の印"
-                  width={25}
-                  height={25}
-                />
-                <Heading
-                  size="xs"
-                  textTransform="uppercase"
-                  color={'purple.600'}
-                >
-                  <Link href={'/decks'}>デッキ検索と構築</Link>
-                </Heading>
-              </Flex>
-              <Text pt="2" fontSize="sm">
-                対戦ガチ勢のデッキを検索したり、自分のオリジナルのデッキを作って共有できます。
-              </Text>
-            </Box>
-            <Box>
-              <Flex align={'center'}>
-                <Image
-                  src="/elements/flame.png"
-                  alt="項目の印"
-                  width={25}
-                  height={25}
-                />
-                {user ? (
-                  <Heading
-                    size="xs"
-                    textTransform="uppercase"
-                    color={'purple.600'}
-                  >
-                    <Link href={'/profiles/edit'}>トレード相手の検索</Link>
-                  </Heading>
-                ) : (
-                  <Heading
-                    size="xs"
-                    textTransform="uppercase"
-                    color={'purple.600'}
-                    cursor={'pointer'}
-                    onClick={() => setShowLoginPopup(true)}
-                  >
-                    トレード相手の検索
-                  </Heading>
-                )}
-              </Flex>
-              <Text pt="2" fontSize="sm">
-                本サイトに自分が欲しいカードと譲れるカードを登録することで交換相手を見つけやすくなります。
-              </Text>
-            </Box>
-            <Box>
-              <Flex align={'center'}>
-                <Image
-                  src="/elements/wind.png"
-                  alt="項目の印"
-                  width={25}
-                  height={25}
-                />
+              ) : (
                 <Heading
                   size="xs"
                   textTransform="uppercase"
                   color={'purple.600'}
                   cursor={'pointer'}
+                  onClick={() => setShowLoginPopup(true)}
                 >
-                  <Link href={'/about'}>運営の情報</Link>
+                  トレード相手の検索
                 </Heading>
-              </Flex>
-              <Text pt="2" fontSize="sm">
-                当サイトの運営の情報を掲載しています。当サイトに協力してくださる方も募集しております。
-              </Text>
-            </Box>
+              )}
+            >
+              本サイトに自分が欲しいカードと譲れるカードを登録することで交換相手を見つけやすくなります。
+            </TopMenuItem>
+            <TopMenuItem
+              imageSrc='/elements/wind.png'
+              heading={
+                <TopMenuItemLinkHeading href="/about">
+                  運営の情報
+                </TopMenuItemLinkHeading>
+              }
+            >
+              当サイトの運営の情報を掲載しています。当サイトに協力してくださる方も募集しております。
+            </TopMenuItem>
             <Flex gap={3} align={'center'}>
               {user === null && (
                 <Button
