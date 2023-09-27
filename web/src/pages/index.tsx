@@ -128,6 +128,16 @@ const Page = ({ cards: staticCards }: Props) => {
             >
               当サイトの運営の情報を掲載しています。当サイトに協力してくださる方も募集しております。
             </TopMenuItem>
+            <TopMenuItem
+              imageSrc='/elements/darkness.png'
+              heading={
+                <TopMenuItemLinkHeading href="/championships">
+                  大会
+                </TopMenuItemLinkHeading>
+              }
+            >
+              開催中の大会を探したり、大会参加者を集めたりできます。
+            </TopMenuItem>
             <Flex gap={3} align={'center'}>
               {user === null && (
                 <Button
