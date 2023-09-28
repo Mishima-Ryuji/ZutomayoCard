@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, Link as ChakraLink, Grid, GridItem, Heading, List, ListItem, Skeleton, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
+import { Box, Card, CardBody, Link as ChakraLink, Divider, Grid, GridItem, Heading, List, ListItem, Skeleton, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
 import { Timestamp } from 'firebase/firestore'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import NextLink from "next/link"
@@ -9,6 +9,7 @@ import { DefaultLayout } from '~/components/Layout'
 import { ChampionshipEyecatch } from '~/components/championship/Eyecatch'
 import { ChampionshipSideMenu } from '~/components/championship/SideMenu'
 import { ChampionshipInfo } from '~/components/championship/detail/ChampionshipInfo'
+import { ChampionshipDeleteForm } from '~/components/championship/detail/Delete'
 import { ChampionshipEditForm } from '~/components/championship/detail/Edit'
 import { JoinChampionshipForm } from '~/components/championship/detail/Join'
 import { getDoc, getDocs } from '~/firebase'
@@ -125,9 +126,15 @@ const ChampionshipDetailPage: NextPage<Props> = ({
                 {isHost
                   ? <TabPanel>
                     {championship
-                      ? <ChampionshipEditForm
-                        defaultValue={championship}
-                      />
+                      ? <>
+                        <ChampionshipEditForm
+                          defaultValue={championship}
+                        />
+                        <Divider my="3" />
+                        <ChampionshipDeleteForm
+                          championship={championship}
+                        />
+                      </>
                       : <Spinner />
                     }
                   </TabPanel>
