@@ -11,6 +11,7 @@ export type HeadProps = {
   keyword?: string
   keywords?: string[]
   image?: string
+  twitterCardType?: "summary" | "summary_large_image"
   path?: string
   index?: boolean
 }
@@ -21,6 +22,7 @@ export const Head = ({
   description = '本サイトでは、「ずとまよカードをもっと楽しく」をコンセプトに、カードの検索やデッキの構築、トレード相手の検索をする機能を提供しております。各カードのページでは、対戦ガチ勢からの評価や動画解説を用意しており、初心者でも簡単に対戦を始めるための知識を身につけることができます。',
   keyword,
   image,
+  twitterCardType = "summary",
   keywords = [
     'ずとまよカード',
     'ズトカ',
@@ -74,7 +76,7 @@ export const Head = ({
       <meta property="og:site_name" content={DISPLAY_APP_NAME} />
 
       {/* Twitter */}
-      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:card" content={twitterCardType} />
       <meta name="twitter:site" content={TWITTER_USER_NAME} />
       <meta name="twitter:url" content={url} />
       <meta name="twitter:title" content={title} />
