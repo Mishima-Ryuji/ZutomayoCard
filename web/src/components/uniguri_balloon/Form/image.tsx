@@ -1,9 +1,9 @@
-import { Button, FormControl, FormHelperText, FormLabel, Icon, InputGroup, ListItem, Spinner, UnorderedList } from "@chakra-ui/react"
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
+import { FormControl, FormHelperText, FormLabel, ListItem, Spinner, UnorderedList } from "@chakra-ui/react"
+import { getDownloadURL, ref } from "firebase/storage"
 import Image from "next/image"
-import { ChangeEventHandler, FC, ReactNode, useRef, useState } from "react"
-import { FiFile } from "react-icons/fi"
+import { ChangeEventHandler, FC, ReactNode, useState } from "react"
 import { v4 as uuidv4 } from "uuid"
+import { FileUpload, useFileUpload } from "~/components/FileUpload"
 import { fb } from "~/firebase"
 import { UniguriBalloon } from "~/shared/firebase/firestore/scheme/uniguriBalloon"
 import { SelectUniguriBalloonImage } from "../SelectUniguriBalloonImage"
@@ -15,9 +15,8 @@ interface InputUniguriBalloonImageProps {
   label?: ReactNode
 }
 export const InputUniguriBalloonImage: FC<InputUniguriBalloonImageProps> = ({ imageUrl, onChange, message, label = "画像" }) => {
-  const [isUploading, setIsUploading] = useState(false)
+  const { upload, isUploading, props: fileUploadProps } = useFileUpload()
   const handleUpload: ChangeEventHandler<HTMLInputElement> = async (e) => {
-    setIsUploading(true)
     try {
       const file = e.target.files?.[0]
       const ext = file?.name.split('.').pop()
@@ -26,14 +25,12 @@ export const InputUniguriBalloonImage: FC<InputUniguriBalloonImageProps> = ({ im
       const filename = `${file.name ?? "noname"}_${uuidv4()}.${ext}`
       const fullPath = `uniguri_balloons/${filename}`
       const uploadRef = ref(fb.storage, fullPath)
-      await uploadBytes(uploadRef, file, { contentType: file?.type, })
+      await upload(uploadRef, file, { contentType: file?.type, })
       const url = await getDownloadURL(uploadRef)
       onChange(url)
     } catch (error) {
       console.error(error)
       alert(error)
-    } finally {
-      setIsUploading(false)
     }
   }
 
@@ -59,6 +56,7 @@ export const InputUniguriBalloonImage: FC<InputUniguriBalloonImageProps> = ({ im
       または
       <FileUpload
         onChange={handleUpload}
+        {...fileUploadProps}
       />
       {isUploading &&
         <Spinner />
@@ -75,30 +73,6 @@ export const InputUniguriBalloonImage: FC<InputUniguriBalloonImageProps> = ({ im
         </UnorderedList>
       </FormHelperText>
     </FormControl>)
-}
-
-type FileUploadProps = {
-  onChange?: ChangeEventHandler<HTMLInputElement>
-}
-
-const FileUpload = ({ onChange: handleChange }: FileUploadProps) => {
-  const inputRef = useRef<HTMLInputElement | null>(null)
-
-  const handleClick = () => inputRef.current?.click()
-
-  return (
-    <InputGroup onClick={handleClick} mb={3}>
-      <input
-        type={'file'}
-        multiple={false}
-        accept={'image/*'}
-        hidden
-        ref={inputRef}
-        onChange={handleChange}
-      />
-      <Button leftIcon={<Icon as={FiFile} />}>アップロード</Button>
-    </InputGroup>
-  )
 }
 
 export const useInputUniguriBalloonImage = ({ message, defaultValue }: {

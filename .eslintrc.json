@@ -81,6 +81,9 @@
     ],
 
     // 到達できない文を警告するルール
-    "@typescript-eslint/switch-exhaustiveness-check": "error"
+    "@typescript-eslint/switch-exhaustiveness-check": "error",
+
+    // useStepsのgoToNextなど、関数を分割代入して得る際のエラーを回避
+    "@typescript-eslint/unbound-method": "off"
   }
 }

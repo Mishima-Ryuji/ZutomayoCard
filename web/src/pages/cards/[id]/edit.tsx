@@ -4,9 +4,7 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  Icon,
   Input,
-  InputGroup,
   NumberInput,
   NumberInputField,
   Radio,
@@ -15,15 +13,15 @@ import {
   Spinner,
   Stack,
   Textarea,
-  VStack,
+  VStack
 } from '@chakra-ui/react'
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import { getDownloadURL, ref } from 'firebase/storage'
 import DefaultErrorPage from 'next/error'
 import { useRouter } from 'next/router'
-import { ChangeEventHandler, useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
 import { Controller, useForm } from 'react-hook-form'
-import { FiFile } from 'react-icons/fi'
+import { FileUpload, useFileUpload } from '~/components/FileUpload'
 import { DefaultLayout } from '~/components/Layout'
 import { CardItem } from '~/components/card/Item'
 import {
@@ -36,30 +34,6 @@ import {
 } from '~/firebase'
 import { useAuthState } from '~/hooks/useAuthState'
 import { remove } from '~/shared/utils'
-
-type FileUploadProps = {
-  onChange?: ChangeEventHandler<HTMLInputElement>
-}
-
-const FileUpload = ({ onChange: handleChange }: FileUploadProps) => {
-  const inputRef = useRef<HTMLInputElement | null>(null)
-
-  const handleClick = () => inputRef.current?.click()
-
-  return (
-    <InputGroup onClick={handleClick} mb={3}>
-      <input
-        type={'file'}
-        multiple={false}
-        accept={'image/*'}
-        hidden
-        ref={inputRef}
-        onChange={handleChange}
-      />
-      <Button leftIcon={<Icon as={FiFile} />}>ファイルを選択</Button>
-    </InputGroup>
-  )
-}
 
 const Page = () => {
   const router = useRouter()
@@ -110,6 +84,8 @@ const Page = () => {
       ])
     )
   }, [card])
+
+  const { upload, props: fileUploadProps } = useFileUpload()
   if (!card && !loading && cardId !== undefined)
     return <DefaultErrorPage statusCode={404} />
   return (
@@ -130,7 +106,7 @@ const Page = () => {
                   const filename = `${card.id}.${ext}`
                   const fullPath = `cards/${filename}`
                   const uploadRef = ref(fb.storage, fullPath)
-                  await uploadBytes(uploadRef, file)
+                  await upload(uploadRef, file)
                   const url = await getDownloadURL(uploadRef)
                   await updateDoc(card.ref, {
                     image: {
@@ -140,6 +116,7 @@ const Page = () => {
                     },
                   })
                 }}
+                {...fileUploadProps}
               />
               <CardItem card={card} width={200} highResolution />
             </FormControl>
